@@ -10,8 +10,8 @@ def get_taxon_nodes(nodes_location):
             line = line.strip().split("|")
             id = line[0].strip()
             parent_id = line[1].strip()
-            print id, parent_id
-    return "PASS"
+            taxon_nodes_dict[id] = parent_id
+    return taxon_nodes_dict
 
 def get_taxon_hierarchy(taxon_id):
     pass
@@ -35,5 +35,6 @@ if __name__ == "__main__":
     taxon_id = args['taxon_id']
 
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
+    print len(taxon_nodes_dict)
 
 

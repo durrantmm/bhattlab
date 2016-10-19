@@ -27,6 +27,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args = vars(args)
+    taxon_nodes = args['taxon_nodes']
+    taxon_id = args['taxon_id']
 
     taxon_nodes dict = get_taxon_nodes(taxon_nodes)
 

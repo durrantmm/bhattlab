@@ -13,6 +13,16 @@ def get_taxon_nodes(nodes_location):
             taxon_nodes_dict[id] = parent_id
     return taxon_nodes_dict
 
+def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
+    hierarchy = [taxon_id]
+
+    while taxon_id != "1":
+        taxon_id = taxon_nodes_dict[taxon_id]
+        hierarchy.append(taxon_id)
+
+    return hierarchy
+
+
 def get_taxon_hierarchy(taxon_id):
     pass
 
@@ -34,7 +44,12 @@ if __name__ == "__main__":
     taxon_nodes = args['taxon_nodes']
     taxon_id = args['taxon_id']
 
+    print("Loading the Taxonomy Database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-    print len(taxon_nodes_dict)
+    print("Getting Taxon Hierarchy")
+    taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
+
+    print("Here is the Taxon Hierarchy: ")
+    print taxon_hierarchy
 
 

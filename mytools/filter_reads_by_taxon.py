@@ -22,10 +22,6 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
 
     return hierarchy
 
-
-def get_taxon_hierarchy(taxon_id):
-    pass
-
 if __name__ == "__main__":
 
     # setup the option parser

@@ -1,12 +1,16 @@
 import argparse
+from collections import defaultdict
 
 # start here when the script is launched
 
 def get_taxon_nodes(nodes_location):
+    taxon_nodes_dict = defaultdict(str)
     with open(nodes_location) as nodes_in:
         for line in nodes_in:
-            line = line.strip()
-            print line
+            line = line.strip().split("|")
+            id = line[0].strip()
+            parent_id = line[1].strip()
+            print id, parent_id
     return "PASS"
 
 def get_taxon_hierarchy(taxon_id):

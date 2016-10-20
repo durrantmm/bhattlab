@@ -72,8 +72,10 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
             if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
-                    matching_reads.add(read_title)
+                print("MATCH")
+                matching_reads.add(read_title)
             else:
+                print("NOT MATCH")
                 continue
 
     return matching_reads

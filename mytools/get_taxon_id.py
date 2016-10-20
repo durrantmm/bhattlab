@@ -27,9 +27,9 @@ if __name__ == "__main__":
     with open(taxon_names_location) as names_in:
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
-            print name, line[3].upper()
-            if name in line[3].upper():
-                print("Name: %s; Taxon ID: %s" % (line[3], line[0]))
+
+            if name in line[2].upper():
+                print("Name: %s; Taxon ID: %s" % (line[2], line[0]))
 
 
 

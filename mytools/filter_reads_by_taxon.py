@@ -38,7 +38,7 @@ def is_child_taxon(taxon_id, taxon_nodes_dict, stop_set):
     return False
 
 
-def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
+def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, out_file_loc):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
@@ -47,7 +47,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
         with open(fastq_reads) as fastq_reads_in:
 
-            with open("filtered_reads_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1]), 'w') as out_file:
+            with open(out_file_loc, 'w') as out_file:
                 read_taxa_in.readline()
                 for taxa_line in read_taxa_in:
                     fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
@@ -132,6 +132,7 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
             print indent+taxa
         level += 1
 
+
 if __name__ == "__main__":
 
     # setup the option parser
@@ -205,7 +206,8 @@ if __name__ == "__main__":
     if not branched:
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
-        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy)
+        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1])
+        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
     else:
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")

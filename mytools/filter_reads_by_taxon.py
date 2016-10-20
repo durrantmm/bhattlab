@@ -25,6 +25,17 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
 
     return hierarchy
 
+def is_child_taxon(taxon_id, taxon_nodes_dict, stop_set):
+    hierarchy = [taxon_id]
+
+    while taxon_id != '1' and taxon_id != '0':
+        if taxon_id in stop_set:
+            taxon_id = taxon_nodes_dict[taxon_id]
+            hierarchy.append(taxon_id)
+
+
+    return False
+
 
 def get_required_reads_linear(reads_to_taxid_location, taxon_id):
     assert type(taxon_id) is list, "taxon_id must be a list"
@@ -52,6 +63,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
+    taxon_id = set(taxon_id)
     matching_reads = set()
     with open(reads_to_taxid_location) as data_in:
         data_in.readline()
@@ -59,9 +71,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
-            if is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
-                hierarchy = set(get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict))
-                if len(hierarchy - set(taxon_id)) < len(hierarchy):
+            if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
                     matching_reads.add(read_title)
             else:
                 continue

@@ -43,6 +43,12 @@ def get_required_reads_linear(reads_to_taxid_location, taxon_id):
 
     return matching_reads
 
+def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
+    if taxon_id in taxon_nodes_dict.keys():
+        return True
+    else:
+        return False
+
 def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_dict):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
@@ -54,15 +60,18 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
-            print read_title
-            print read_taxon_id
+            if is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
+                print read_title
+                print read_taxon_id
 
-            hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
-            print taxon_id
-            print hierarchy
+                hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
+                print taxon_id
+                print hierarchy
 
-            if read_taxon_id in taxon_id:
-                matching_reads.add(read_title)
+                if read_taxon_id in taxon_id:
+                    matching_reads.add(read_title)
+            else:
+                continue
 
     return matching_reads
 
@@ -146,9 +155,13 @@ if __name__ == "__main__":
     sys.exit()
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
+    if not is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
+        print("The given taxon ID is not in the database")
+        sys.exit()
 
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
+
 
     print("Here is the taxon id hierarchy:")
     print_hierarchy(taxon_hierarchy, taxa2names)

@@ -147,7 +147,7 @@ if __name__ == "__main__":
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
-    subparsers = parser.add_subparsers(required=False, help="FILL THIS OUT")
+    subparsers = parser.add_subparsers(help="FILL THIS OUT")
 
 
     subparsers.add_parser('-names', '--use_taxon_names', required=False,

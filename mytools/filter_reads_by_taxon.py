@@ -59,7 +59,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
                     sys.exit()
 
                 if read_taxon_id in taxon_id:
-                    matching_reads.add(fastq_lines)
+                    matching_reads.append(fastq_lines)
 
     return matching_reads
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
     parser.add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()
-    print args
+
     args = vars(args)
 
     fastq_reads = args['fastq_reads']

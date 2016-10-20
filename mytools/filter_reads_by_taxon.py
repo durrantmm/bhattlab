@@ -30,9 +30,10 @@ def is_child_taxon(taxon_id, taxon_nodes_dict, stop_set):
 
     while taxon_id != '1' and taxon_id != '0':
         if taxon_id in stop_set:
+            return True
+        else:
             taxon_id = taxon_nodes_dict[taxon_id]
             hierarchy.append(taxon_id)
-
 
     return False
 

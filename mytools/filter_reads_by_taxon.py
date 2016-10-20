@@ -42,8 +42,8 @@ def get_required_reads(reads_to_taxid_location, taxon_id):
     return matching_reads
 
 
-def get_taxa_to_names(taxon_ids, taxon_names_location):
-    assert type(taxon_ids) is set, "the taxon_ids input must be a set of taxon_ids"
+def get_taxa_to_names(taxon_names_location):
+    assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
 
     taxa_to_names = defaultdict(str)
     with open(taxon_names_location) as names_in:

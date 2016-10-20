@@ -76,6 +76,8 @@ if __name__ == "__main__":
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
 
+    parser.add_argument('-names', '--use_taxon_names', action='store_true')
+
     args = parser.parse_args()
     args = vars(args)
 
@@ -84,6 +86,9 @@ if __name__ == "__main__":
     taxon_id = args['taxon_id']
     taxon_nodes = args['taxon_nodes']
     ntaxa= args['number_of_parent_taxa']
+    use_taxon_names = args[use_taxon_names]
+    print use_taxon_names
+    sys.exit()
 
     print("Loading the Taxonomy Database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)

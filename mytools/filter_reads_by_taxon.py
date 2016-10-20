@@ -47,7 +47,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
         with open(fastq_reads) as fastq_reads_in:
 
-            with open("filtered_reads_%s.fastq" % taxon_id[0], 'w') as out_file:
+            with open("filtered_reads_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1]), 'w') as out_file:
                 read_taxa_in.readline()
                 for taxa_line in read_taxa_in:
                     fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
@@ -65,11 +65,13 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
     return matching_reads
 
+
 def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
     if taxon_id in taxon_nodes_dict.keys():
         return True
     else:
         return False
+
 
 def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_dict):
     assert type(taxon_id) is list, "taxon_id must be a list"

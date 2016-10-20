@@ -61,14 +61,8 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
             if is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
-                print read_title
-                print read_taxon_id
-
-                hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
-                print taxon_id
-                print hierarchy
-
-                if read_taxon_id in taxon_id:
+                hierarchy = set(get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict))
+                if len(hierarchy - set(taxon_id)) < len(hierarchy):
                     matching_reads.add(read_title)
             else:
                 continue

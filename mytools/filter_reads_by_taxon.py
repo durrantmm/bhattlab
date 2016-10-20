@@ -200,7 +200,7 @@ if __name__ == "__main__":
         print("Children Taxa Included:")
         for child in children_taxa:
             print taxa2names[child],
-            print
+        print
 
 
 

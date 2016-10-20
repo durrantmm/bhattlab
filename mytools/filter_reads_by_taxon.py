@@ -51,13 +51,13 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
             for line in read_taxa_in:
                 fastq_lines = [line for line in fastq_reads_in][:4]
                 print fastq_lines
-                sys.exit()
+                continue
                 line = line.strip().split("\t")
                 read_title = line[0].strip()
                 read_taxon_id = line[1].strip()
                 if read_taxon_id in taxon_id:
                     matching_reads.add(read_title)
-
+            sys.exit()
     return matching_reads
 
 def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):

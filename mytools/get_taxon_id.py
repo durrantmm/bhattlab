@@ -29,9 +29,11 @@ if __name__ == "__main__":
             line = [field.strip() for field in line.strip().split("|")]
 
             for part in name:
+                print part
                 if part not in line[1].upper():
-                    continue
-            print("Name: %s; Taxon ID: %s" % (line[1], line[0]))
+                    break
+            else:
+                print("Name: %s; Taxon ID: %s" % (line[1], line[0]))
 
 
 

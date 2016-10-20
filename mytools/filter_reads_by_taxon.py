@@ -43,17 +43,20 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
     matching_reads = set()
-    with open(reads_to_taxid_location) as read_taxa_in, open(fastq_reads) as fastq_reads_in:
-        read_taxa_in.readline()
-        for line in read_taxa_in:
-            fastq_lines = [line for line in read_taxa_in][:4]
-            print fastq_lines
-            sys.exit()
-            line = line.strip().split("\t")
-            read_title = line[0].strip()
-            read_taxon_id = line[1].strip()
-            if read_taxon_id in taxon_id:
-                matching_reads.add(read_title)
+    with open(reads_to_taxid_location) as read_taxa_in:
+
+        with open(fastq_reads) as fastq_reads_in:
+
+            read_taxa_in.readline()
+            for line in read_taxa_in:
+                fastq_lines = [line for line in fastq_reads_in][:4]
+                print fastq_lines
+                sys.exit()
+                line = line.strip().split("\t")
+                read_title = line[0].strip()
+                read_taxon_id = line[1].strip()
+                if read_taxon_id in taxon_id:
+                    matching_reads.add(read_title)
 
     return matching_reads
 

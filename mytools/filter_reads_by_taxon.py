@@ -38,8 +38,7 @@ if __name__ == "__main__":
     parser.add_argument('-par', '--parent_read_extract', required=False,
                         help='Specify --parent_read_extract if you would like to filter the reads by every read that'
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
-                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
-                        default="||PASS||")
+                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy')
 
 
     args = parser.parse_args()

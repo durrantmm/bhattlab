@@ -87,11 +87,14 @@ if __name__ == "__main__":
     taxon_nodes = args['taxon_nodes']
     ntaxa= args['number_of_parent_taxa']
     use_taxon_names = args['use_taxon_names']
-    print use_taxon_names
-    sys.exit()
+
+    taxa2names = defaultdict(str)
 
     print("Loading the Taxonomy Database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
+    print len(taxon_nodes_dict.keys() + taxon_nodes_dict.values())
+
+    sys.exit()
 
     print("Getting Taxon Hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)

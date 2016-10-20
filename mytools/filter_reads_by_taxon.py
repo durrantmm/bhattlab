@@ -26,7 +26,7 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
     return hierarchy
 
 
-def get_required_reads(reads_to_taxid_location, taxon_id):
+def get_required_reads_linear(reads_to_taxid_location, taxon_id):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
@@ -36,6 +36,26 @@ def get_required_reads(reads_to_taxid_location, taxon_id):
             line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
+            if read_taxon_id in taxon_id:
+                matching_reads.add(read_title)
+
+    return matching_reads
+
+def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_dict):
+    assert type(taxon_id) is list, "taxon_id must be a list"
+    assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
+
+    matching_reads = set()
+    with open(reads_to_taxid_location) as data_in:
+        for line in data_in:
+            line = line.strip().split("\t")
+            read_title = line[0].strip()
+            read_taxon_id = line[1].strip()
+
+            hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
+            print taxon_id
+            print hierarchy
+            sys.exit()
             if read_taxon_id in taxon_id:
                 matching_reads.add(read_title)
 
@@ -95,6 +115,10 @@ if __name__ == "__main__":
 
     parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
 
+    parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
+
+    parser.add_argument('-b', '--branched', action='store_true')
+
     args = parser.parse_args()
     args = vars(args)
 
@@ -104,6 +128,7 @@ if __name__ == "__main__":
     taxon_nodes = args['taxon_nodes']
     ntaxa= args['number_of_parent_taxa']
     taxon_names = args['use_taxon_names']
+    branched = args['branched']
 
     taxa2names = None
 
@@ -114,10 +139,6 @@ if __name__ == "__main__":
         print("Retrieving taxon names as requested...")
         taxa2names = get_taxa_to_names(taxon_names)
 
-    print
-    print len(taxa2names)
-    print
-
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
 
@@ -125,10 +146,16 @@ if __name__ == "__main__":
     print_hierarchy(taxon_hierarchy, taxa2names)
     taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
 
-    print("Collecting reads binned to the following taxa:")
-    print_hierarchy(taxon_hierarchy, taxa2names)
-    selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
-    print("Total Reads Collected: %d" % len(selected_reads))
+    if not branched:
+        print("Collecting reads binned to the following taxa:")
+        print_hierarchy(taxon_hierarchy, taxa2names)
+        selected_reads = get_required_reads_linear(read_to_taxid, taxon_hierarchy)
+        print("Total Reads Collected: %d" % len(selected_reads))
+    else:
+        print("Collecting reads binned to the following taxa, and ALL DESCENDING TAXA:")
+        print_hierarchy(taxon_hierarchy, taxa2names)
+        selected_reads = get_required_reads_branched(read_to_taxid, taxon_hierarchy, taxon_nodes_dict)
+        print("Total Reads Collected: %d" % len(selected_reads))
 
 
 

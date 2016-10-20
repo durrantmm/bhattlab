@@ -81,7 +81,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
                     print("NOT MATCH")
                     continue
             else:
-                print("READ NOT IN DICTIONARY")
+                print("READ NOT IN DICTIONARY: %s" % read_taxon_id)
                 unfound_reads += 1
                 continue
 

@@ -48,16 +48,20 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
         with open(fastq_reads) as fastq_reads_in:
 
             read_taxa_in.readline()
-            for line in read_taxa_in:
+            for taxa_line in read_taxa_in:
                 fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
-                print fastq_lines
-                continue
-                line = line.strip().split("\t")
-                read_title = line[0].strip()
-                read_taxon_id = line[1].strip()
+                taxa_line = taxa_line.strip().split("\t")
+                read_title = taxa_line[0].strip()
+                read_taxon_id = taxa_line[1].strip()
+
+                if read_title != fastq_lines[0]:
+                    print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                    sys.exit()
+
                 if read_taxon_id in taxon_id:
                     matching_reads.add(read_title)
-            sys.exit()
+                    print "\n".join(fastq_lines)
+
     return matching_reads
 
 def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):

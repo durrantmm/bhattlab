@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 def get_taxon_nodes(nodes_location):
-    taxon_nodes_dict = defaultdict(str)
+    taxon_nodes_dict = {}
     with open(nodes_location) as nodes_in:
         for line in nodes_in:
             line = line.strip().split("|")

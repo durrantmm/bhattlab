@@ -61,7 +61,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
                     if read_taxon_id in taxon_id:
                         matching_reads.add(read_title)
-                        out_file.writelines(fastq_lines)
+                        out_file.write("\n".join(fastq_lines)+"\n")
 
     return matching_reads
 

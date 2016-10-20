@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     print("Taxon of Interest:")
     print("\t"+taxon_id)
-    if taxon_names: taxa2names[taxon_id]
+    if taxon_names: print taxa2names[taxon_id]
 
     sys.exit()
     print("Loading the taxonomy database...")

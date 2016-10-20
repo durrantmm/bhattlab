@@ -104,6 +104,8 @@ if __name__ == "__main__":
     ntaxa= args['number_of_parent_taxa']
     taxon_names = args['use_taxon_names']
 
+    taxa2names = None
+
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
 

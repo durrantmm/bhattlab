@@ -198,7 +198,7 @@ if __name__ == "__main__":
     if not branched:
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
-        selected_reads = get_required_reads_linear(read_to_taxid, taxon_hierarchy)
+        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy)
         print("Total Reads Collected: %d" % len(selected_reads))
     else:
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")

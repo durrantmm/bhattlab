@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-    if not is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
+    if not is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
         print("The given taxon ID is not in the database")
         sys.exit()
 

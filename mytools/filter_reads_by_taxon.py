@@ -1,4 +1,5 @@
 import argparse
+import sys
 from collections import defaultdict
 
 # start here when the script is launched
@@ -29,23 +30,32 @@ if __name__ == "__main__":
                                                  'several variant managing services.')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
-    parser.add_argument('taxon_nodes', help='This is an updated version of the NCBI Taxonomy Database "nodes.txt" file.')
     parser.add_argument('taxon_id',
                         help='The NCBI Taxon ID of the species of interest')
-    #parser.add_argument('fastq_reads', help='The name of the project being used.')
-    #parser.add_argument('assigned_read_taxa', help='The name of the project being used.')
+    parser.add_argument('fastq_reads',
+                        help='The fastq file containing the reads of interest')
+
+    parser.add_argument('-par', '--parent_read_extract', metavar='taxon_nodes', required=False,
+                        help='Specify --parent_read_extract if you would like to filter the reads by every read that'
+                             'is binned into each node in the hierarchy. Follow this flag with the location of the'
+                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy')
+
 
     args = parser.parse_args()
     args = vars(args)
     taxon_nodes = args['taxon_nodes']
     taxon_id = args['taxon_id']
 
-    print("Loading the Taxonomy Database...")
-    taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-    print("Getting Taxon Hierarchy")
-    taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
+    taxon_hierarchy = [taxon_id]
+    print taxon_nodes
+    sys.exit()
+    if taxon_nodes == "":
 
-    print("Here is the Taxon Hierarchy: ")
-    print taxon_hierarchy
+    else:
+        print("Loading the Taxonomy Database...")
+        taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
+        print("Getting Taxon Hierarchy")
+        taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
+
 
 

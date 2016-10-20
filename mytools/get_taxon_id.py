@@ -19,7 +19,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args = vars(args)
 
-    name = parser['name']
+    name = args['name']
     taxon_names_location = args['taxon_names_location']
 
 

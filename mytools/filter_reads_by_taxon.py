@@ -47,7 +47,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
         with open(fastq_reads) as fastq_reads_in:
 
-            with open("filtered_reads_%s.fastq" % taxon_id[0]) as out_file:
+            with open("filtered_reads_%s.fastq" % taxon_id[0], 'w') as out_file:
                 read_taxa_in.readline()
                 for taxa_line in read_taxa_in:
                     fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]

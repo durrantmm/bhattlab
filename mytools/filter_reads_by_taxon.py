@@ -38,7 +38,7 @@ def is_child_taxon(taxon_id, taxon_nodes_dict, stop_set):
     return False
 
 
-def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, out_file_loc):
+def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
@@ -47,21 +47,19 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, ou
 
         with open(fastq_reads) as fastq_reads_in:
 
-            with open(out_file_loc, 'w') as out_file:
-                read_taxa_in.readline()
-                for taxa_line in read_taxa_in:
-                    fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
-                    taxa_line = taxa_line.strip().split("\t")
-                    read_title = taxa_line[0].strip()
-                    read_taxon_id = taxa_line[1].strip()
+            read_taxa_in.readline()
+            for taxa_line in read_taxa_in:
+                fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
+                taxa_line = taxa_line.strip().split("\t")
+                read_title = taxa_line[0].strip()
+                read_taxon_id = taxa_line[1].strip()
 
-                    if read_title != fastq_lines[0]:
-                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
-                        sys.exit()
+                if read_title != fastq_lines[0]:
+                    print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                    sys.exit()
 
-                    if read_taxon_id in taxon_id:
-                        matching_reads.add(read_title)
-                        out_file.write("\n".join(fastq_lines)+"\n")
+                if read_taxon_id in taxon_id:
+                    matching_reads.add(fastq_lines)
 
     return matching_reads
 
@@ -132,6 +130,11 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
             print indent+taxa
         level += 1
 
+
+def write_reads(reads, out_file_loc):
+    with open(out_file_loc,'w') as out_file:
+            for line in reads:
+                out_file.write("\n".join(line)+"\n")
 
 if __name__ == "__main__":
 
@@ -206,8 +209,9 @@ if __name__ == "__main__":
     if not branched:
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
-        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1])
         selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1])
+        write_reads(selected_reads, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
     else:
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")

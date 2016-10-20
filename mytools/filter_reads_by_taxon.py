@@ -148,15 +148,9 @@ if __name__ == "__main__":
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
 
-    subparsers = parser.add_subparsers(help="FILL THIS OUT")
+    parser.add_argument('-names', '--use_taxon_names', required = False, help = 'FILL THIS OUT')
 
-    parser_names = subparsers.add_parser('names', help="FILL THIS OUT")
-
-    parser_names.add_argument('-names', '--use_taxon_names', required = False,
-    default = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
-    help = 'FILL THIS OUT')
-
-    parser_names.add_argument('-b', '--branched', action='store_true')
+    parser.add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()
     print args
@@ -169,6 +163,9 @@ if __name__ == "__main__":
     ntaxa= args['number_of_parent_taxa']
     taxon_names = args['use_taxon_names']
     branched = args['branched']
+
+    if taxon_names is None:
+        taxon_names = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp"
 
     taxa2names = None
 

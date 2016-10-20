@@ -76,14 +76,15 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
 
-            if read_taxon_id != '0':
+            try:
                 if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
                     print("MATCH")
                     matching_reads.add(read_title)
                 else:
                     print("NOT MATCH")
                     continue
-            else:
+
+            except KeyError:
                 print("READ NOT IN DICTIONARY: %s" % read_taxon_id)
                 unfound_reads += 1
                 continue

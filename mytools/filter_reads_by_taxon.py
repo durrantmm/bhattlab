@@ -38,14 +38,17 @@ def is_child_taxon(taxon_id, taxon_nodes_dict, stop_set):
     return False
 
 
-def get_required_reads_linear(reads_to_taxid_location, taxon_id):
+def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
     matching_reads = set()
-    with open(reads_to_taxid_location) as data_in:
-        data_in.readline()
-        for line in data_in:
+    with open(reads_to_taxid_location) as read_taxa_in, open(fastq_reads) as fastq_reads_in:
+        read_taxa_in.readline()
+        for line in read_taxa_in:
+            fastq_lines = [line for line in read_taxa_in][:4]
+            print fastq_lines
+            sys.exit()
             line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
@@ -79,15 +82,12 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
             try:
                 if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
-                    #print("MATCH")
                     matching_reads.add(read_title)
                     matching_taxa.add(read_taxon_id)
                 else:
-                    #print("NOT MATCH")
                     continue
 
             except KeyError:
-                #print("READ NOT IN DICTIONARY: %s" % read_taxon_id)
                 unfound_reads += 1
                 continue
 

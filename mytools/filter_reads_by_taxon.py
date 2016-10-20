@@ -111,7 +111,7 @@ def get_taxa_to_names(taxon_names_location):
     with open(taxon_names_location) as names_in:
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
-
+            #print "\t".join([line[0], line[1], line[3]])
             if line[3] == 'scientific name':
                 taxa_to_names[line[0]] = line[1]
 
@@ -129,7 +129,6 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
         else:
             print indent+taxa
         level += 1
-
 
 def write_reads(reads, out_file_loc):
     with open(out_file_loc,'w') as out_file:
@@ -209,9 +208,10 @@ if __name__ == "__main__":
     if not branched:
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
-        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy)
 
-        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_id[0], taxon_id[-1])
+        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxa2names[taxon_id[0]].replace(" ",""),
+                                                             taxa2names[taxon_id[-1]].replace(" ",""))
         print("Writing reads to file: %s" % out_file)
         write_reads(selected_reads, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))

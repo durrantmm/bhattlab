@@ -47,8 +47,7 @@ def print_hierarchy(taxon_hierarchy):
 
     level = 0
     for taxa in taxon_hierarchy[::-1]:
-        indent = ["\t"]*level
-        indent = indent.join("")
+        indent = "".join(["\t"]*level)
         print indent+taxa
         level += 1
 

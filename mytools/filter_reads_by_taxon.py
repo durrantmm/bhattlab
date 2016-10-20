@@ -57,6 +57,11 @@ if __name__ == "__main__":
                         help='Specify --parent_read_extract if you would like to filter the reads by every read that'
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy')
+    parser.add_argument('-ntaxa', '--number_of_parent_taxa', required=False,
+                        help='Specify --parent_read_extract if you would like to filter the reads by every read that'
+                             'is binned into each node in the hierarchy. Follow this flag with the location of the'
+                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
+                        type = int, default=0)
 
     args = parser.parse_args()
     args = vars(args)
@@ -65,6 +70,7 @@ if __name__ == "__main__":
     read_to_taxid = args['read_to_taxid']
     taxon_id = args['taxon_id']
     taxon_nodes = args['extract_parent_reads']
+    ntaxa= args['number_of_parent_taxa']
 
     taxon_hierarchy = [taxon_id]
 
@@ -72,10 +78,18 @@ if __name__ == "__main__":
         selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
         print len(selected_reads)
     else:
+
         print("Loading the Taxonomy Database...")
         taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-        print("Getting Taxon Hierarchy")
+        print("Getting Taxon Hierarchy...")
         taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
-
+        print("Here is the taxon id hierarchy:\n\t")
+        print taxon_hierarchy
+        if ntaxa != 0:
+            taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
+        print("Collecting reads binned to the following taxa:\n\t")
+        print taxon_hierarchy
+        selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
+        print len(selected_reads)
 
 

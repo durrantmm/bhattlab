@@ -28,8 +28,8 @@ if __name__ == "__main__":
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
 
-            if name in line[2].upper():
-                print("Name: %s; Taxon ID: %s" % (line[2], line[0]))
+            if name in line[1].upper():
+                print("Name: %s; Taxon ID: %s" % (line[1], line[0]))
 
 
 

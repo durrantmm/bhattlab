@@ -148,16 +148,16 @@ if __name__ == "__main__":
         print("Retrieving taxon names as requested...")
         taxa2names = get_taxa_to_names(taxon_names)
 
-    print("Taxon of Interest:")
-    print("\t"+taxon_id)
-    if taxon_names: print taxa2names[taxon_id]
 
-    sys.exit()
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
     if not is_taxon_id_in_nodes(read_taxon_id, taxon_nodes_dict):
         print("The given taxon ID is not in the database")
         sys.exit()
+
+    print("Taxon of Interest:")
+    print("\t"+taxon_id)
+    if taxon_names: print taxa2names[taxon_id]
 
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)

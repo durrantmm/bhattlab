@@ -147,14 +147,14 @@ if __name__ == "__main__":
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
-    subparsers = parser.add_subparsers(help="FILL THIS OUT")
+    subparsers = parser.add_subparsers('names', help="FILL THIS OUT")
 
 
-    subparsers.add_parser('-names', '--use_taxon_names', required=False,
+    parser_names = subparsers.add_parser('-names', '--use_taxon_names', required=False,
                         default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
                         help='FILL THIS OUT')
 
-    parser.add_argument('-b', '--branched', action='store_true')
+    parser_names, .add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()
     print args

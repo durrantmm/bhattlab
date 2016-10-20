@@ -86,7 +86,7 @@ if __name__ == "__main__":
     taxon_id = args['taxon_id']
     taxon_nodes = args['taxon_nodes']
     ntaxa= args['number_of_parent_taxa']
-    use_taxon_names = args[use_taxon_names]
+    use_taxon_names = args['use_taxon_names']
     print use_taxon_names
     sys.exit()
 

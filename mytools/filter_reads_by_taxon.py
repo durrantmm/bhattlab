@@ -30,15 +30,16 @@ if __name__ == "__main__":
                                                  'several variant managing services.')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
-    parser.add_argument('taxon_id',
-                        help='The NCBI Taxon ID of the species of interest')
     parser.add_argument('fastq_reads',
                         help='The fastq file containing the reads of interest')
+    parser.add_argument('taxon_id',
+                        help='The NCBI Taxon ID of the species of interest')
 
     parser.add_argument('-par', '--parent_read_extract', metavar='taxon_nodes', required=False,
                         help='Specify --parent_read_extract if you would like to filter the reads by every read that'
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
-                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy')
+                             'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
+                        default="||PASS||")
 
 
     args = parser.parse_args()

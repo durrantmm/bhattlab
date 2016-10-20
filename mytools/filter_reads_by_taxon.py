@@ -113,6 +113,10 @@ if __name__ == "__main__":
         print("Retrieving taxon names as requested...")
         taxa2names = get_taxa_to_names(taxon_names)
 
+    print
+    print len(taxa2names)
+    print
+
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
 

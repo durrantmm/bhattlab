@@ -32,6 +32,7 @@ def get_required_reads_linear(reads_to_taxid_location, taxon_id):
 
     matching_reads = set()
     with open(reads_to_taxid_location) as data_in:
+        data_in.readline()
         for line in data_in:
             line = line.strip().split("\t")
             read_title = line[0].strip()
@@ -47,6 +48,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
     matching_reads = set()
     with open(reads_to_taxid_location) as data_in:
+        data_in.readline()
         for line in data_in:
             line = line.strip().split("\t")
             read_title = line[0].strip()

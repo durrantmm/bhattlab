@@ -66,6 +66,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
     taxon_id = set(taxon_id)
     matching_reads = set()
+    unfound_reads = 0
     with open(reads_to_taxid_location) as data_in:
         data_in.readline()
         for line in data_in:
@@ -80,7 +81,11 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
                     print("NOT MATCH")
                     continue
             else:
+                print("READ NOT IN DICTIONARY")
+                unfound_reads += 1
                 continue
+
+    print unfound_reads
 
     return matching_reads
 

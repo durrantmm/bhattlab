@@ -50,7 +50,7 @@ def get_taxa_to_names(taxon_names_location):
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
             print line
-            if line[2] == ['scientific name']:
+            if line[3] == ['scientific name']:
                 taxa_to_names[line[0]] = line[1]
 
     return taxa_to_names

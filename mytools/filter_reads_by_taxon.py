@@ -42,13 +42,29 @@ def get_required_reads(reads_to_taxid_location, taxon_id):
     return matching_reads
 
 
-def print_hierarchy(taxon_hierarchy):
+def get_taxa_to_names(taxon_ids, taxon_names_location):
+    assert type(taxon_ids) is set, "the taxon_ids input must be a set of taxon_ids"
+
+    taxa_to_names = defaultdict(str)
+    with open(taxon_names_location) as names_in:
+        for line in names_in:
+            line = [field.strip() for field in line.strip().split("|")]
+            if line[2] == ['scientific name']:
+                taxa_to_names[line[0]] = line[1]
+
+    return taxa_to_names
+
+
+def print_hierarchy(taxon_hierarchy, taxa2names=None):
     assert type(taxon_hierarchy) is list, "the taxon hierarchy must be a list"
 
     level = 0
     for taxa in taxon_hierarchy[::-1]:
         indent = "".join(["     "]*level)
-        print indent+taxa
+        if taxa2names:
+            print indent+taxa2names[taxa]
+        else:
+            print indent+taxa
         level += 1
 
 if __name__ == "__main__":
@@ -76,7 +92,7 @@ if __name__ == "__main__":
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
 
-    parser.add_argument('-names', '--use_taxon_names', action='store_true')
+    parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
 
     args = parser.parse_args()
     args = vars(args)
@@ -86,25 +102,24 @@ if __name__ == "__main__":
     taxon_id = args['taxon_id']
     taxon_nodes = args['taxon_nodes']
     ntaxa= args['number_of_parent_taxa']
-    use_taxon_names = args['use_taxon_names']
+    taxon_names = args['use_taxon_names']
 
-    taxa2names = defaultdict(str)
-
-    print("Loading the Taxonomy Database...")
+    print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-    print len(set(taxon_nodes_dict.keys() + taxon_nodes_dict.values()))
 
-    sys.exit()
+    if taxon_names:
+        print("Retrieving taxon names as requested...")
+        taxa2names = get_taxa_to_names(taxon_names)
 
-    print("Getting Taxon Hierarchy...")
+    print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
 
     print("Here is the taxon id hierarchy:")
-    print_hierarchy(taxon_hierarchy)
+    print_hierarchy(taxon_hierarchy, taxa2names)
     taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
 
     print("Collecting reads binned to the following taxa:")
-    print_hierarchy(taxon_hierarchy)
+    print_hierarchy(taxon_hierarchy, taxa2names)
     selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
     print("Total Reads Collected: %d" % len(selected_reads))
 

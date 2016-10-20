@@ -51,6 +51,8 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
+            print read_title
+            print read_taxon_id
 
             hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
             print taxon_id

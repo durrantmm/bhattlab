@@ -50,7 +50,7 @@ if __name__ == "__main__":
     print taxon_nodes
     sys.exit()
     if taxon_nodes == "":
-
+        pass
     else:
         print("Loading the Taxonomy Database...")
         taxon_nodes_dict = get_taxon_nodes(taxon_nodes)

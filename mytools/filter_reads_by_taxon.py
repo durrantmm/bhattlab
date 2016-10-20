@@ -98,6 +98,7 @@ if __name__ == "__main__":
     print("Collecting reads binned to the following taxa:")
     print_hierarchy(taxon_hierarchy)
     selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
-    print len(selected_reads)
+    print("Total Reads Collected: %d" % len(selected_reads))
+
 
 

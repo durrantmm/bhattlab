@@ -215,6 +215,7 @@ if __name__ == "__main__":
         print("Writing reads to file: %s" % out_file)
         write_reads(selected_reads, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
+
     else:
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")
         print_hierarchy(taxon_hierarchy, taxa2names)

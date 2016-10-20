@@ -163,7 +163,6 @@ if __name__ == "__main__":
     parser.add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()
-    print args
     args = vars(args)
 
     fastq_reads = args['fastq_reads']

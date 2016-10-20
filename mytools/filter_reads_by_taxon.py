@@ -35,7 +35,7 @@ if __name__ == "__main__":
     parser.add_argument('taxon_id',
                         help='The NCBI Taxon ID of the species of interest')
 
-    parser.add_argument('-par', '--parent_read_extract', required=False,
+    parser.add_argument('-par', '--extract_parent_read', required=False,
                         help='Specify --parent_read_extract if you would like to filter the reads by every read that'
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy')
@@ -43,14 +43,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args = vars(args)
-    print args
-    sys.exit()
-    taxon_nodes = args['taxon_nodes']
+    taxon_nodes = args['extract_parent_reads']
     taxon_id = args['taxon_id']
 
     taxon_hierarchy = [taxon_id]
 
-    if taxon_nodes == "":
+    if taxon_nodes is None:
         pass
     else:
         print("Loading the Taxonomy Database...")

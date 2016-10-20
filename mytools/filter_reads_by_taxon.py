@@ -125,8 +125,8 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
 if __name__ == "__main__":
 
     # setup the option parser
-    parser = argparse.ArgumentParser(description='VariantManager is a software suite that provides '
-                                                 'several variant managing services.')
+    parser = argparse.ArgumentParser(description='fiter_reads_by_taxon.py is a simple program for filtering the reads '
+                                                 'by taxon of interest. Use the -h flag for more information.')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_reads',
@@ -136,7 +136,8 @@ if __name__ == "__main__":
                         help='A tab-separated file where the first column is the read title and the second'
                              'column is the assigned taxon id')
 
-    parser.add_argument('taxon_nodes',
+    parser.add_argument('-nodes','--taxon_nodes', required = False,
+                        default = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
                         help='Location of the NCBI Taxonomy Database nodes.txt file')
 
     parser.add_argument('taxon_id', help='The NCBI Taxon ID of the species of interest')
@@ -147,7 +148,9 @@ if __name__ == "__main__":
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
 
-    parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
+    parser.add_argument('-names', '--use_taxon_names', required=False,
+                        default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
+                        help='FILL THIS OUT')
 
     parser.add_argument('-b', '--branched', action='store_true')
 

@@ -30,7 +30,7 @@ def get_required_reads(reads_to_taxid_location, taxon_id):
     matching_reads = set()
     with open(reads_to_taxid_location) as data_in:
         for line in data_in:
-            line = line.strip().split()
+            line = line.strip().split("\t")
             read_title = line[0].strip()
             read_taxon_id = line[1].strip()
             if read_taxon_id in taxon_id:

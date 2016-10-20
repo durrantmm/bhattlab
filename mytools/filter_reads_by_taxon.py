@@ -78,18 +78,18 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
             try:
                 if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
-                    print("MATCH")
+                    #print("MATCH")
                     matching_reads.add(read_title)
                 else:
-                    print("NOT MATCH")
+                    #print("NOT MATCH")
                     continue
 
             except KeyError:
-                print("READ NOT IN DICTIONARY: %s" % read_taxon_id)
+                #print("READ NOT IN DICTIONARY: %s" % read_taxon_id)
                 unfound_reads += 1
                 continue
 
-    print unfound_reads
+    print("Total Unclassified/Unknown Reads: %s" % unfound_reads)
 
     return matching_reads
 

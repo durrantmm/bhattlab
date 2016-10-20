@@ -20,6 +20,7 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
     hierarchy = [taxon_id]
 
     while taxon_id != '1' and taxon_id != '0':
+        print taxon_id
         taxon_id = taxon_nodes_dict[taxon_id]
         hierarchy.append(taxon_id)
 

@@ -19,7 +19,7 @@ def get_taxon_nodes(nodes_location):
 def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
     hierarchy = [taxon_id]
 
-    while taxon_id != "1":
+    while taxon_id != '1' and taxon_id != '0':
         taxon_id = taxon_nodes_dict[taxon_id]
         hierarchy.append(taxon_id)
 
@@ -59,7 +59,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
             hierarchy = get_taxon_hierarchy(read_taxon_id, taxon_nodes_dict)
             print taxon_id
             print hierarchy
-            sys.exit()
+
             if read_taxon_id in taxon_id:
                 matching_reads.add(read_title)
 

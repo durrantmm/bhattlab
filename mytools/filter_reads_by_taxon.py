@@ -115,8 +115,6 @@ if __name__ == "__main__":
 
     parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
 
-    parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
-
     parser.add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()

@@ -154,7 +154,7 @@ if __name__ == "__main__":
                         default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
                         help='FILL THIS OUT')
 
-    parser_names, .add_argument('-b', '--branched', action='store_true')
+    parser_names.add_argument('-b', '--branched', action='store_true')
 
     args = parser.parse_args()
     print args

@@ -8,17 +8,27 @@ from collections import defaultdict
 if __name__ == "__main__":
 
     # setup the option parser
-    parser = argparse.ArgumentParser(description='VariantManager is a software suite that provides '
-                                                 'several variant managing services.')
-    parser.add_argument('-names', '--use_taxon_names', help='FILL THIS OUT')
+    parser = argparse.ArgumentParser(description='Quickly get the taxon id for a given')
+    parser.add_argument('name', help='FILL THIS OUT')
+    parser.add_argument('taxon_names_location', required = False,
+                        default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
+                        help='FILL THIS OUT')
 
 
 
     args = parser.parse_args()
     args = vars(args)
 
+    name = parser['name']
+    taxon_names_location = args['taxon_names_location']
 
-    ar
+
+    with open(taxon_names_location) as names_in:
+        for line in names_in:
+            line = [field.strip() for field in line.strip().split("|")]
+            if name.upper() in line[3].upper():
+                print("Name: %s; Taxon ID: %s" % (line[3], line[0]))
+
 
 
 

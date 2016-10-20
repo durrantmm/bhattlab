@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
     print("Loading the Taxonomy Database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
-    print len(taxon_nodes_dict.keys() + taxon_nodes_dict.values())
+    print len(set(taxon_nodes_dict.keys() + taxon_nodes_dict.values()))
 
     sys.exit()
 

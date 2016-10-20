@@ -111,7 +111,7 @@ def get_taxa_to_names(taxon_names_location):
     with open(taxon_names_location) as names_in:
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
-            #print "\t".join([line[0], line[1], line[3]])
+
             if line[3] == 'scientific name':
                 taxa_to_names[line[0]] = line[1]
 
@@ -217,6 +217,7 @@ if __name__ == "__main__":
         print("Total Reads Collected: %d" % len(selected_reads))
 
     else:
+
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")
         print_hierarchy(taxon_hierarchy, taxa2names)
         selected_reads, children_taxa = get_required_reads_branched(read_to_taxid, taxon_hierarchy, taxon_nodes_dict)

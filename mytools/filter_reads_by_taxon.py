@@ -66,6 +66,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
     taxon_id = set(taxon_id)
     matching_reads = set()
+    matching_taxa = set()
     unfound_reads = 0
 
     with open(reads_to_taxid_location) as data_in:
@@ -80,6 +81,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
                 if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
                     #print("MATCH")
                     matching_reads.add(read_title)
+                    matching_taxa.add(read_taxon_id)
                 else:
                     #print("NOT MATCH")
                     continue
@@ -91,7 +93,7 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
 
     print("Total Unclassified/Unknown Reads: %s" % unfound_reads)
 
-    return matching_reads
+    return matching_reads, matching_taxa
 
 
 def get_taxa_to_names(taxon_names_location):
@@ -191,10 +193,13 @@ if __name__ == "__main__":
         selected_reads = get_required_reads_linear(read_to_taxid, taxon_hierarchy)
         print("Total Reads Collected: %d" % len(selected_reads))
     else:
-        print("Collecting reads binned to the following taxa, and ALL DESCENDING TAXA:")
+        print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")
         print_hierarchy(taxon_hierarchy, taxa2names)
-        selected_reads = get_required_reads_branched(read_to_taxid, taxon_hierarchy, taxon_nodes_dict)
+        selected_reads, children_taxa = get_required_reads_branched(read_to_taxid, taxon_hierarchy, taxon_nodes_dict)
         print("Total Reads Collected: %d" % len(selected_reads))
+        print("Children Taxa Included:")
+        print children_taxa
+
 
 
 

@@ -19,14 +19,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args = vars(args)
 
-    name = args['name']
+    name = args['name'].upper()
     taxon_names_location = args['taxon_names_location']
+
 
 
     with open(taxon_names_location) as names_in:
         for line in names_in:
             line = [field.strip() for field in line.strip().split("|")]
-            if name.upper() in line[3].upper():
+            print name, line[3].upper()
+            if name in line[3].upper():
                 print("Name: %s; Taxon ID: %s" % (line[3], line[0]))
 
 

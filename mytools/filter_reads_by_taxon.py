@@ -49,7 +49,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id):
 
             read_taxa_in.readline()
             for line in read_taxa_in:
-                fastq_lines = [line for line in fastq_reads_in][:4]
+                fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
                 print fastq_lines
                 continue
                 line = line.strip().split("\t")

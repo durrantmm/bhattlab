@@ -23,6 +23,21 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
 
     return hierarchy
 
+def get_required_reads(reads_to_taxid_location, taxon_id):
+    assert type(taxon_id) is list, "taxon_id must be a list"
+    assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
+
+    matching_reads = set()
+    with open(reads_to_taxid_location) as data_in:
+        for line in data_in:
+            line = line.strip().split("|")
+            read_title = line[0].strip()
+            read_taxon_id = line[1].strip()
+            if read_taxon_id in taxon_id:
+                matching_reads.add(read_title)
+
+    return matching_reads
+
 if __name__ == "__main__":
 
     # setup the option parser
@@ -32,6 +47,9 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_reads',
                         help='The fastq file containing the reads of interest')
+    parser.add_argument('read_to_taxid',
+                        help='A tab-separated file where the first column is the read title and the second'
+                             'column is the assigned taxon id')
     parser.add_argument('taxon_id',
                         help='The NCBI Taxon ID of the species of interest')
 
@@ -42,13 +60,17 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args = vars(args)
-    taxon_nodes = args['extract_parent_reads']
+
+    fastq_reads = args['fastq_reads']
+    read_to_taxid = args['read_to_taxid']
     taxon_id = args['taxon_id']
+    taxon_nodes = args['extract_parent_reads']
 
     taxon_hierarchy = [taxon_id]
 
     if taxon_nodes is None:
-        pass
+        selected_reads = get_required_reads(read_to_taxid, taxon_hierarchy)
+        print len(selected_reads)
     else:
         print("Loading the Taxonomy Database...")
         taxon_nodes_dict = get_taxon_nodes(taxon_nodes)

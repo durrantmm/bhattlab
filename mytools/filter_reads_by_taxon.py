@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     parser.add_argument('-nodes','--taxon_nodes', required = False,
                         default = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
-                        help='Location of the NCBI Taxonomy Database nodes.txt file')
+                        help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('taxon_id', help='The NCBI Taxon ID of the species of interest')
 
@@ -183,6 +183,8 @@ if __name__ == "__main__":
     taxon_names = args['use_taxon_names']
     branched = args['branched']
 
+    print taxon_nodes
+    sys.exit()
     if taxon_names == "default":
         taxon_names = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp"
 

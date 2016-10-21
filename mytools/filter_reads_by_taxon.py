@@ -120,12 +120,13 @@ def get_taxa_to_names(taxon_names_location):
     assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
 
     taxa_to_names = defaultdict(str)
-    with open(taxon_names_location) as names_in:
-        for line in names_in:
-            line = [field.strip() for field in line.strip().split("|")]
-            #print "\t".join([line[0], line[1], line[3]])
-            if line[3] == 'scientific name':
-                taxa_to_names[line[0]] = line[1]
+    for location in taxon_names_location:
+        with open(location) as names_in:
+            for line in names_in:
+                line = [field.strip() for field in line.strip().split("|")]
+                #print "\t".join([line[0], line[1], line[3]])
+                if line[3] == 'scientific name':
+                    taxa_to_names[line[0]] = line[1]
 
     return taxa_to_names
 
@@ -198,7 +199,7 @@ if __name__ == "__main__":
     branched = args['branched']
 
     print taxon_nodes
-    sys.exit()
+
     if taxon_names == "default":
         taxon_names = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp"
 

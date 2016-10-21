@@ -107,6 +107,7 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
                             continue
 
                     except KeyError:
+                        print "UNIDENTIFIED TAXON ID: " + read_taxon_id
                         unfound_reads += 1
                         continue
 
@@ -210,9 +211,8 @@ if __name__ == "__main__":
     print_hierarchy(taxon_hierarchy, taxa2names)
     taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
 
-
-
     if not branched:
+
         out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
 
         print("Collecting reads binned to the following taxa:")

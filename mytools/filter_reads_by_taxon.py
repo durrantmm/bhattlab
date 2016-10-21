@@ -66,7 +66,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, ou
     return matching_reads
 
 
-def get_required_reads_faster_maybe(reads_to_taxid_location, fastq_reads, taxon_id, out_file_loc):
+def get_required_reads_linear_faster_maybe(reads_to_taxid_location, fastq_reads, taxon_id, out_file_loc):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 

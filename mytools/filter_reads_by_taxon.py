@@ -120,7 +120,7 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
 def get_taxa_to_names(taxon_names_location):
     assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
 
-    taxa_to_names = defaultdict(str)
+    taxa_to_names = {}
 
     with open(taxon_names_location) as names_in:
         for line in names_in:

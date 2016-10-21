@@ -32,7 +32,7 @@ if __name__ == "__main__":
                 if part not in line[1].upper():
                     break
             else:
-                print("Name: %s; Taxon ID: %s" % (line[1], line[0]))
+                print("%s\t%s"" % (line[1], line[0]))
 
 
 

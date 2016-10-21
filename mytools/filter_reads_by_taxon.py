@@ -87,7 +87,8 @@ def get_required_reads_linear_faster_maybe(reads_to_taxid_location, fastq_reads,
     with open(fastq_reads) as fastq_reads_in:
         line = fastq_reads_in.readline().strip()
         while line != "":
-            if line[0] == '@':
+            if line[0] == '@' and line == matching_reads[0]:
+                matching.pop(0)
                 reads_out.append([line, fastq_reads_in.readline().strip(),
                                   fastq_reads_in.readline().strip(), fastq_reads_in.readline().strip()])
             line = fastq_reads_in.readline()

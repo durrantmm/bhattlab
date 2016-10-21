@@ -73,7 +73,7 @@ def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
         return False
 
 
-def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_dict):
+def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, taxon_nodes_dict, out_file_loc):
     assert type(taxon_id) is list, "taxon_id must be a list"
     assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
 
@@ -82,24 +82,33 @@ def get_required_reads_branched(reads_to_taxid_location, taxon_id, taxon_nodes_d
     matching_taxa = set()
     unfound_reads = 0
 
-    with open(reads_to_taxid_location) as data_in:
-        data_in.readline()
-        for line in data_in:
+    with open(reads_to_taxid_location) as read_taxa_in:
 
-            line = line.strip().split("\t")
-            read_title = line[0].strip()
-            read_taxon_id = line[1].strip()
+        with open(fastq_reads) as fastq_reads_in:
 
-            try:
-                if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
-                    matching_reads.add(read_title)
-                    matching_taxa.add(read_taxon_id)
-                else:
-                    continue
+            with open(out_file_loc, 'w') as out_file:
+                read_taxa_in.readline()
+                for line in read_taxa_in:
+                    fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
+                    line = line.strip().split("\t")
+                    read_title = line[0].strip()
+                    read_taxon_id = line[1].strip()
 
-            except KeyError:
-                unfound_reads += 1
-                continue
+                    if read_title != fastq_lines[0]:
+                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                        sys.exit()
+
+                    try:
+                        if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
+                            matching_reads.add(read_title)
+                            matching_taxa.add(read_taxon_id)
+                            out_file.write("\n".join(fastq_lines) + "\n")
+                        else:
+                            continue
+
+                    except KeyError:
+                        unfound_reads += 1
+                        continue
 
     print("Total Unclassified/Unknown Reads: %s" % unfound_reads)
 
@@ -217,8 +226,3 @@ if __name__ == "__main__":
         print("Children Taxa Included:")
         for child in children_taxa:
             print "\t"+taxa2names[child]
-
-
-
-
-

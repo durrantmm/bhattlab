@@ -5,14 +5,15 @@ from collections import defaultdict
 # start here when the script is launched
 
 
-def get_taxon_nodes(nodes_location):
+def get_taxon_nodes(nodes_locations):
     taxon_nodes_dict = {}
-    with open(nodes_location) as nodes_in:
-        for line in nodes_in:
-            line = line.strip().split("|")
-            id = line[0].strip()
-            parent_id = line[1].strip()
-            taxon_nodes_dict[id] = parent_id
+    for location in nodes_locations:
+        with open(location) as nodes_in:
+            for line in nodes_in:
+                line = line.strip().split("|")
+                id = line[0].strip()
+                parent_id = line[1].strip()
+                taxon_nodes_dict[id] = parent_id
     return taxon_nodes_dict
 
 
@@ -120,13 +121,13 @@ def get_taxa_to_names(taxon_names_location):
     assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
 
     taxa_to_names = defaultdict(str)
-    for location in taxon_names_location:
-        with open(location) as names_in:
-            for line in names_in:
-                line = [field.strip() for field in line.strip().split("|")]
-                #print "\t".join([line[0], line[1], line[3]])
-                if line[3] == 'scientific name':
-                    taxa_to_names[line[0]] = line[1]
+
+    with open(taxon_names_location) as names_in:
+        for line in names_in:
+            line = [field.strip() for field in line.strip().split("|")]
+            #print "\t".join([line[0], line[1], line[3]])
+            if line[3] == 'scientific name':
+                taxa_to_names[line[0]] = line[1]
 
     return taxa_to_names
 

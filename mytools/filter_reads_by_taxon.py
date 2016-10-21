@@ -170,7 +170,8 @@ if __name__ == "__main__":
                              'column is the assigned taxon id')
 
     parser.add_argument('-nodes','--taxon_nodes', required = False,
-                        default = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
+                        default = ["/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
+                                   "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/merged.dmp"],
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('taxon_id', help='The NCBI Taxon ID of the species of interest')

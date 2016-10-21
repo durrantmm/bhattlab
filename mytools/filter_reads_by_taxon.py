@@ -210,8 +210,7 @@ if __name__ == "__main__":
         taxa2names = get_taxa_to_names(taxon_names)
 
     print taxon_id
-    print taxa2names[taxon_id]
-
+    print taxon_id_to_name(taxon_id, taxa2names)
     sys.exit()
 
     print("Loading the taxonomy database...")

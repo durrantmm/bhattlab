@@ -72,27 +72,28 @@ def get_required_reads_linear_faster_maybe(reads_to_taxid_location, fastq_reads,
 
     matching_reads = []
     with open(reads_to_taxid_location) as read_taxa_in:
+        read_taxa_in.readline()
 
-        with open(fastq_reads) as fastq_reads_in:
+        for taxa_line in read_taxa_in:
 
+            taxa_line = taxa_line.strip().split("\t")
+            read_title = taxa_line[0].strip()
+            read_taxon_id = taxa_line[1].strip()
 
-                read_taxa_in.readline()
-                for taxa_line in read_taxa_in:
-                    fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
-                    taxa_line = taxa_line.strip().split("\t")
-                    read_title = taxa_line[0].strip()
-                    read_taxon_id = taxa_line[1].strip()
+            if read_taxon_id in taxon_id:
+                matching_reads.append(read_title)
 
-                    if read_title != fastq_lines[0]:
-                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
-                        sys.exit()
-
-                    if read_taxon_id in taxon_id:
-                        matching_reads.append(fastq_lines)
-
+    reads_out = []
+    with open(fastq_reads) as fastq_reads_in:
+        line = fastq_reads_in.readline().strip()
+        while line != "":
+            if line[0] == '@':
+                reads_out.append([line, fastq_reads_in.readline().strip(),
+                                  fastq_reads_in.readline().strip(), fastq_reads_in.readline().strip()])
+            line = fastq_reads_in.readline()
 
     with open(out_file_loc, 'w') as out_file:
-        for read in matching_reads:
+        for read in reads_out:
             out_file.write("\n".join(read) + "\n")
 
     return matching_reads

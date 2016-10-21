@@ -224,13 +224,12 @@ if __name__ == "__main__":
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
 
-    print taxon_hierarchy
-    sys.exit()
 
     print("Here is the taxon id hierarchy:")
     print_hierarchy(taxon_hierarchy, taxa2names)
     taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
 
+    sys.exit()
     if not branched:
 
         out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)

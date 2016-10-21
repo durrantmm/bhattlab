@@ -149,7 +149,7 @@ def taxon_id_to_name(taxon_id, taxa2names=None):
 
     if taxa2names:
         try:
-            return(taxa2names[taxon_id])
+            return taxa2names[taxon_id]
         except KeyError:
             return taxon_id
     else:
@@ -209,6 +209,10 @@ if __name__ == "__main__":
         print("Retrieving taxon names as requested...")
         taxa2names = get_taxa_to_names(taxon_names)
 
+    print taxon_id
+    print taxa2names[taxon_id]
+
+    sys.exit()
 
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)

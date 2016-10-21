@@ -151,7 +151,7 @@ def taxon_id_to_name(taxon_id, taxa2names=None):
         try:
             return taxa2names[taxon_id]
         except KeyError:
-            return taxon_id
+            return taxon_id+" (OLD ID - MERGED WITH SHOWN PARENT NODE)"
     else:
         return taxon_id
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     read_to_taxid = args['read_to_taxid']
     taxon_id = args['taxon_id']
     taxon_nodes = args['taxon_nodes']
-    ntaxa= args['number_of_parent_taxa']
+    ntaxa = args['number_of_parent_taxa']
     taxon_names = args['use_taxon_names']
     branched = args['branched']
 
@@ -208,8 +208,6 @@ if __name__ == "__main__":
     if taxon_names:
         print("Retrieving taxon names as requested...")
         taxa2names = get_taxa_to_names(taxon_names)
-
-
 
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
@@ -229,11 +227,9 @@ if __name__ == "__main__":
     print_hierarchy(taxon_hierarchy, taxa2names)
     taxon_hierarchy = taxon_hierarchy[0:ntaxa+1]
 
-    sys.exit()
     if not branched:
 
         out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
-
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
         print("Writing out to file: %s" % out_file)

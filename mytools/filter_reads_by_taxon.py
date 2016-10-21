@@ -213,18 +213,20 @@ if __name__ == "__main__":
 
 
     if not branched:
+        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1])
+
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
         print("Writing out to file: %s" % out_file)
-        out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1])
         selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
 
     else:
+        out_file = "reads_filtered_%s_to_%s_BRANCHED.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1])
+
         print("Collecting reads binned to the following taxa, and ALL CHILDREN TAXA:")
         print_hierarchy(taxon_hierarchy, taxa2names)
         print("Writing out to file: %s" % out_file)
-        out_file = "reads_filtered_%s_to_%s_BRANCHED.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1])
         selected_reads, children_taxa = get_required_reads_branched(read_to_taxid, fastq_reads, taxon_hierarchy,
                                                                     taxon_nodes_dict, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))

@@ -212,7 +212,7 @@ if __name__ == "__main__":
     print("Loading the taxonomy database...")
     taxon_nodes_dict = get_taxon_nodes(taxon_nodes)
     if not is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
-        print("The given taxon ID is not in the database")
+        print("The given taxon ID is not in the database, it may be deleted or your database is outdated.")
         sys.exit()
 
     print("Taxon of Interest:")

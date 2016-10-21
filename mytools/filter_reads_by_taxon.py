@@ -75,23 +75,25 @@ def get_required_reads_linear_faster_maybe(reads_to_taxid_location, fastq_reads,
 
         with open(fastq_reads) as fastq_reads_in:
 
-            read_taxa_in.readline()
-            for taxa_line in read_taxa_in:
-                fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
-                taxa_line = taxa_line.strip().split("\t")
-                read_title = taxa_line[0].strip()
-                read_taxon_id = taxa_line[1].strip()
 
-                if read_title != fastq_lines[0]:
-                    print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
-                    sys.exit()
+                read_taxa_in.readline()
+                for taxa_line in read_taxa_in:
+                    fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
+                    taxa_line = taxa_line.strip().split("\t")
+                    read_title = taxa_line[0].strip()
+                    read_taxon_id = taxa_line[1].strip()
 
-                if read_taxon_id in taxon_id:
-                    matching_reads.append(read_title)
+                    if read_title != fastq_lines[0]:
+                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                        sys.exit()
+
+                    if read_taxon_id in taxon_id:
+                        matching_reads.append(fastq_lines)
+
 
     with open(out_file_loc, 'w') as out_file:
-        for line in matching_reads:
-            out_file.write("\n".join(line)+"\n")
+        for read in matching_reads:
+            out_file.write("\n".join(read) + "\n")
 
     return matching_reads
 

@@ -66,40 +66,6 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, ou
     return matching_reads
 
 
-def get_required_reads_linear_faster_maybe(reads_to_taxid_location, fastq_reads, taxon_id, out_file_loc):
-    assert type(taxon_id) is list, "taxon_id must be a list"
-    assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
-
-    matching_reads = []
-    with open(reads_to_taxid_location) as read_taxa_in:
-        read_taxa_in.readline()
-
-        for taxa_line in read_taxa_in:
-
-            taxa_line = taxa_line.strip().split("\t")
-            read_title = taxa_line[0].strip()
-            read_taxon_id = taxa_line[1].strip()
-
-            if read_taxon_id in taxon_id:
-                matching_reads.append(read_title)
-
-    reads_out = []
-    with open(fastq_reads) as fastq_reads_in:
-        line = fastq_reads_in.readline().strip()
-        while line != "":
-            if line[0] == '@' and line == matching_reads[0]:
-                matching.pop(0)
-                reads_out.append([line, fastq_reads_in.readline().strip(),
-                                  fastq_reads_in.readline().strip(), fastq_reads_in.readline().strip()])
-            line = fastq_reads_in.readline()
-
-    with open(out_file_loc, 'w') as out_file:
-        for read in reads_out:
-            out_file.write("\n".join(read) + "\n")
-
-    return matching_reads
-
-
 def is_taxon_id_in_nodes(taxon_id, taxon_nodes_dict):
     if taxon_id in taxon_nodes_dict.keys():
         return True
@@ -240,7 +206,7 @@ if __name__ == "__main__":
         print_hierarchy(taxon_hierarchy, taxa2names)
         out_file = "reads_filtered_%s_to_%s_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1])
         print("Writing out to file: %s" % out_file)
-        selected_reads = get_required_reads_linear_faster_maybe(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
 
     else:

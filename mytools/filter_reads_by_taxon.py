@@ -199,7 +199,6 @@ if __name__ == "__main__":
     taxon_names = args['use_taxon_names']
     branched = args['branched']
 
-    print taxon_nodes
 
     if taxon_names == "default":
         taxon_names = "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp"

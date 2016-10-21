@@ -139,7 +139,7 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
     for taxon in taxon_hierarchy[::-1]:
         indent = "".join(["     "]*level)
         if taxa2names:
-            print indent+taxon_id_to_name[(taxon, taxa2names)]
+            print indent+taxon_id_to_name(taxon, taxa2names)
         else:
             print indent+taxon
         level += 1
@@ -219,7 +219,7 @@ if __name__ == "__main__":
 
     print("Taxon of Interest:")
     print("\t"+taxon_id)
-    if taxon_names: print taxon_id_to_name[(taxon_id, taxa2names)]
+    if taxon_names: print taxon_id_to_name(taxon_id, taxa2names)
 
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
@@ -250,4 +250,4 @@ if __name__ == "__main__":
         print("Total Reads Collected: %d" % len(selected_reads))
         print("Children Taxa Included:")
         for child in children_taxa:
-            print "\t"+taxon_id_to_name[(child, taxa2names)]
+            print "\t"+taxon_id_to_name(child, taxa2names)

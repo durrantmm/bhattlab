@@ -134,13 +134,26 @@ def print_hierarchy(taxon_hierarchy, taxa2names=None):
     assert type(taxon_hierarchy) is list, "the taxon hierarchy must be a list"
 
     level = 0
-    for taxa in taxon_hierarchy[::-1]:
+    for taxon in taxon_hierarchy[::-1]:
         indent = "".join(["     "]*level)
         if taxa2names:
-            print indent+taxa2names[taxa]
+            print indent+taxon_id_to_name[(taxon, taxa2names)]
         else:
-            print indent+taxa
+            print indent+taxon
         level += 1
+
+
+def taxon_id_to_name(taxon_id, taxa2names=None):
+
+    if taxa2names:
+        try:
+            return(taxa2names[taxon_id])
+        except KeyError:
+            return taxon_id
+    else:
+        return taxon_id
+
+
 
 if __name__ == "__main__":
 
@@ -203,7 +216,7 @@ if __name__ == "__main__":
 
     print("Taxon of Interest:")
     print("\t"+taxon_id)
-    if taxon_names: print taxa2names[taxon_id]
+    if taxon_names: print taxon_id_to_name[(taxon_id, taxa2names)]
 
     print("Getting taxon hierarchy...")
     taxon_hierarchy = get_taxon_hierarchy(taxon_id, taxon_nodes_dict)
@@ -234,4 +247,4 @@ if __name__ == "__main__":
         print("Total Reads Collected: %d" % len(selected_reads))
         print("Children Taxa Included:")
         for child in children_taxa:
-            print "\t"+taxa2names[child]
+            print "\t"+taxon_id_to_name[(child, taxa2names)]

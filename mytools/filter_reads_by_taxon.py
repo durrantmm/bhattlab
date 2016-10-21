@@ -213,7 +213,7 @@ if __name__ == "__main__":
 
 
     if not branched:
-        out_file = "reads_filtered_%s_to_%s_ntaxa%dLINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
+        out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
 
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)

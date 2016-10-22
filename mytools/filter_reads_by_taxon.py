@@ -248,8 +248,8 @@ if __name__ == "__main__":
         print("Total Reads Collected: %d" % len(selected_reads))
 
         print("Children Taxa Included:")
-        col_width_species = max(len(taxon_id_to_name(taxon, taxa2names)) for taxon in children_taxa.keys())
-        col_width_ids = max(len(str(max([int(taxon), int(children_taxa[taxon])]))) for taxon in children_taxa.keys())
+        col_width_species = max(len(taxon_id_to_name(taxon, taxa2names)) for taxon in children_taxa.keys()) + 2
+        col_width_ids = max(len(str(max([int(taxon), int(children_taxa[taxon])]))) for taxon in children_taxa.keys()) + 2
         print col_width_ids
         for child in children_taxa:
             print "".join([str(child).ljust(col_width_ids), str(children_taxa[child]).ljust(col_width_ids),

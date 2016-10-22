@@ -18,10 +18,12 @@ def destack_and_interleave(fastq_file, part_B_line):
 
             with open(".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]]), 'w') as out_file:
                 read1 = ["GO"]
-                while read1 != []:
+                while True:
                     try:
                         read1 = [file_in2.readline().strip() for i in range(4)]
                         read2 = [file_in1.readline().strip() for i in range(4)]
+
+                        test = read1[0].split()[0]
 
                         print("\n".join(read1))
                         print("\n".join(read2))

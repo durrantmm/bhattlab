@@ -80,7 +80,7 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
 
     taxon_id = set(taxon_id)
     matching_reads = set()
-    matching_taxa = set()
+    matching_taxa = defaultdict(0)
     unfound_reads = 0
 
     with open(reads_to_taxid_location) as read_taxa_in:
@@ -102,7 +102,7 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
                     try:
                         if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
                             matching_reads.add(read_title)
-                            matching_taxa.add(read_taxon_id)
+                            matching_taxa[read_taxon_id] += 1
                             out_file.write("\n".join(fastq_lines) + "\n")
                         else:
                             continue
@@ -247,5 +247,7 @@ if __name__ == "__main__":
                                                                     taxon_nodes_dict, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
         print("Children Taxa Included:")
+        col_width = max(len(taxon_id_to_name(taxon, taxa2names) for taxon in children_taxa.keys()))
         for child in children_taxa:
-            print child+"\t"+taxon_id_to_name(child, taxa2names)
+            print "".join(str(child).ljust(col_width), str(children_taxa[child]).ljust(col_width),
+                          taxon_id_to_name(child, taxa2names).ljust(col_width))

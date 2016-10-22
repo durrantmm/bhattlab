@@ -5,7 +5,7 @@ def destack_and_interleave(fastq_file):
 
     read_set = set()
     with open(fastq_file) as file_in:
-        for line in file:
+        for line in file_in:
             line = line.strip().split()
             if line[0][0] == '@':
                 print line

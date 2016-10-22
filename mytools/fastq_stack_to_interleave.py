@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_file',
                         help='The fastq file containing the STACKED reads of interest')
-    parser.add_argument('part_B_line',
+    parser.add_argument('part_B_line', type=int,
                         help='The line in the file where the second reads are first begin, (1-indexed).')
 
 

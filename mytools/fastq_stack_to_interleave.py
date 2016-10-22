@@ -26,10 +26,13 @@ def destack_and_interleave(fastq_file, part_B_line):
                         read2 = [file_in1.readline().strip() for i in range(4)]
                         read2_name = read2[0].split()[0]
 
-
                         if read1_name == read2_name:
                             print read1[0]
                             print read2[0]
+                        else:
+                            print read1[0]
+                            print read2[0]
+                            sys.exit()
 
                     except IndexError:
                         break

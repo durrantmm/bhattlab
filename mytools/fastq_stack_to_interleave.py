@@ -8,12 +8,14 @@ def destack_and_interleave(fastq_file):
         for line in file_in:
             line = line.strip().split()
             if line[0][0] == '@':
-                read_set.add(line[0])
-
                 if line[0] in read_set:
                     print "FOUND THE FIRST PAIR"
                     print "SIZE OF READ SET: %d" % len(read_set)
                     sys.exit()
+
+                read_set.add(line[0])
+
+
 
 
 if __name__ == "__main__":

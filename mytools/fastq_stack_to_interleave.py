@@ -19,6 +19,11 @@ def destack_and_interleave(fastq_file, part_B_line):
             print file_in1.readline()
             print file_in1.readline()
             print file_in1.readline()
+            print file_in1.readline()
+            print file_in1.readline()
+            print file_in1.readline()
+            print file_in1.readline()
+            print file_in1.readline()
 
 if __name__ == "__main__":
 

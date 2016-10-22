@@ -17,7 +17,11 @@ def destack_and_interleave(fastq_file, part_B_line):
                 line_number += 1
 
             with open(".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]]), 'w') as out_file:
-                out_file.write("YUP")
+                read1 = [file_in2.readline().strip() for i in range(4)]
+                read2 = [file_in1.readline().strip() for i in range(4)]
+
+                print read1
+                print read2
 
 if __name__ == "__main__":
 

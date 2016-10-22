@@ -30,7 +30,7 @@ def destack_and_interleave(fastq_file, part_B_line):
                         print("\n".join(read1))
                         print("\n".join(read1))
 
-                    except IndexError
+                    except IndexError:
                         break
 
 if __name__ == "__main__":

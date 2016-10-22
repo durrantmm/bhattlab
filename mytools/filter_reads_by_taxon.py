@@ -253,4 +253,4 @@ if __name__ == "__main__":
 
         for child in children_taxa:
             print "".join([str(child).ljust(col_width_ids), str(children_taxa[child]).ljust(col_width_ids),
-                          taxon_id_to_name(child, taxa2names).replace(" ","").ljust(col_width_species)])
+                          taxon_id_to_name(child, taxa2names).replace(" ","_").ljust(col_width_species)])

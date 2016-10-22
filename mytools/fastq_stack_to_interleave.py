@@ -18,19 +18,21 @@ def destack_and_interleave(fastq_file, part_B_line):
 
             with open(".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]]), 'w') as out_file:
 
-                run = True
-                while run:
-                    read1 = [file_in2.readline().strip() for i in range(4)]
-                    read1_name = read1[0].split()[0]
+                while True:
+                    try:
+                        read1 = [file_in2.readline().strip() for i in range(4)]
+                        read1_name = read1[0].split()[0]
 
-                    read2 = [file_in1.readline().strip() for i in range(4)]
-                    read2_name = read2[0].split()[0]
+                        read2 = [file_in1.readline().strip() for i in range(4)]
+                        read2_name = read2[0].split()[0]
 
 
-                    if read1_name == read2_name:
-                        print read1_name
-                        print read2_name
+                        if read1_name == read2_name:
+                            print read1[0]
+                            print read2[0]
 
+                    except IndexError:
+                        break
 
 
 

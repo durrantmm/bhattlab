@@ -15,6 +15,7 @@ def destack_and_interleave(fastq_file, part_B_line):
             for line in file_in1:
                 if line_number == part_B_line:
                     break
+                line_number += 1
 
             print file_in1.readline()
             print file_in1.readline()

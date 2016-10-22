@@ -55,4 +55,5 @@ if __name__ == "__main__":
     if outfile is None: outfile = ".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]])
 
     destack_and_interleave(fastq_file, part_B_line, outfile)
+    print("File written to %s" % outfile)
 

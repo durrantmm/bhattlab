@@ -250,5 +250,5 @@ if __name__ == "__main__":
         print("Children Taxa Included:")
         col_width = max(len(taxon_id_to_name(taxon, taxa2names)) for taxon in children_taxa.keys())
         for child in children_taxa:
-            print "".join(str(child).ljust(col_width), str(children_taxa[child]).ljust(col_width),
-                          taxon_id_to_name(child, taxa2names).ljust(col_width))
+            print "".join([str(child).ljust(col_width), str(children_taxa[child]).ljust(col_width),
+                          taxon_id_to_name(child, taxa2names).ljust(col_width)])

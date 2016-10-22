@@ -44,6 +44,9 @@ if __name__ == "__main__":
                         help='The line in the file where the second reads are first begin, (1-indexed).')
     parser.add_argument('-o', '--outfile', type=int, required=False,
                         help='Optional output specification.')
+    parser.add_argument('-n', '--lines_per_leaf', type=int, required=False,
+                        default=4,
+                        help='The number of lines used per leaf in the output file. Default of 4 for standard fastq.')
 
     args = parser.parse_args()
     args = vars(args)

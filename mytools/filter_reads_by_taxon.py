@@ -252,4 +252,4 @@ if __name__ == "__main__":
         col_width_ids = max(max([int(taxon), int(children_taxa[taxon])]) for taxon in children_taxa.keys())
         for child in children_taxa:
             print "".join([str(child).ljust(col_width_ids), str(children_taxa[child]).ljust(col_width_ids),
-                          taxon_id_to_name(child, taxa2names).ljust(col_width_species])
+                          taxon_id_to_name(child, taxa2names).ljust(col_width_species)])

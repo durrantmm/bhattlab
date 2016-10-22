@@ -5,7 +5,7 @@ output = False
 read_set = set()
 
 
-def destack_and_interleave(fastq_file, part_B_line):
+def destack_and_interleave(fastq_file, part_B_line, output_file):
 
     with open(fastq_file) as file_in1:
 
@@ -16,19 +16,17 @@ def destack_and_interleave(fastq_file, part_B_line):
                 file_in1.readline()
                 line_number += 1
 
-            with open(".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]]), 'w') as out_file:
+            with open(output_file, 'w') as out_file:
 
                 while True:
                     try:
                         read1 = [file_in2.readline().strip() for i in range(4)]
-                        read1_test = read1[0].split()[0]
+                        read1[0].split()[0] # read1_test
 
                         read2 = [file_in1.readline().strip() for i in range(4)]
-                        read2_test = read2[0].split()[0]
+                        read2[0].split()[0] # read2_test
 
-
-                        print("\n".join(read1))
-                        print("\n".join(read2))
+                        out_file.write("\n".join(read1+read2)+"\n")
 
                     except IndexError:
                         break
@@ -44,13 +42,17 @@ if __name__ == "__main__":
                         help='The fastq file containing the STACKED reads of interest')
     parser.add_argument('part_B_line', type=int,
                         help='The line in the file where the second reads are first begin, (1-indexed).')
-
+    parser.add_argument('-o', '--outfile', type=int, required=False,
+                        help='Optional output specification.')
 
     args = parser.parse_args()
     args = vars(args)
 
     fastq_file = args['fastq_file']
     part_B_line = args['part_B_line']
+    outfile = args['outfile']
 
-    destack_and_interleave(fastq_file, part_B_line)
+    if outfile is None: outfile = ".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]])
+
+    destack_and_interleave(fastq_file, part_B_line, outfile)
 

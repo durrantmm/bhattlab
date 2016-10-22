@@ -21,14 +21,10 @@ def destack_and_interleave(fastq_file, part_B_line):
                 while True:
                     try:
                         read1 = [file_in2.readline().strip() for i in range(4)]
-                        read1_name = read1[0].split()[0]
-
                         read2 = [file_in1.readline().strip() for i in range(4)]
-                        read2_name = read2[0].split()[0]
-
 
                         print("\n".join(read1))
-                        print("\n".join(read1))
+                        print("\n".join(read2))
 
                     except IndexError:
                         break

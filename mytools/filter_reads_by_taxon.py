@@ -248,4 +248,4 @@ if __name__ == "__main__":
         print("Total Reads Collected: %d" % len(selected_reads))
         print("Children Taxa Included:")
         for child in children_taxa:
-            print "\t"+taxon_id_to_name(child, taxa2names)
+            print child+"\t"+taxon_id_to_name(child, taxa2names)

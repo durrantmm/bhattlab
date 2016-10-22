@@ -80,7 +80,7 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
 
     taxon_id = set(taxon_id)
     matching_reads = set()
-    matching_taxa = defaultdict(0)
+    matching_taxa = defaultdict(int)
     unfound_reads = 0
 
     with open(reads_to_taxid_location) as read_taxa_in:

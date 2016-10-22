@@ -5,7 +5,7 @@ output = False
 read_set = set()
 
 
-def destack_and_interleave(fastq_file, part_B_line, output_file):
+def destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, output_file):
 
     with open(fastq_file) as file_in1:
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
                         help='The fastq file containing the STACKED reads of interest')
     parser.add_argument('part_B_line', type=int,
                         help='The line in the file where the second reads are first begin, (1-indexed).')
-    parser.add_argument('-o', '--outfile', type=int, required=False,
+    parser.add_argument('-o', '--outfile', required=False,
                         help='Optional output specification.')
     parser.add_argument('-n', '--lines_per_leaf', type=int, required=False,
                         default=4,
@@ -54,9 +54,10 @@ if __name__ == "__main__":
     fastq_file = args['fastq_file']
     part_B_line = args['part_B_line']
     outfile = args['outfile']
+    lines_per_leaf = args['lines_per_leaf']
 
     if outfile is None: outfile = ".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]])
 
-    destack_and_interleave(fastq_file, part_B_line, outfile)
+    destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, outfile)
     print("File written to %s" % outfile)
 

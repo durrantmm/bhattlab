@@ -26,14 +26,11 @@ def destack_and_interleave(fastq_file, part_B_line):
                         read2 = [file_in1.readline().strip() for i in range(4)]
                         read2_name = read2[0].split()[0]
 
-                        if read1_name == read2_name:
-                            print("\n".join(read1))
-                            print("\n".join(read1))
-                        else:
-                            print("ERROR: Your paired ends stack file is not sorted properly / some reads are missing.")
-                            sys.exit()
 
-                    except IndexError:
+                        print("\n".join(read1))
+                        print("\n".join(read1))
+
+                    except IndexError
                         break
 
 if __name__ == "__main__":

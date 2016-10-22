@@ -1,22 +1,20 @@
 import argparse
 import sys
 
-def destack_and_interleave(fastq_file):
-
-    read_set = set()
-    with open(fastq_file) as file_in:
-        for line in file_in:
-            line = line.strip().split()
-            if line[0][0] == '@':
-                if line[0] in read_set:
-                    print "FOUND THE FIRST PAIR"
-                    print "SIZE OF READ SET: %d" % len(read_set)
-                    sys.exit()
-
-                read_set.add(line[0])
+output = False
+read_set = set()
 
 
+def destack_and_interleave(fastq_file, part_B_line):
 
+    with open(fastq_file) as file_in1:
+
+        with open(fastq_file) as file_in2:
+
+            line_number = 1
+            while line_number != part_B_line:
+                file_in1.readline()
+            print file_in1.readline()
 
 if __name__ == "__main__":
 
@@ -27,12 +25,15 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_file',
                         help='The fastq file containing the STACKED reads of interest')
+    parser.add_argument('part_B_line',
+                        help='The line in the file where the second reads are first begin, (1-indexed).')
 
 
     args = parser.parse_args()
     args = vars(args)
 
     fastq_file = args['fastq_file']
+    part_B_line = args['part_B_line']
 
-    destack_and_interleave(fastq_file)
+    destack_and_interleave(fastq_file, part_B_line)
 

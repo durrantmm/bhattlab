@@ -26,9 +26,11 @@ def destack_and_interleave(fastq_file, part_B_line):
                     read2 = [file_in1.readline().strip() for i in range(4)]
                     read2_name = read2[0].split()[0]
 
-                    print read1
-                    print read2
-                    run = False
+
+                    if read1_name == read2_name:
+                        print read1_name
+                        print read2_name
+
 
 
 

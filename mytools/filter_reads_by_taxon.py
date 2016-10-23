@@ -50,6 +50,7 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, ou
 
             with open(out_file_loc, 'w') as out_file:
                 read_taxa_in.readline()
+
                 for taxa_line in read_taxa_in:
                     fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
                     taxa_line = taxa_line.strip().split("\t")
@@ -63,6 +64,45 @@ def get_required_reads_linear(reads_to_taxid_location, fastq_reads, taxon_id, ou
                     if read_taxon_id in taxon_id:
                         matching_reads.add(read_title)
                         out_file.write("\n".join(fastq_lines)+"\n")
+
+    return matching_reads
+
+
+def get_required_reads_paired_linear(reads_to_taxid_location, fastq_reads, taxon_hierarchy, out_file_loc):
+    assert type(taxon_hierarchy) is list, "taxon_id must be a list"
+    assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
+
+    matching_reads = set()
+    with open(reads_to_taxid_location) as read_taxa_in:
+
+        with open(fastq_reads) as fastq_reads_in:
+
+            with open(out_file_loc, 'w') as out_file:
+                header = read_taxa_in.readline()
+                while True:
+                    read_taxa1 = read_taxa_in.readline()
+                    read_taxa2 = read_taxa_in.readline()
+                    if not read_taxa2: break # EOF
+
+                    fastq_read1 = [fastq_reads_in.readline().strip() for i in range(4)]
+                    fastq_read2 = [fastq_reads_in.readline().strip() for i in range(4)]
+
+                    read_taxa1 = read_taxa1.strip().split("\t")
+                    read_taxa2 = read_taxa2.strip().split("\t")
+
+                    read1_title = read_taxa1[0].strip()
+                    read2_title = read_taxa2[0].strip()
+                    read1_taxon_id = read_taxa1[1].strip()
+                    read2_taxon_id = read_taxa1[1].strip()
+
+                    if read1_title != fastq_read1[0] or read2_title != fastq_read2[0]:
+                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                        sys.exit()
+
+                    if read1_taxon_id in taxon_hierarchy or read2_taxon_id in taxon_hierarchy:
+                        matching_reads.add(read1_title)
+                        matching_reads.add(read2_title)
+                        out_file.write("\n".join(fastq_read1+fastq_read2)+"\n")
 
     return matching_reads
 
@@ -116,6 +156,48 @@ def get_required_reads_branched(reads_to_taxid_location, fastq_reads, taxon_id, 
 
     return matching_reads, matching_taxa
 
+
+def get_required_reads_paired_branched(reads_to_taxid_location, fastq_reads, taxon_id, taxon_nodes_dict, out_file_loc):
+    assert type(taxon_id) is list, "taxon_id must be a list"
+    assert type(reads_to_taxid_location) is str, "reads_to_taxid_location must be a string specifying file"
+
+    taxon_id = set(taxon_id)
+    matching_reads = set()
+    matching_taxa = defaultdict(int)
+    unfound_reads = 0
+
+    with open(reads_to_taxid_location) as read_taxa_in:
+
+        with open(fastq_reads) as fastq_reads_in:
+
+            with open(out_file_loc, 'w') as out_file:
+                read_taxa_in.readline()
+                for line in read_taxa_in:
+                    fastq_lines = [fastq_reads_in.readline().strip() for i in range(4)]
+                    line = line.strip().split("\t")
+                    read_title = line[0].strip()
+                    read_taxon_id = line[1].strip()
+
+                    if read_title != fastq_lines[0]:
+                        print "ERROR: Please make sure that fastq_reads and read_to_taxid are in the same sorted order"
+                        sys.exit()
+
+                    try:
+                        if is_child_taxon(read_taxon_id, taxon_nodes_dict, taxon_id):
+                            matching_reads.add(read_title)
+                            matching_taxa[read_taxon_id] += 1
+                            out_file.write("\n".join(fastq_lines) + "\n")
+                        else:
+                            continue
+
+                    except KeyError:
+                        print "UNIDENTIFIED TAXON ID: " + read_taxon_id
+                        unfound_reads += 1
+                        continue
+
+    print("Total Unclassified/Unknown Reads: %s" % unfound_reads)
+
+    return matching_reads, matching_taxa
 
 def get_taxa_to_names(taxon_names_location):
     assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
@@ -188,6 +270,10 @@ if __name__ == "__main__":
 
     parser.add_argument('-b', '--branched', action='store_true')
 
+    parser.add_argument('-p', '--paired_ends', action='store_true', help= "Account for the assigned taxon for each read "
+                                                                          "in the pair. If one passes the taxon test,"
+                                                                          "it is included.")
+
     args = parser.parse_args()
     args = vars(args)
 
@@ -198,6 +284,7 @@ if __name__ == "__main__":
     ntaxa = args['number_of_parent_taxa']
     taxon_names = args['use_taxon_names']
     branched = args['branched']
+    paired_ends =  args['paired_ends']
 
 
     if taxon_names == "default":
@@ -234,7 +321,10 @@ if __name__ == "__main__":
         print("Collecting reads binned to the following taxa:")
         print_hierarchy(taxon_hierarchy, taxa2names)
         print("Writing out to file: %s" % out_file)
-        selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+        if paired_ends:
+            selected_reads = get_required_reads_paired_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+        else:
+            selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
         print("Total Reads Collected: %d" % len(selected_reads))
 
     else:

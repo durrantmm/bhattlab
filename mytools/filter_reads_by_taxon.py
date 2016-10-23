@@ -317,14 +317,20 @@ if __name__ == "__main__":
 
     if not branched:
 
-        out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
-        print("Collecting reads binned to the following taxa:")
-        print_hierarchy(taxon_hierarchy, taxa2names)
-        print("Writing out to file: %s" % out_file)
         if paired_ends:
+            print("Collecting reads binned to the following taxa, included PAIRED ENDS:")
+            out_file = "reads_filtered_%s_to_%s_ntaxa%d_PAIRED_ENDS_LINEAR.fastq" % \
+                       (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
+            print("Writing out to file: %s" % out_file)
             selected_reads = get_required_reads_paired_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+
         else:
+            print("Collecting reads binned to the following taxa:")
+            print_hierarchy(taxon_hierarchy, taxa2names)
+            out_file = "reads_filtered_%s_to_%s_ntaxa%d_LINEAR.fastq" % (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
+            print("Writing out to file: %s" % out_file)
             selected_reads = get_required_reads_linear(read_to_taxid, fastq_reads, taxon_hierarchy, out_file)
+
         print("Total Reads Collected: %d" % len(selected_reads))
 
     else:

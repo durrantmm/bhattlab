@@ -27,8 +27,9 @@ def destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, output_file)
                         read2[0].split()[0]  # read2_test
 
                         out_file.write("\n".join(read1 + read2) + "\n")
-                    except IndexError:
 
+                    except IndexError:
+                        break
 
 
 if __name__ == "__main__":

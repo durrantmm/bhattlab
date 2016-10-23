@@ -20,11 +20,15 @@ def destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, output_file)
 
                 while True:
 
-                    read1 = [file_in2.readline().strip() for i in range(lines_per_leaf)]
-                    read2 = [file_in1.readline().strip() for i in range(lines_per_leaf)]
-                    if len(read1[0]) == 0: break
+                    try:
+                        read1 = [file_in2.readline().strip() for i in range(lines_per_leaf)]
+                        read1[0][0] # Error Test
+                        read2 = [file_in1.readline().strip() for i in range(lines_per_leaf)]
+                        read2[0][0]  # Error Test
 
-                    out_file.write("\n".join(read1+read2)+"\n")
+                        out_file.write("\n".join(read1 + read2) + "\n")
+                    except IndexError:
+                        break
 
 
 if __name__ == "__main__":

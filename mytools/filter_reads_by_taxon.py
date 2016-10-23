@@ -270,9 +270,9 @@ if __name__ == "__main__":
 
     parser.add_argument('-b', '--branched', action='store_true')
 
-    parser.add_argument('-p', '--paired_ends', action='store_true', help= "Account for the assigned taxon for each read "
-                                                                          "in the pair. If one passes the taxon test,"
-                                                                          "it is included.")
+    parser.add_argument('-p', '--paired_ends', action='store_true', default=False,
+                        help= "Account for the assigned taxon for each read in the pair. If one passes the taxon test,"
+                              "it is included.")
 
     args = parser.parse_args()
     args = vars(args)

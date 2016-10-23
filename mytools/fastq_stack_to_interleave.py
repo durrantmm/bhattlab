@@ -22,7 +22,7 @@ def destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, output_file)
 
                     read1 = [file_in2.readline().strip() for i in range(lines_per_leaf)]
                     read2 = [file_in1.readline().strip() for i in range(lines_per_leaf)]
-                    if read1 == []: break
+                    print len(read1)
 
                     out_file.write("\n".join(read1+read2)+"\n")
 

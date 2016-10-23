@@ -318,7 +318,7 @@ if __name__ == "__main__":
     if not branched:
 
         if paired_ends:
-            print("Collecting reads binned to the following taxa, included PAIRED ENDS:")
+            print("Collecting reads binned to the following taxa, including PAIRED ENDS:")
             out_file = "reads_filtered_%s_to_%s_ntaxa%d_PAIRED_ENDS_LINEAR.fastq" % \
                        (taxon_hierarchy[0], taxon_hierarchy[-1], ntaxa)
             print("Writing out to file: %s" % out_file)

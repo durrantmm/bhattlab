@@ -1,4 +1,5 @@
 import sys
+import IO
 import argparse
 import logging
 import pprint
@@ -6,6 +7,11 @@ import pprint
 def main(args):
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(pprint.pformat(args))
+
+    with open(args['fastq_reads']) as infile:
+        for line in IO.read_fastq_paired_ends(infile):
+            print line
+
 
 
 if __name__ == "__main__":

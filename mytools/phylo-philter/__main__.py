@@ -1,8 +1,7 @@
 import sys
 
-def main(args):
-    print args
-    sys.exit()
+def main():
+
     # setup the option parser
     parser = argparse.ArgumentParser(description='fiter_reads_by_taxon.py is a simple program for filtering the reads '
                                                  'by taxon of interest. Use the -h flag for more information.')

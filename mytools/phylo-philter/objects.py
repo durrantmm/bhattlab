@@ -14,7 +14,7 @@ class pairedEnd:
 
 
     def __str__(self):
-        return "\n".join([self.read1, self.read2])
+        return "\n".join(["\n".join(self.read1), "\n".join(self.read2)])
 
     def getTitles(self):
         return [self.read1_title, self.read2_title]

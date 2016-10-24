@@ -40,6 +40,7 @@ def main():
     args = parser.parse_args()
     args = vars(args)
 
+    print args()
     fastq_reads = args['fastq_reads']
     read_to_taxid = args['read_to_taxid']
     taxon_id = args['taxon_id']

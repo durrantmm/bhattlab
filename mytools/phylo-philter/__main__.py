@@ -1,10 +1,11 @@
 import sys
 import argparse
 import logging
+import pprint
 
 def main(args):
     logging.basicConfig(level=logging.DEBUG)
-    logging.debug(args)
+    logging.debug(pprint.pformat(args))
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ import filters, clade, subtree
 
 def main(args):
 
-    logging.basicConfig(level=logging.DEBUG, format="\n| %(asctime)s | %(name)s | %(levelname)s |\n\n %(message)s")
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 

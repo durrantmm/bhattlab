@@ -20,7 +20,7 @@ def main(args):
     if args['linear']:
 
         if not args['output_file']:
-            output_file = args['fastq_reads']+("FILTERED.%s" % args['taxon_id'])
+            output_file = args['fastq_reads']+(".FILTERED.%s.fq" % args['taxon_id'])
         else:
             output_file = args['output_file']
 

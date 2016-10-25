@@ -10,8 +10,10 @@ def main(args):
     logging.debug(pprint.pformat(args))
 
     with open(args['fastq_reads']) as infile:
+        read_count = 0
         for paired_ends in IO.read_fastq_paired_ends_interleaved(infile):
-            print("\n".join(paired_ends.getTitles()))
+            read_count += 1
+        print read_count
 
 
 

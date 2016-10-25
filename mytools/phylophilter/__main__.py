@@ -64,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument('-names', '--use_taxon_names', required=False, help='FILL THIS OUT')
 
 
-    group_modes = parser.add_mutually_exclusive_group()
+    group_modes = parser.add_mutually_exclusive_group(required=True)
     group_modes.add_argument('-l','--linear', action = 'store_true', default = False,
                              help="This mode will perform a linear filtering of the results. This technique takes "
                                   "filters out all of the reads at the level of the given taxon_id, and then all reads"

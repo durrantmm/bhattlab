@@ -18,6 +18,7 @@ def main(args):
 
         filtered_reads = linear_filter.filter_reads(args['taxon_id'])
 
+        sys.exit()
         for reads, classifs in filtered_reads:
             print reads
             print classifs
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     top_parser.add_argument('-t','--taxon_id', required = True,
                             help='The NCBI Taxon ID of the species of interest')
 
-    top_parser.add_argument('-nodes', '--taxon_nodes', required=False,
+    top_parser.add_argument('-nodes', '--taxon_nodes', required=False, type=list,
                         default=[
                             "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
                             "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/merged.dmp"],

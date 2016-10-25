@@ -1,6 +1,6 @@
 
 def get_taxon_nodes(nodes_locations, logger=None):
-    assert type(nodes_locations) is str, "The nodes location must be a string to the location."
+    assert type(nodes_locations) is list, "The nodes location must be a list of file locations."
 
     if logger: logger.info("Loading the taxonomy nodes for the analysis.")
 

@@ -48,7 +48,7 @@ class Filter:
                         raise IndexError("The reads and the classifications need to be in the same order.")
 
                     if read_class.getClassifs()[0] in hierarchy and read_class.getClassifs()[1] in hierarchy:
-                        yield reads
+                        yield reads.getReads()
                     else:
                         continue
 

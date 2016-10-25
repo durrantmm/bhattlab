@@ -28,20 +28,24 @@ class Filter:
         hierarchy = hierarchy[:num_ancestral_nodes+1]
         if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
 
-        if self.logger: self.logger.info("Performing paired end filtering...")
+
         while True:
 
             try:
                 # For paired ends
                 if paired_end:
+                    if self.logger: self.logger.info("Performing paired end filtering...")
                     reads = self.fastq_paired_gen.next()
                     read_class = self.read_to_taxid_paired_gen.next()
                     if reads.getTitles() != read_class.getTitles():
-                        self.logger.error("The reads do not match")
+                        if self.logger: self.logger.error("The reads do not match")
                         raise IndexError("The reads and the classifications need to be in the same order.")
 
                     if read_class.getClassifs()[0] in hierarchy and read_class.getClassifs()[1] in hierarchy:
+                        if self.logger: self.logger("Yielding a paired end read")
                         yield reads
+                    else:
+                        continue
 
                 # For non-paired
                 else:
@@ -53,6 +57,8 @@ class Filter:
 
                     if read_class.getClassif() in hierarchy:
                         yield read
+                    else:
+                        continue
 
 
             except ValueError:

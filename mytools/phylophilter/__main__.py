@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     parser.add_argument('-n', '--taxon_names', required=False, type=str, help='FILL THIS OUT')
 
-    parser.add_argument('-pe', '--paired_ends', action='store_true', required=False,
+    parser.add_argument('-pe', '--paired_end', action='store_true', required=False,
                         help='This is for paired-end based filtering, and it assumes that the'
                              'given fastq and read classifications are in interleaved format.')
 

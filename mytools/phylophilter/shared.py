@@ -14,7 +14,7 @@ def get_taxon_nodes(nodes_locations, logger=None):
                 taxon_nodes_dict[id] = parent_id
     return taxon_nodes_dict
 
-def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
+def get_taxon_hierarchy_list(taxon_id, taxon_nodes_dict):
     hierarchy = [taxon_id]
 
     while taxon_id != '1' and taxon_id != '0':
@@ -22,3 +22,16 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
         hierarchy.append(taxon_id)
 
     return hierarchy
+
+def get_taxon_hierarchy_set(taxon_id, taxon_nodes_dict):
+    hierarchy = set([taxon_id])
+
+    while taxon_id != '1' and taxon_id != '0':
+        taxon_id = taxon_nodes_dict[taxon_id]
+        hierarchy.add(taxon_id)
+
+    return hierarchy
+
+
+
+### USING LISTS FOR BETTER SPEED

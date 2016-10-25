@@ -30,7 +30,7 @@ def main(args):
 
         with open(output_file, 'w') as outfile:
             for read in filtered_reads:
-                outfile.write(read+"\n")
+                outfile.write(str(read)+"\n")
                 total_reads_filtered += 1
 
         logger.info("Finished linear read filtering.")

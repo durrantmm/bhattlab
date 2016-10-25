@@ -24,6 +24,7 @@ class Filter:
         if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
 
         if paired_end:
+            if self.logger: self.logger.info("Performing paired end filtering...")
             while True:
                 try:
                     reads = self.fastq_gen.next()

@@ -3,19 +3,22 @@ import IO
 import argparse
 import logging
 import pprint
+import linear, clade, subtree
 
 
 def main(args):
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug(pprint.pformat(args))
+    logger = logging.getLogger()
+    logger.basicConfig(level=logging.DEBUG)
+    logger.debug(pprint.pformat(args))
 
+    if args['which'] == "linear":
+        linear.filter(logger)
+    elif args['which'] == "clade":
+        clade.filter(logger)
+    elif args['which'] == "subtree":
+        subtree.filter(logger)
 
-    with open(args['fastq_reads']) as infile:
-        read_count = 0
-        for paired_ends in IO.read_fastq_paired_ends_interleaved(infile):
-            read_count += 1
-        print read_count
-
+    sys.exit()
 
 
 if __name__ == "__main__":
@@ -25,14 +28,15 @@ if __name__ == "__main__":
                                                  'by taxon of interest. Use the -h flag for more information.')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
-    top_parser.add_argument('fastq_reads',
+    top_parser.add_argument('-fq', '--fastq_reads', required = True,
                         help='The fastq file containing the reads of interest')
 
-    top_parser.add_argument('read_to_taxid',
+    top_parser.add_argument('-c', '--read_to_taxid', required = True,
                         help='A tab-separated file where the first column is the read title and the second'
                              'column is the assigned taxon id')
 
-    top_parser.add_argument('taxon_id', help='The NCBI Taxon ID of the species of interest')
+    top_parser.add_argument('-t','--taxon_id', required = True,
+                            help='The NCBI Taxon ID of the species of interest')
 
     top_parser.add_argument('-nodes', '--taxon_nodes', required=False,
                         default=[

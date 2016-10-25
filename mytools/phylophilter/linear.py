@@ -8,7 +8,7 @@ class Filter:
         self.read_to_taxid_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
         self.logger = logger_in
 
-    def filter_reads(self):
+    def filter_reads(self, taxon_id):
         while True:
             yield self.fastq_gen.next(), self.read_to_taxid_gen.next()
 

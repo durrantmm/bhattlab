@@ -12,13 +12,15 @@ def main(args):
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 
-    myfilter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],
+    the_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],
                               args['taxon_nodes'], logger)
 
     if args['linear']:
 
-        filtered_reads = myfilter.filter_reads_linear(args['taxon_id'], args['paired_end'])
+        filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], args['paired_end'])
 
+        for read in filtered_reads:
+            print read
         sys.exit()
 
     elif args['clade']:

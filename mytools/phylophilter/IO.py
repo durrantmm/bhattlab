@@ -11,4 +11,12 @@ def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
         except ValueError:
             break
 
+def read_to_taxid(reads_to_taxids_file_object):
+
+    while True:
+        try:
+            yield [reads_to_taxids_file_object.readline().strip(),
+                   reads_to_taxids_file_object.readline().strip()]
+        except ValueError:
+            break
 

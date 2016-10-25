@@ -7,12 +7,20 @@ import linear, clade, subtree
 
 
 def main(args):
+
     logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 
     if args['which'] == "linear":
-        linear.filter(logger)
+        linear_filter = linear.Filter(args['fastq_reads'], args['read_to_taxid'],
+                                      args['taxon_nodes'])
+
+        filtered_reads = linear_filter.filter_reads(args['taxon_id'])
+
+        for read in filtered_reads:
+            print read
+
     elif args['which'] == "clade":
         clade.filter(logger)
     elif args['which'] == "subtree":

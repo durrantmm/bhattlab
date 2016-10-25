@@ -1,5 +1,6 @@
 
 
+
 class pairedEnd:
 
     def __init__(self, read1_in, read2_in):

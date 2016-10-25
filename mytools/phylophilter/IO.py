@@ -16,9 +16,9 @@ def reads_to_taxids(reads_to_taxids_file_object, has_header=True):
     if has_header: reads_to_taxids_file_object.readline()
 
     while True:
-        try:
-            yield [reads_to_taxids_file_object.readline().strip(),
-                   reads_to_taxids_file_object.readline().strip()]
-        except ValueError:
-            break
+        read1 = reads_to_taxids_file_object.readline().strip()
+        read2 = reads_to_taxids_file_object.readline().strip()
+        if len(read1) == 0 or len(read2) == 0: break
+        yield [read1.split('\t'), read2.split('\t')]
+
 

@@ -10,8 +10,10 @@ class Filter:
         assert type(taxonomy_nodes) is list, "The provided taxonomy nodes must be a list of file location(s)"
 
         self.logger = logger_in
-        self.fastq_gen = IO.read_fastq_paired_ends_interleaved(open(fastq_reads, 'r'))
-        self.read_to_taxid_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
+        self.fastq_paired_gen = IO.read_fastq_paired_ends_interleaved(open(fastq_reads, 'r'))
+        self.fastq_non_paired_gen = IO.read_fastq_not_paired(open(fastq_reads, 'r'))
+        self.read_to_taxid_paired_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
+        self.read_to_taxid_non_paired_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
         self.taxonomy_names = None
 
@@ -23,29 +25,33 @@ class Filter:
         hierarchy = hierarchy[:num_ancestral_nodes+1]
         if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
 
-        if paired_end:
-            if self.logger: self.logger.info("Performing paired end filtering...")
-            while True:
-                try:
-                    reads = self.fastq_gen.next()
-                    read_class = self.read_to_taxid_gen.next()
+        if self.logger: self.logger.info("Performing paired end filtering...")
+        while True:
 
+            try:
+                # For paired ends
+                if paired_end:
+                    reads = self.fastq_paired_gen.next()
+                    read_class = self.read_to_taxid_paired_gen.next()
                     if reads.getTitles() != read_class.getTitles():
                         self.logger.error("The reads do not match")
                         raise IndexError("The reads and the classifications need to be in the same order.")
 
+                    if read_class.getClassifs()[0] in hierarchy and read_class.getClassifs()[1] in hierarchy:
+                        yield reads
 
-                except ValueError:
-                    if self.logger: self.logger.debug("There was a ValueError in filter_reads_linear()")
-                    break
+                # For non-paired
+                else:
+                    read = self.fastq_non_paired_gen.next()
+                    read_class = self.read_to_taxid_paired_gen.next()
+                    if read.getTitle() != read_class.getTitle():
+                        self.logger.error("The read information does not match")
+                        raise IndexError("The reads and the classifications need to be in the same order.")
 
-        else:
-            while True:
-                try:
-                    reads = self.fastq_gen.next()
-                    read_class = self.read_to_taxid_gen.next()
+                    if read_class.getClassif() in hierarchy:
+                        yield read
 
 
-
-                except ValueError:
-                    break
+            except ValueError:
+                if self.logger: self.logger.debug("There was a ValueError in filter_reads_linear()")
+                break

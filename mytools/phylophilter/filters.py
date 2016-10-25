@@ -54,6 +54,7 @@ class Filter:
 
                 # For non-paired
                 else:
+                    sys.exit()
                     read = self.fastq_non_paired_gen.next()
                     read_class = self.read_to_taxid_non_paired_gen.next()
                     if read.getTitle() != read_class.getTitle():

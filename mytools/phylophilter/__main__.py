@@ -17,7 +17,7 @@ def main(args):
 
     if args['linear']:
 
-        filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], args['paired_end'])
+        filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
 
         for read in filtered_reads:
             print read

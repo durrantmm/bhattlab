@@ -7,8 +7,8 @@ import linear, clade, subtree
 
 
 def main(args):
+    logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
     logger.debug(pprint.pformat(args))
 
     if args['which'] == "linear":

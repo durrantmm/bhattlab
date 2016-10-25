@@ -55,7 +55,7 @@ class Filter:
                 # For non-paired
                 else:
                     read = self.fastq_non_paired_gen.next()
-                    read_class = self.read_to_taxid_paired_gen.next()
+                    read_class = self.read_to_taxid_non_paired_gen.next()
                     if read.getTitle() != read_class.getTitle():
                         self.logger.error("The read information does not match")
                         raise IndexError("The reads and the classifications need to be in the same order.")

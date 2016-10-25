@@ -4,7 +4,6 @@ def get_taxon_nodes(nodes_locations, logger=None):
 
     if logger: logger.error("Loading the taxonomy nodes for the analysis.")
 
-    logger.error("Loading the taxonomy nodes for the analysis. TWO")
     taxon_nodes_dict = {}
     for location in nodes_locations:
         with open(location) as nodes_in:

@@ -14,7 +14,7 @@ def main(args):
 
     if args['which'] == "linear":
         linear_filter = linear.Filter(args['fastq_reads'], args['read_to_taxid'],
-                                      args['taxon_nodes'])
+                                      args['taxon_nodes'], logger)
 
         filtered_reads = linear_filter.filter_reads(args['taxon_id'])
 

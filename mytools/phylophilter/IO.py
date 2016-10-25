@@ -11,7 +11,9 @@ def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
         except ValueError:
             break
 
-def reads_to_taxids(reads_to_taxids_file_object):
+def reads_to_taxids(reads_to_taxids_file_object, has_header=True):
+
+    if has_header: reads_to_taxids_file_object.readline()
 
     while True:
         try:

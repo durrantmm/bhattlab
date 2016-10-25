@@ -26,4 +26,4 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
 def fastq_write_bulk(read_generator, output_file):
 
     for read in read_generator:
-        print read
+        print read.getRead()

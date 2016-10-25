@@ -15,7 +15,7 @@ class pairedEndRead:
                              "end read")
 
     def getReads(self):
-        return "\n".join(self.read1+self.read2)
+        return self.read1+self.read2
 
     def getTitles(self):
         return [self.read1_title, self.read2_title]

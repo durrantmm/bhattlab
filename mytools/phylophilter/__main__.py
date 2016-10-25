@@ -27,7 +27,9 @@ def main(args):
         filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
 
         with open(output_file, 'w'):
-            output_file.writelines(filtered_reads)
+            for read in filtered_reads:
+                output_file.writelines(read)
+
 
         logger.info("Finished linear read filtering.")
         logger.info("All reads written to %s" % output_file)

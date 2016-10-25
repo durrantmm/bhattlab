@@ -1,6 +1,3 @@
-
-
-
 class pairedEndRead:
 
     def __init__(self, read1_in, read2_in):
@@ -17,8 +14,8 @@ class pairedEndRead:
             raise ValueError("The input information does not represent a valid paired-"
                              "end read")
 
-    def __str__(self):
-        return "\n".join(["\n".join(self.read1), "\n".join(self.read2)])
+    def getRead(self):
+        return self.read1+self.read2
 
     def getTitles(self):
         return [self.read1_title, self.read2_title]

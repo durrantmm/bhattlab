@@ -9,6 +9,7 @@ def main(args):
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(pprint.pformat(args))
 
+
     with open(args['fastq_reads']) as infile:
         read_count = 0
         for paired_ends in IO.read_fastq_paired_ends_interleaved(infile):
@@ -66,14 +67,17 @@ if __name__ == "__main__":
                                           "the reads allocated to ancestral nodes.")
 
     # Linear Subparser
+    parser_linear.set_defaults(which="linear")
     parser_linear.add_argument('-npe', '--no_paired_ends', required=False,
                                action='store_true', help='Default is for paired ends, set flag for no paired ends.')
 
     # Clade Subparser
+    parser_clade.set_defaults(which="clade")
     parser_clade.add_argument('-npe', '--no_paired_ends', required=False,
                                action='store_true', help='Default is for paired ends, set flag for no paired ends.')
 
     # Subtree Subparser
+    parser_subtree.set_defaults(which="subtree")
     parser_subtree.add_argument('-npe', '--no_paired_ends', required=False,
                                action='store_true', help='Default is for paired ends, set flag for no paired ends.')
 

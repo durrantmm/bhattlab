@@ -12,19 +12,30 @@ def main(args):
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 
+
+
     the_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],
                               args['taxon_nodes'], logger)
 
     if args['linear']:
 
+        if not args['output_file']:
+            output_file = args['fastq_reads']+("FILTERED.%s" % args['taxon_id'])
+        else:
+            output_file = args['output_file']
+
         filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
 
         total_reads_filtered = 0
-        for read in filtered_reads:
-            print read
-            total_reads_filtered += 1
-        logger.debug("Finished linear read filtering.")
-        logger.debug("Total Reads Filtered: %s" % total_reads_filtered)
+
+        with open(output_file, 'w') as outfile:
+            for read in filtered_reads:
+                outfile.write(read+"\n")
+                total_reads_filtered += 1
+
+        logger.info("Finished linear read filtering.")
+        logger.info("Total Reads Filtered: %s" % total_reads_filtered)
+        logger.info("All reads written to %s" % output_file)
         sys.exit()
 
     elif args['clade']:
@@ -59,7 +70,7 @@ if __name__ == "__main__":
                             "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/merged.dmp"],
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
-    parser.add_argument('-ntaxa', '--number_of_parent_taxa', required=False,
+    parser.add_argument('-ntaxa', '--number_of_ancestral_taxa', required=False,
                         help='Specify --parent_read_extract if you would like to filter the reads by every read that'
                              'is binned into each node in the hierarchy. Follow this flag with the location of the'
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
@@ -70,6 +81,9 @@ if __name__ == "__main__":
     parser.add_argument('-pe', '--paired_end', action='store_true', required=False,
                         help='This is for paired-end based filtering, and it assumes that the'
                              'given fastq and read classifications are in interleaved format.')
+
+    parser.add_argument('-o', '--output_file', required=False,
+                        help='Specify the output file')
 
     group_modes = parser.add_mutually_exclusive_group(required=True)
     group_modes.add_argument('-l','--linear', action = 'store_true', default = False,

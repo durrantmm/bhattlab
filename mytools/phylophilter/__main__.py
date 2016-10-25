@@ -18,8 +18,10 @@ def main(args):
 
         filtered_reads = linear_filter.filter_reads(args['taxon_id'])
 
-        for read in filtered_reads:
-            print read
+        for reads, classifs in filtered_reads:
+            print reads
+            print classifs
+            print
 
     elif args['which'] == "clade":
         clade.filter(logger)

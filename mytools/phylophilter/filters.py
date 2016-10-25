@@ -16,7 +16,7 @@ class Filter:
         self.taxonomy_names = None
 
 
-    def filter_reads_linear(self, start_taxon, num_ancestral_nodes=0, stop_taxon=None, paired_end=True):
+    def filter_reads_linear(self, start_taxon, paired_end=True, num_ancestral_nodes=0, stop_taxon=None):
         hierarchy = shared.get_taxon_hierarchy(start_taxon, self.taxonomy_nodes)
         if self.logger: self.logger.info("Complete Ancestral Lineage: "+str(hierarchy))
 

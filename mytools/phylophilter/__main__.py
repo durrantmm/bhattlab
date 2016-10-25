@@ -3,7 +3,7 @@ import IO
 import argparse
 import logging
 import pprint
-import Filters, clade, subtree
+import filters, clade, subtree
 
 
 def main(args):
@@ -12,17 +12,14 @@ def main(args):
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 
+    myfilter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],
+                              args['taxon_nodes'], logger)
+
     if args['linear']:
-        myfilter = Filters.Filter(args['fastq_reads'], args['read_to_taxid'],
-                                       args['taxon_nodes'], logger)
 
         filtered_reads = myfilter.filter_reads_linear(args['taxon_id'], args['paired_end'])
 
         sys.exit()
-        for reads, classifs in filtered_reads:
-            print reads
-            print classifs
-            print
 
     elif args['clade']:
         clade.filter(logger)
@@ -64,7 +61,9 @@ if __name__ == "__main__":
 
     parser.add_argument('-n', '--taxon_names', required=False, type=str, help='FILL THIS OUT')
 
-    parser.add_argument('-pe', '--paired_ends', action='store_true', required=False, help='FILL THIS OUT')
+    parser.add_argument('-pe', '--paired_ends', action='store_true', required=False,
+                        help='This is for paired-end based filtering, and it assumes that the'
+                             'given fastq and read classifications are in interleaved format.')
 
     group_modes = parser.add_mutually_exclusive_group(required=True)
     group_modes.add_argument('-l','--linear', action = 'store_true', default = False,

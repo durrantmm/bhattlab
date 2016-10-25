@@ -15,8 +15,8 @@ class Filter:
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
 
 
-    def filter_reads(self, taxon_id, num_ancestral_nodes=0, stopping_node=None, paired_end=True):
-
+    def filter_reads_linear(self, start_taxon, num_ancestral_nodes=0, stop_taxon=None, paired_end=True):
+        hierarchy = shared.get_taxon_hierarchy(start_taxon, self.taxonomy_nodes)
         while True:
 
             yield self.fastq_gen.next(), self.read_to_taxid_gen.next()

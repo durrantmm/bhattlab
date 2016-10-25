@@ -28,7 +28,9 @@ class Filter:
             while True:
                 try:
                     reads = self.fastq_gen.next()
+                    self.logger.debug("Got first reads")
                     read_class = self.read_to_taxid_gen.next()
+                    self.logger.debug("Got first read classifications.")
 
                     if reads.getTitles() == read_class.getTitles():
                         self.logger.debug("THEY MATCH, GREAT")

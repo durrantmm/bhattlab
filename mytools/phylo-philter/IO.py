@@ -9,6 +9,6 @@ def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
 
             yield read
         except IndexError:
-            sys.exit()
+            break
 
 

@@ -4,6 +4,7 @@ import argparse
 import logging
 import pprint
 
+
 def main(args):
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(pprint.pformat(args))

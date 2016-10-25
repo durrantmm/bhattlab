@@ -31,7 +31,7 @@ class Filter:
                     read_class = self.read_to_taxid_gen.next()
 
                     if reads.getTitles() == read_class.getTitles():
-                        "THEY MATCH, GREAT"
+                        self.logger.debug("THEY MATCH, GREAT")
                         sys.exit()
 
 

@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('-fq', '--fastq_reads', required = True,
                         help='The fastq file containing the reads of interest')
 
-    parser.add_argument('-c', '--read_to_taxid', required = True,
+    parser.add_argument('-b', '--read_to_taxid', required = True,
                         help='A tab-separated file where the first column is the read title and the second'
                              'column is the assigned taxon id')
 

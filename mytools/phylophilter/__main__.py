@@ -8,11 +8,8 @@ import filters, clade, subtree
 
 def main(args):
 
-    logging.basicConfig(level=logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logger = logging.getLogger()
-    logger.setFormatter(formatter)
     logger.debug(pprint.pformat(args))
 
     the_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],

@@ -36,6 +36,7 @@ class Filter:
 
 
                 except ValueError:
+                    if self.logger: self.logger.debug("There was a ValueError in filter_reads_linear()")
                     break
 
         else:

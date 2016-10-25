@@ -13,6 +13,7 @@ class Filter:
         self.fastq_gen = IO.read_fastq_paired_ends_interleaved(open(fastq_reads, 'r'))
         self.read_to_taxid_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
+        self.taxonomy_names = None
 
 
     def filter_reads_linear(self, start_taxon, num_ancestral_nodes=0, stop_taxon=None, paired_end=True):

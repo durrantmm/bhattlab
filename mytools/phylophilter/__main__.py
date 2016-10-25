@@ -62,8 +62,9 @@ if __name__ == "__main__":
                              'NCBI Taxonomy Database that you would like to use to determine the hierarchy',
                         type=int, default=0)
 
-    parser.add_argument('-names', '--use_taxon_names', required=False, help='FILL THIS OUT')
+    parser.add_argument('-n', '--taxon_names', required=False, type=str, help='FILL THIS OUT')
 
+    parser.add_argument('-pe', '--paired_ends', action='store_true', required=False, help='FILL THIS OUT')
 
     group_modes = parser.add_mutually_exclusive_group(required=True)
     group_modes.add_argument('-l','--linear', action = 'store_true', default = False,

@@ -37,6 +37,9 @@ class Filter:
                     if self.logger: self.logger.info("Performing paired end filtering...")
                     reads = self.fastq_paired_gen.next()
                     read_class = self.read_to_taxid_paired_gen.next()
+                    print reads
+                    print read_class
+                    sys.exit()
                     if reads.getTitles() != read_class.getTitles():
                         if self.logger: self.logger.error("The reads do not match")
                         raise IndexError("The reads and the classifications need to be in the same order.")

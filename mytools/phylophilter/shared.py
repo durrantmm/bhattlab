@@ -23,7 +23,15 @@ def get_taxon_hierarchy(taxon_id, taxon_nodes_dict):
 
     return hierarchy
 
-def fastq_write_bulk(read_generator, output_file):
-
-    for read in read_generator:
-        print read.getRead()
+def fastq_write_bulk(read_generator, output_file, CHUNK_LIMIT=100000):
+    out_lines = []
+    current_chunk = 0
+    with open(output_file, 'w') as outfile:
+        for read in read_generator:
+            out_lines += read.getRead()
+            current_chunk += 1
+            if current_chunk >= CHUNK_LIMIT:
+                output_file.writelines(out_lines)
+                current_chunk = 0
+                out_lines = []
+    output_file.writelines(out_lines)

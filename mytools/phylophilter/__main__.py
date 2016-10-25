@@ -19,9 +19,12 @@ def main(args):
 
         filtered_reads = the_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
 
+        total_reads_filtered = 0
         for read in filtered_reads:
             print read
+            total_reads_filtered += 1
         logger.debug("Finished linear read filtering.")
+        logger.debug("Total Reads Filtered: %s" % total_reads_filtered)
         sys.exit()
 
     elif args['clade']:

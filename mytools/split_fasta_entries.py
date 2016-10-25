@@ -1,4 +1,4 @@
-import biopython
+import Bio
 import sys
 
 from Bio import SeqIO

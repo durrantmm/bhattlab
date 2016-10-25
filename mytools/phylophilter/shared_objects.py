@@ -54,8 +54,8 @@ class pairedEndClassification:
 
 
     def __str__(self):
-        return "\n".join(["\n".join([self.read1_title, self.read1_class]),
-                          "\n".join([self.read2_title, self.read2_class])])
+        return "\n".join(["\t".join([self.read1_title, self.read1_class]),
+                          "\t".join([self.read2_title, self.read2_class])])
 
     def getTitles(self):
         return [self.read1_title, self.read2_title]

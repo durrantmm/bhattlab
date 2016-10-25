@@ -6,7 +6,7 @@ def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
         try:
             read = objects.pairedEnd([fastq_file_object.readline().strip() for line in range(lines_per_read)],
                                      [fastq_file_object.readline().strip() for line in range(lines_per_read)])
-            print read
+
             yield read
         except IndexError:
             break

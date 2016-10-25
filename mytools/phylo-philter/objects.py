@@ -12,6 +12,10 @@ class pairedEnd:
         self.read1_seq = read1_in[1]
         self.read2_seq = read1_in[1]
 
+        raise ValueError("The input information does not represent a valid paired-"
+                         "end read")
+
+
 
     def __str__(self):
         return "\n".join(["\n".join(self.read1), "\n".join(self.read2)])

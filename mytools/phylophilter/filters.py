@@ -15,7 +15,7 @@ class Filter:
         self.fastq_non_paired_gen = IO.read_fastq_non_paired(open(fastq_reads, 'r'))
 
         self.read_to_taxid_paired_gen = IO.paired_reads_to_taxids(open(read_to_taxid, 'r'))
-        self.read_to_taxid_non_paired_gen = IO.non_paired_reads_to_taxids()
+        self.read_to_taxid_non_paired_gen = IO.non_paired_reads_to_taxids(open(read_to_taxid, 'r'))
 
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
         self.taxonomy_names = None

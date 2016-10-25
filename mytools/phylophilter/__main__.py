@@ -21,6 +21,7 @@ def main(args):
 
         for read in filtered_reads:
             print read
+        logger.debug("Finished linear read filtering.")
         sys.exit()
 
     elif args['clade']:

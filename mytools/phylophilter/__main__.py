@@ -12,7 +12,7 @@ def main(args):
     logger = logging.getLogger()
     logger.debug(pprint.pformat(args))
 
-    if args['which'] == "linear":
+    if args['linear']:
         myfilter = Filters.Filter(args['fastq_reads'], args['read_to_taxid'],
                                        args['taxon_nodes'], logger)
 
@@ -24,9 +24,10 @@ def main(args):
             print classifs
             print
 
-    elif args['which'] == "clade":
+    elif args['clade']:
         clade.filter(logger)
-    elif args['which'] == "subtree":
+
+    elif args['subtree']:
         subtree.filter(logger)
 
     sys.exit()

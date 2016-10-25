@@ -49,6 +49,7 @@ class Filter:
 
                     # First check that at least one of the reads is found at the level of the start taxon
                     if read_class.getClassifs()[0] == start_taxon or read_class.getClassifs()[1] == start_taxon:
+
                         # Now check that both reads are found within the ancestral line of the taxon.
                         if read_class.getClassifs()[0] in hierarchy and read_class.getClassifs()[1] in hierarchy:
 

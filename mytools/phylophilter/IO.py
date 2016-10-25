@@ -11,18 +11,17 @@ def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
         except ValueError:
             break
 
-def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
+def read_fastq_non_paired(fastq_file_object, lines_per_read=4):
 
     while True:
         try:
-            read = shared_objects.pairedEndRead([fastq_file_object.readline().strip() for line in range(lines_per_read)],
-                                                [fastq_file_object.readline().strip() for line in range(lines_per_read)])
+            read = shared_objects.singleRead([fastq_file_object.readline().strip() for line in range(lines_per_read)])
 
             yield read
         except ValueError:
             break
 
-def reads_to_taxids(reads_to_taxids_file_object, has_header=True, delim='\t'):
+def paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, delim='\t'):
 
     if has_header: reads_to_taxids_file_object.readline()
 
@@ -35,6 +34,17 @@ def reads_to_taxids(reads_to_taxids_file_object, has_header=True, delim='\t'):
         except ValueError:
             break
 
+def non_paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, delim='\t'):
+
+    if has_header: reads_to_taxids_file_object.readline()
+
+    while True:
+        try:
+            read_class = shared_objects.singleReadClassification(
+                reads_to_taxids_file_object.readline().strip().split(delim))
+            yield read_class
+        except ValueError:
+            break
 
 
 

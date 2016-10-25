@@ -10,10 +10,13 @@ class Filter:
         assert type(taxonomy_nodes) is list, "The provided taxonomy nodes must be a list of file location(s)"
 
         self.logger = logger_in
+
         self.fastq_paired_gen = IO.read_fastq_paired_ends_interleaved(open(fastq_reads, 'r'))
-        self.fastq_non_paired_gen = IO.read_fastq_not_paired(open(fastq_reads, 'r'))
-        self.read_to_taxid_paired_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
-        self.read_to_taxid_non_paired_gen = IO.reads_to_taxids(open(read_to_taxid, 'r'))
+        self.fastq_non_paired_gen = IO.read_fastq_non_paired(open(fastq_reads, 'r'))
+
+        self.read_to_taxid_paired_gen = IO.paired_reads_to_taxids(open(read_to_taxid, 'r'))
+        self.read_to_taxid_non_paired_gen = IO.non_paired_reads_to_taxids()
+
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
         self.taxonomy_names = None
 

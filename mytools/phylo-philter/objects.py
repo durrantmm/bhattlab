@@ -3,6 +3,9 @@
 class pairedEnd:
 
     def __init__(self, read1_in, read2_in):
+        assert type(read1_in) is list, "read 1 must be a list"
+        assert type(read2_in) is list, "read 2 must be a list"
+
         self.read1 = read1_in
         self.read2 = read2_in
 
@@ -12,8 +15,9 @@ class pairedEnd:
         self.read1_seq = read1_in[1]
         self.read2_seq = read1_in[1]
 
-        raise ValueError("The input information does not represent a valid paired-"
-                         "end read")
+        if len(read1_in[0]) == 0:
+            raise ValueError("The input information does not represent a valid paired-"
+                             "end read")
 
 
 

@@ -3,19 +3,28 @@ import sys, os
 import pprint
 from datetime import datetime
 from phylophilter import filters
+import bowtie2
 
 def main(args):
+    logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
+    logger = logging.getLogger()
 
     if not os.path.isdir(args['output_folder']):
         os.mkdir(args['output_folder'])
 
+    logger.info("Saving run info to output folder.")
     write_run_info(args, args['output_folder'])
     read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
 
     filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
 
+    logger.info("Filtering reads and saving to output folder.")
     with open(os.path.join(args['output_folder'], "filtered_reads.fq"), 'w') as out:
         out.writelines(filtered_reads)
+    logger.info("Reads saved to %s" % os.path.join(args['output_folder'], "filtered_reads.fq"))
+
+    bowtie2.build_all(args['insertion_sequences'])
+
 
 def write_run_info(args, output_folder):
 
@@ -50,9 +59,8 @@ if __name__ == "__main__":
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('-is', '--insertion_sequences', required=False, type=str,
-                        default=os.path.join(data_dir, "insertion_sequences")
-                            ,
-                        help='Location of the NCBI Taxonomy Database nodes.txt file')
+                        default=os.path.join(data_dir, "insertion_sequences"),
+                        help='A directory containing the insertion sequences of interest, one file for')
 
     parser.add_argument('-o', '--output_folder', required=False,
                         default = os.path.join(output_dir,"ISMapper_%s" % timestamp),

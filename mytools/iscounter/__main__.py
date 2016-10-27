@@ -12,7 +12,7 @@ def main(args):
     write_run_info(args, args['output_folder'])
     read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
 
-    filtered_reads = read_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
+    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
 
     with open(os.path.join(args['output_folder'], ), 'w') as out:
         out.writelines(filtered_reads)

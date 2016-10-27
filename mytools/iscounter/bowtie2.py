@@ -10,8 +10,6 @@ def build_all(directory, suffix="fasta"):
     for fasta in fasta_files:
         if len(glob(os.path.join(directory,"*.fasta.*"))) == 0:
             build('2.2.9', fasta)
-        print
-    sys.exit()
 
 def build(version, fasta):
     """

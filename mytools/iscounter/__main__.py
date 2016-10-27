@@ -3,11 +3,17 @@ import sys, os
 import pprint
 from datetime import datetime
 
+def main(args):
+
+    if not os.path.isdir(args['output_folder']):
+        os.mkdir(args['output_folder'])
+    
 
 if __name__ == "__main__":
 
     current_dir = os.path.dirname(__file__)
     data_dir = os.path.join(current_dir, "data")
+    output_dir = os.path.join(current_dir, "output")
     timestamp = ":".join([str(datetime.now().time()), str(datetime.now().date())])
 
     # setup the option parser
@@ -35,11 +41,14 @@ if __name__ == "__main__":
                             ,
                         help='Location of the NCBI Taxonomy Database nodes.txt file')
 
-    parser.add_argument('-o', '--output_folder', required=False, default = "ISMapper_%s" % timestamp,
+    parser.add_argument('-o', '--output_folder', required=False,
+                        default = os.path.join(output_dir,"ISMapper_%s" % timestamp),
                         help='Specify the output file')
 
     args = parser.parse_args()
     args = vars(args)
 
     print pprint.pformat(args)
+
+    main(args)
 

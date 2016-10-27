@@ -8,7 +8,7 @@ import os, sys
 def build_all(directory, suffix="fasta"):
     fasta_files = glob(os.path.join(directory,"*.fasta"))
     for fasta in fasta_files:
-        if len(glob(os.path.join(directory,"*.fasta.*"))) == 0:
+        if len(glob(os.path.join(directory,"%s.*" % fasta))) == 0:
             build('2.2.9', fasta)
 
 def build(version, fasta):

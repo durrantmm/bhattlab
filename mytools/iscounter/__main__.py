@@ -35,7 +35,7 @@ if __name__ == "__main__":
                             ,
                         help='Location of the NCBI Taxonomy Database nodes.txt file')
 
-    parser.add_argument('-o', '--output_folder', required=False, default = "ISMapper_%s" % timestamp
+    parser.add_argument('-o', '--output_folder', required=False, default = "ISMapper_%s" % timestamp,
                         help='Specify the output file')
 
     args = parser.parse_args()

@@ -1,5 +1,8 @@
-import logging, sys
-import IO, shared
+import sys
+
+import IO
+import shared
+
 
 class Filter:
 
@@ -20,8 +23,58 @@ class Filter:
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
         self.taxonomy_names = None
 
-
     def filter_reads_linear(self, start_taxon, paired_end=True, num_ancestral_nodes=8, stop_taxon=None):
+        hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes)
+        if self.logger: self.logger.info("Complete Ancestral Lineage:\n\t" + str(hierarchy))
+
+        hierarchy = set(hierarchy[:num_ancestral_nodes + 1])
+        if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
+
+        if paired_end:
+            if self.logger: self.logger.info("Performing paired end filtering...")
+        else:
+            if self.logger: self.logger.info("Performing single read filtering...")
+
+        while True:
+
+            try:
+                # For paired ends
+                if paired_end:
+
+                    reads = self.fastq_paired_gen.next()
+                    read_class = self.read_to_taxid_paired_gen.next()
+
+                    if reads.getTitles() != read_class.getTitles():
+                        if self.logger: self.logger.error("The reads do not match")
+                        raise IndexError("The reads and the classifications need to be in the same order.")
+
+                    # Now check that both reads are found within the ancestral line of the taxon.
+                    if read_class.getClassifs()[0] in hierarchy and read_class.getClassifs()[1] in hierarchy:
+                        yield reads.getReads()
+                    else:
+                        continue
+
+                # For non-paired
+                else:
+                    sys.exit()
+                    read = self.fastq_non_paired_gen.next()
+                    read_class = self.read_to_taxid_non_paired_gen.next()
+                    if read.getTitle() != read_class.getTitle():
+                        self.logger.error("The read information does not match")
+                        raise IndexError("The reads and the classifications need to be in the same order.")
+
+                    if read_class.getClassif() in hierarchy:
+                        yield read
+                    else:
+                        continue
+
+
+            except ValueError:
+                if self.logger: self.logger.debug("There was a ValueError in filter_reads_linear()")
+                break
+
+
+    def filter_reads_linear_ismapper(self, start_taxon, paired_end=True, num_ancestral_nodes=8, stop_taxon=None):
 
         hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes)
         if self.logger: self.logger.info("Complete Ancestral Lineage:\n\t"+str(hierarchy))
@@ -36,7 +89,7 @@ class Filter:
 
         while True:
 
-            try:
+       å     try:
                 # For paired ends
                 if paired_end:
 

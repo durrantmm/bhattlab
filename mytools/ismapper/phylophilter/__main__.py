@@ -1,9 +1,11 @@
-import sys
-import IO
 import argparse
 import logging
 import pprint
-import filters, clade, subtree, shared
+import sys
+
+import clade
+import filters
+import subtree
 
 
 def main(args):
@@ -15,7 +17,7 @@ def main(args):
 
 
     the_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],
-                              args['taxon_nodes'], logger)
+                                args['taxon_nodes'], logger)
 
     if args['linear']:
 

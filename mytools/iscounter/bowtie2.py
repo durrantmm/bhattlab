@@ -7,7 +7,9 @@ import os, sys
 
 def build_all(directory, suffix="fasta"):
     fasta_files = glob(os.path.join(directory,"*.fasta"))
-    print fasta_files
+    for fasta in fasta_files:
+        print glob(os.path.join(directory,"*.fasta.*"))
+        print
     sys.exit()
 
 def build(version, fasta):

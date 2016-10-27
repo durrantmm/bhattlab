@@ -4,8 +4,8 @@ import sys, os
 
 if __name__ == "__main__":
 
-    print os.path.dirname(__file__)
-    sys.exit()
+    current_dir = os.path.dirname(__file__)
+
     # setup the option parser
     parser = argparse.ArgumentParser(
         description='')
@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     parser.add_argument('-nodes', '--taxon_nodes', required=False, type=list,
                         default=[
-                            "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/nodes.dmp",
+                            os.path.join(TaxonomyDatabase/nodes.dmp",
                             "/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/merged.dmp"],
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 

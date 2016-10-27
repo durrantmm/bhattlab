@@ -2,12 +2,25 @@ import argparse, logging
 import sys, os
 import pprint
 from datetime import datetime
+from phylophilter import filters
 
 def main(args):
 
     if not os.path.isdir(args['output_folder']):
         os.mkdir(args['output_folder'])
-    
+
+    write_run_info(args, args['output_folder'])
+    read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
+
+    filtered_reads = read_filter.filter_reads_linear(args['taxon_id'], paired_end=args['paired_end'])
+
+    with open(os.path.join(args['output_folder'], ), 'w') as out:
+        out.writelines(filtered_reads)
+
+def write_run_info(args, output_folder):
+
+    with open(os.path.join(output_folder, "run_info.txt"), 'w') as out:
+        out.write(pprint.pformat(args))
 
 if __name__ == "__main__":
 
@@ -47,8 +60,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args = vars(args)
-
-    print pprint.pformat(args)
 
     main(args)
 

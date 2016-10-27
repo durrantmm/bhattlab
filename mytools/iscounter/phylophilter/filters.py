@@ -89,7 +89,7 @@ class Filter:
 
         while True:
 
-       å     try:
+            try:
                 # For paired ends
                 if paired_end:
 

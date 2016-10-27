@@ -4,7 +4,7 @@ import sys, os
 
 if __name__ == "__main__":
 
-    print os.path.realpath(__file__)
+    print os.path.dirname(__file__)
     sys.exit()
     # setup the option parser
     parser = argparse.ArgumentParser(

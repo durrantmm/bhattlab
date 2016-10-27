@@ -1,5 +1,7 @@
-import argparse
+import argparse, logging
 import sys, os
+import pprint
+
 
 
 if __name__ == "__main__":
@@ -39,5 +41,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args = vars(args)
 
-    print args
+    print pprint.pformat(args)
 

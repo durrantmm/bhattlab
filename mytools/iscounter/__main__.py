@@ -14,7 +14,7 @@ def main(args):
 
     filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
 
-    with open(os.path.join(args['output_folder'], ), 'w') as out:
+    with open(os.path.join(args['output_folder'], "filtered_reads.fq"), 'w') as out:
         out.writelines(filtered_reads)
 
 def write_run_info(args, output_folder):

@@ -1,17 +1,17 @@
 import argparse, logging
 import sys, os
 import pprint
-
+from datetime import datetime
 
 
 if __name__ == "__main__":
 
     current_dir = os.path.dirname(__file__)
     data_dir = os.path.join(current_dir, "data")
+    timestamp = ":".join([str(datetime.now().time()), str(datetime.now().date())])
 
     # setup the option parser
-    parser = argparse.ArgumentParser(
-        description='')
+    parser = argparse.ArgumentParser(description='')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('-fq', '--fastq_reads', required=True,
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                             ,
                         help='Location of the NCBI Taxonomy Database nodes.txt file')
 
-    parser.add_argument('-o', '--output_file', required=False,
+    parser.add_argument('-o', '--output_folder', required=False, default = "ISMapper_%s" % timestamp
                         help='Specify the output file')
 
     args = parser.parse_args()

@@ -23,7 +23,7 @@ def build(version, fasta):
     except OSError:
         raise RuntimeError('bowtie2-build not found; check if it is installed and in $PATH\n')
 
-    stdout = subprocess.check_output(['bowtie2-build', '--version'])
+    stdout = "BOWTIE2 OUTPUT: "+subprocess.check_output(['bowtie2-build', '--version'])
     local_version = stdout.split('\n')[0].split()[-1]
     assert version == local_version, 'bowtie2-build version incompatibility %s != %s' % (version, local_version)
     subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])

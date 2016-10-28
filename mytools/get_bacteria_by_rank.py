@@ -29,7 +29,7 @@ def get_nodes_ranks(nodes_location):
     ranks_dict = {}
     with open(nodes_location) as nodes_in:
         for line in nodes_in:
-            line = line.strip().split("|")
+            line = [field.strip() for field in line.strip().split("|")]
             id = line[0].strip()
             parent_id = line[1].strip()
             rank = line[2]

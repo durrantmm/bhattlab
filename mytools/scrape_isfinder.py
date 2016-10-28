@@ -19,17 +19,13 @@ def main(args):
         IS_host = soup.find("div", {"class": "ascenseurAuto"}).getText().strip()
         IS_seq = soup.find("div", {"class": "seq"}).getText().strip()
 
-        print IS_name
-        print IS_host
-        print IS_seq
-
-        break
 
         with open(os.path.join(args['output_dir'], "%s.html" % IS_name), 'w') as outhtml:
             outhtml.write(r)
 
         with open(os.path.join(args['output_dir'], "%s.fasta" % IS_name), 'w') as outfasta:
-            pass
+            outfasta.write(">%s %s\n" % IS_name, IS_host)
+            outfasta.write(IS_seq)
 
 def get_IS_links(soup):
     all_links = soup.find_all("a")

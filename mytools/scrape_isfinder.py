@@ -12,9 +12,16 @@ def main(args):
 
     IS_links = get_IS_links(BeautifulSoup(page, 'lxml'))
 
-    r = urllib.urlopen(args['search_result_prefix_url']+IS_links[0]).read()
-    print r
-    soup = BeautifulSoup(r)
+    for link in IS_links:
+        r = urllib.urlopen(args['search_result_prefix_url'] + link).read()
+        soup = BeautifulSoup(r, 'lxml')
+        print soup.find("div")
+        break
+
+
+
+
+
 
 
 

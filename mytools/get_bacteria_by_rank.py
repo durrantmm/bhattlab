@@ -8,7 +8,7 @@ def main(args):
     print "Number of ranks: %d" % len(ranks)
     print "Getting Names.."
     names = get_names(args['names'])
-    print "Number of names: %d" % len(name)
+    print "Number of names: %d" % len(names)
 
     for line in get_relevant_taxa(args['rank'], ranks, nodes, names):
         print '\t'.join(line)

@@ -9,9 +9,9 @@ import argparse
 
 def main(args):
     page = submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
-    soup = BeautifulSoup(page)
+    soup = BeautifulSoup(page, 'html')
 
-
+    get_IS_links(soup)
 
 
 def get_IS_links(soup):

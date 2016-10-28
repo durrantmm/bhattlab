@@ -29,7 +29,7 @@ def main(args):
     bowtie2.build_all(args['insertion_sequences'])
 
     logger.info("Aligning the reads to all the insertion sequences...")
-    bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file)
+    bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'])
 
 
 def write_run_info(args, output_folder):

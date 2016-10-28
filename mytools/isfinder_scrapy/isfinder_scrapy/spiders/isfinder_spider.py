@@ -2,7 +2,7 @@ import scrapy
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "quotes"
+    name = "isfinder"
 
     def start_requests(self):
         genera_file = "/home/mdurrant/my_code_bhatt/mytools/bacterial_genera_small.tsv"

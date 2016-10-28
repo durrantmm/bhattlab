@@ -52,14 +52,13 @@ def get_names(taxon_names_location):
 
     return taxa_to_names
 
-def is_bacteria(taxon, nodes):
-    hierarchy = [taxon]
+def is_bacteria(taxon_id, nodes):
 
     while taxon_id != '1' and taxon_id != '0':
-        taxon_id = nodes[taxon_id]
-        hierarchy.append(taxon_id)
         if taxon_id == '2':
             return True
+        taxon_id = nodes[taxon_id]
+
 
     return False
 

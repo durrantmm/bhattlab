@@ -9,11 +9,13 @@ import argparse
 
 def main(args):
     page = submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
-    soup = BeautifulSoup(page, 'html')
 
-    IS_links = get_IS_links(soup)
+    IS_links = get_IS_links(BeautifulSoup(page, 'lxml'))
 
-    print IS_links[0]
+    r = urllib.urlopen(IS_links[0]).read()
+    soup = BeautifulSoup(r)
+    print soup.findall("a")
+
 
 
 

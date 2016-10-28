@@ -9,3 +9,6 @@ soup = BeautifulSoup(page, "html.parser")
 print soup.title
 
 all_links = soup.find_all("a")
+
+for link in all_links:
+    print link

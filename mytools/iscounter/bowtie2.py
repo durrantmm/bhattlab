@@ -58,17 +58,4 @@ def align(version, refpath, fastq, flags=('--quiet', '--no-unal', '--local')):
 
     # stream output from bowtie2
     bowtie_args = ['bowtie2', '-x', refpath, '-U', fastq, '-S %s.sam' % refpath] + list(flags)
-    p2 = subprocess.Popen(bowtie_args, stdout=subprocess.PIPE)
-    for line in p2.stdout:
-        yield line
-
-    # exception handling
-
-
-def main():
-    iter = align_paired('2.1.3', 'gb-ref.fa', 'test1.fastq', 'test2.fastq')
-    for line in iter:
-        print line
-
-if __name__ == '__main__':
-    main()
+    p2 = subprocess.check_call(bowtie_args, stdout=subprocess.PIPE)

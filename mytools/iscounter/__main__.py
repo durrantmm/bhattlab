@@ -17,9 +17,9 @@ def main(args):
 
     logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])
-    read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
+    read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'], logger=logger)
 
-    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True, logger=logger)
+    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:
@@ -53,8 +53,6 @@ def save_summary_stats(filtered_fastq_file, output_dir, taxon_filter):
         header.write("\t".join(header)+"\n")
         for line in results:
             out.write("\t".join(line)+"\n")
-
-
 
 
 def get_fastq_read_count(fastq_file, lines_per_read=4):

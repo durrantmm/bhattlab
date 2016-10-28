@@ -12,7 +12,7 @@ def main(args):
 
     IS_links = get_IS_links(BeautifulSoup(page, 'lxml'))
 
-    r = urllib.urlopen(IS_links[0]).read()
+    r = urllib.urlopen(args['search_result_prefix_url']+IS_links[0]).read()
     soup = BeautifulSoup(r)
     print soup.findall("a")
 
@@ -58,6 +58,10 @@ if __name__ == "__main__":
     parser.add_argument('--isfinder_search_url', required=False, type=str,
                         default="https://www-is.biotoul.fr/search.php",
                         help='The url of the ISFinder Website')
+
+    parser.add_argument('--search_result_prefix_url', required=False, type=str,
+                        default="https://www-is.biotoul.fr/scripts/",
+                        help='The url of the ISFinder results pages.')
 
     parser.add_argument('--output_dir', required=False, type=str,
                         default= os.path.join(current_dir, "output"),

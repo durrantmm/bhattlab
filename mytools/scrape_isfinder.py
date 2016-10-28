@@ -8,4 +8,4 @@ soup = BeautifulSoup(page, "html.parser")
 
 print soup.title
 
-print soup.a
+all_links = soup.find_all("a")

@@ -11,14 +11,20 @@ def main(args):
     page = submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
     soup = BeautifulSoup(page, 'html')
 
-    get_IS_links(soup)
+    IS_links = get_IS_links(soup)
+
+    print IS_links[0]
+
 
 
 def get_IS_links(soup):
     all_links = soup.find_all("a")
+    links = []
     for link in all_links:
-        if "ficheIS" in link.get("href"):
-            print link.get("href")
+        href = link.get("href")
+        if "ficheIS" in href:
+            links.append(href)
+    return links
 
 
 def submit_search(search_query, search_field, isfinder_url):

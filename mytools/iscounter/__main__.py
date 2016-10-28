@@ -19,7 +19,7 @@ def main(args):
     write_run_info(args, args['output_folder'])
     read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
 
-    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
+    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True, logger=logger)
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:
@@ -33,7 +33,7 @@ def main(args):
     bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'])
 
     logger.info("Saving summary statistics to results.txt in output directory...")
-    save_summary_stats(filtered_fastq_file, args['output_folder'])
+    save_summary_stats(filtered_fastq_file, args['output_folder'], args['taxon_id'])
 
     logger.info("Analysis Complete  :)")
 

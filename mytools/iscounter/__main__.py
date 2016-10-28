@@ -45,7 +45,7 @@ def save_summary_stats(filtered_fastq_file, output_dir):
     results = []
     for sam in sam_files:
         sam_aligned_reads = get_sam_read_count(sam)
-        results.append([sam.split('.')[0], str(sam_aligned_reads), str(float(sam_aligned_reads) / initial_read_count),
+        results.append([os.path.basename(sam).split('.')[0], str(sam_aligned_reads), str(float(sam_aligned_reads) / initial_read_count),
                         str(initial_read_count)])
 
     with open(results_output,'w') as out:

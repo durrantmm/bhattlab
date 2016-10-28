@@ -15,7 +15,7 @@ def main(args):
     for link in IS_links:
         r = urllib.urlopen(args['search_result_prefix_url'] + link).read()
         soup = BeautifulSoup(r, 'lxml')
-        print soup.find("div", {"id": "seq_ident"}).get("p")
+        print soup.find("div", {"id": "seq_ident"}).find("p").getText()
         break
 
 

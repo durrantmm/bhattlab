@@ -48,11 +48,11 @@ if __name__ == "__main__":
                         help='The rank of interest to be extracted.')
 
     parser.add_argument('--nodes', required=False, type=str,
-                        default=os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"),
+                        default=os.path.join(data_dir, "iscounter/TaxonomyDatabase/nodes.dmp"),
                         help='Location of the NCBI Taxonomy Database nodes.txt file')
 
     parser.add_argument('--names', required=False, type=str,
-                        default= os.path.join(data_dir, "TaxonomyDatabase/names.dmp"),
+                        default= os.path.join(data_dir, "iscounter/TaxonomyDatabase/names.dmp"),
                         help='Location of the NCBI Taxonomy Database names.txt file')
 
     args = parser.parse_args()

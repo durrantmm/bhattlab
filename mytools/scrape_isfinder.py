@@ -16,7 +16,7 @@ def main(args):
         r = urllib.urlopen(args['search_result_prefix_url'] + link).read()
         soup = BeautifulSoup(r, 'lxml')
         IS_name = soup.find("div", {"id": "seq_ident"}).find("p").getText()
-        with open(os.path.join(args['output_dir'], "%s.html" % IS_name)) as outfile:
+        with open(os.path.join(args['output_dir'], "%s.html" % IS_name), 'w') as outfile:
             outfile.write(r)
         break
 

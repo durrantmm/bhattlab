@@ -46,7 +46,7 @@ def save_summary_stats(filtered_fastq_file, output_dir, taxon_filter):
     for sam in sam_files:
         sam_aligned_reads = get_sam_read_count(sam)
         results.append([os.path.basename(sam).split('.')[0], taxon_filter, str(sam_aligned_reads),
-                        str((float(sam_aligned_reads) / initial_read_count)*100)+"%%", str(initial_read_count)])
+                        str((float(sam_aligned_reads) / initial_read_count)*100)+"%", str(initial_read_count)])
 
     with open(results_output,'w') as out:
         header = ['InsertionSequence', 'TaxonFilter', '#AlignedReads', '%AlignedReads', 'InitialReadCount']

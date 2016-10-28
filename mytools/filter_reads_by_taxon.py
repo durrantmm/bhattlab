@@ -199,19 +199,7 @@ def get_required_reads_paired_branched(reads_to_taxid_location, fastq_reads, tax
 
     return matching_reads, matching_taxa
 
-def get_taxa_to_names(taxon_names_location):
-    assert type(taxon_names_location) is str, "the taxon_names_location input must be a set of taxon_ids"
 
-    taxa_to_names = {}
-
-    with open(taxon_names_location) as names_in:
-        for line in names_in:
-            line = [field.strip() for field in line.strip().split("|")]
-            #print "\t".join([line[0], line[1], line[3]])
-            if line[3] == 'scientific name':
-                taxa_to_names[line[0]] = line[1]
-
-    return taxa_to_names
 
 
 def print_hierarchy(taxon_hierarchy, taxa2names=None):

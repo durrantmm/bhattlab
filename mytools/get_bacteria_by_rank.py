@@ -2,36 +2,60 @@ import sys, os
 import argparse
 
 def main(args):
-    nodes = get_taxon_nodes(args['nodes'])
+    nodes, ranks = get_nodes_ranks(args['nodes'])
+    names = get_names(args['names'])
 
-    relevant_taxa = get_relevant_taxa(args['rank'], args['names'], nodes)
+    for line in get_relevant_taxa(args['rank'], ranks, nodes, names):
+        print '\t'.join(line)
+
+def get_relevant_taxa(rank, ranks, nodes, names):
+    relevant_taxa = {}
+
+    for taxon in nodes.keys():
+        if ranks[taxon]== rank:
+            if is_bacteria(taxon, nodes):
+                yield [taxon, rank, names[taxon]]
 
 
-def get_taxon_nodes(nodes_location):
+def get_nodes_ranks(nodes_location):
     taxon_nodes_dict = {}
+    ranks_dict = {}
     with open(nodes_location) as nodes_in:
         for line in nodes_in:
             line = line.strip().split("|")
             id = line[0].strip()
             parent_id = line[1].strip()
+            rank = line[2]
             taxon_nodes_dict[id] = parent_id
-    return taxon_nodes_dict
+            ranks_dict[id] = rank
 
-def get_relevant_taxa(rank, names, nodes):
-    relevant_taxa = {}
+    return taxon_nodes_dict, ranks_dict
 
-    with open(names, 'r') as names_in:
 
+
+def get_names(taxon_names_location):
+
+    taxa_to_names = {}
+
+    with open(taxon_names_location) as names_in:
         for line in names_in:
-            line = line = [field.strip() for field in line.strip().split("|")]
-            print line
+            line = [field.strip() for field in line.strip().split("|")]
+            #print "\t".join([line[0], line[1], line[3]])
+            if line[3] == 'scientific name':
+                taxa_to_names[line[0]] = line[1]
 
-    return 0
-
-
+    return taxa_to_names
 
 def is_bacteria(taxon, nodes):
-    pass
+    hierarchy = [taxon]
+
+    while taxon_id != '1' and taxon_id != '0':
+        taxon_id = taxon_nodes_dict[taxon_id]
+        hierarchy.append(taxon_id)
+        if taxon_id == '2':
+            return True
+
+    return False
 
 
 

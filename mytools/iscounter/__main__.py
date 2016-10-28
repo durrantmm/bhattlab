@@ -37,7 +37,7 @@ def main(args):
 
     logger.info("Analysis Complete  :)")
 
-def save_summary_stats(filtered_fastq_file, output_dir, logger):
+def save_summary_stats(filtered_fastq_file, output_dir):
     results_output = os.path.join(output_dir, "results.txt")
     initial_read_count = get_fastq_read_count(filtered_fastq_file)
     print initial_read_count

@@ -40,9 +40,7 @@ def main(args):
 def save_summary_stats(filtered_fastq_file, output_dir):
     results_output = os.path.join(output_dir, "results.txt")
     initial_read_count = get_fastq_read_count(filtered_fastq_file)
-    print initial_read_count
     sam_files = glob(os.path.join(output_dir, "*.sam"))
-    print sam_files
 
     results = []
     for sam in sam_files:
@@ -52,7 +50,6 @@ def save_summary_stats(filtered_fastq_file, output_dir):
 
     with open(results_output,'w') as out:
         header = ['InsertionSequence', '#AlignedReads', '%AlignedReads', 'InitialReadCount']
-        print "\t".join(header)
         for line in results:
             out.write("\t".join(line)+"\n")
 

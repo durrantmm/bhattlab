@@ -8,8 +8,13 @@ import argparse
 
 
 def main(args):
-    print submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
+    page = submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
+    soup = BeautifulSoup(page)
 
+    all_links=soup.find_all("a")
+
+    for link in all_links:
+            print link.get("href")
 
 def submit_search(search_query, search_field, isfinder_url):
     br = mechanize.Browser()

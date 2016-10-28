@@ -77,7 +77,7 @@ class Filter:
 
     def filter_reads_linear_ismapper(self, start_taxon, paired_end=True, num_ancestral_nodes=8, stop_taxon=None):
 
-        hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes) + '0'
+        hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes) + ['0']
 
 
         if self.logger: self.logger.info("Complete Ancestral Lineage and Unassigned Taxon:\n\t"+str(hierarchy))

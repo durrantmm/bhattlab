@@ -12,5 +12,9 @@ the_page = response.read()
 the_url  = response.geturl()
 
 
+print the_url
+soup = BeautifulSoup(the_page, "html.parser")
 
-soup = BeautifulSoup(page, "html.parser")
+all_links = soup.find_all("a")
+for link in all_links:
+    print link

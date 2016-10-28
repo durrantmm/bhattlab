@@ -2,8 +2,13 @@ import sys, os
 import argparse
 
 def main(args):
+    print "Getting Nodes and Ranks"
     nodes, ranks = get_nodes_ranks(args['nodes'])
+    print "Number of nodes: %d" % nodes.len()
+    print "Number of ranks: %d" % ranks.len()
+    print "Getting Names.."
     names = get_names(args['names'])
+    print "Number of names: %d" % name.len()
 
     for line in get_relevant_taxa(args['rank'], ranks, nodes, names):
         print '\t'.join(line)
@@ -11,7 +16,7 @@ def main(args):
 def get_relevant_taxa(rank, ranks, nodes, names):
     relevant_taxa = {}
 
-    for taxon in nodes.keys():
+    for taxon in names.keys():
         if ranks[taxon]== rank:
             if is_bacteria(taxon, nodes):
                 yield [taxon, rank, names[taxon]]

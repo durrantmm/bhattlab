@@ -17,7 +17,6 @@ def get_relevant_taxa(rank, ranks, nodes, names):
     relevant_taxa = {}
 
     for taxon in names.keys():
-        print ranks[taxon], rank
         if ranks[taxon] == rank:
             print ranks[taxon], rank
             if is_bacteria(taxon, nodes):

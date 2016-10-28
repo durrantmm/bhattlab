@@ -4,11 +4,11 @@ import argparse
 def main(args):
     print "Getting Nodes and Ranks"
     nodes, ranks = get_nodes_ranks(args['nodes'])
-    print "Number of nodes: %d" % nodes.len()
-    print "Number of ranks: %d" % ranks.len()
+    print "Number of nodes: %d" % len(nodes)
+    print "Number of ranks: %d" % len(ranks)
     print "Getting Names.."
     names = get_names(args['names'])
-    print "Number of names: %d" % name.len()
+    print "Number of names: %d" % len(name)
 
     for line in get_relevant_taxa(args['rank'], ranks, nodes, names):
         print '\t'.join(line)

@@ -18,7 +18,7 @@ def get_IS_links(soup):
     all_links = soup.find_all("a")
     for link in all_links:
         if "fiche" in link.get("href"):
-            print link.get("text"), link.get("href")
+            print link.get("href")
 
 
 def submit_search(search_query, search_field, isfinder_url):

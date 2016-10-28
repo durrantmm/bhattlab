@@ -4,6 +4,7 @@ import pprint
 from datetime import datetime
 from phylophilter import filters
 import bowtie2
+from glob import glob
 
 def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
@@ -31,6 +32,46 @@ def main(args):
     logger.info("Aligning the reads to all the insertion sequences...")
     bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'])
 
+    logger.info("Saving summary statistics to results.txt in output directory...")
+    save_summary_stats(filtered_fastq_file, args['output_folder'])
+
+    logger.info("Analysis Complete  :)")
+
+def save_summary_stats(filtered_fastq_file, output_dir, logger):
+    results_output = os.path.join(output_dir, "results.txt")
+    initial_read_count = get_fastq_read_count(filtered_fastq_file)
+    print initial_read_count
+    sam_files = glob(os.path.join(output_dir, "*.sam"))
+    print sam_files
+
+    results = []
+    for sam in sam_files:
+        sam_aligned_reads = get_sam_read_count(sam)
+        results.append([sam.split('.')[0], sam_aligned_reads, float(sam_aligned_reads) / initial_read_count, initial_read_count])
+
+    with open(results_output,'w') as out:
+        header = ['InsertionSequence', '#AlignedReads', '%AlignedReads', 'InitialReadCount']
+        print "\t".join(header)
+        for line in results:
+            out.write("\t".join(line)+"\n")
+
+
+
+
+def get_fastq_read_count(fastq_file, lines_per_read=4):
+    line_count = 0
+    with open(fastq_file) as in:
+        for line in fastq_file:
+            line_count += 1
+    return line_count / lines_per_read
+
+def get_sam_read_count(sam_file):
+    line_count = 0
+    with open(sam_file) as in:
+        for line in fastq_file:
+            if line[0] != '@':
+                line_count += 1
+    return line_count
 
 def write_run_info(args, output_folder):
 

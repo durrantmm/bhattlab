@@ -58,5 +58,5 @@ def align(version, refpath, fastq, output_dir, flags=('--quiet', '--no-unal', '-
 
     # stream output from bowtie2
     bowtie_args = ['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' % (output_dir, os.path.basename(refpath))] + list(flags)
-
+    print " ".join(bowtie_args)
     subprocess.check_call(bowtie_args, stdout=subprocess.PIPE)

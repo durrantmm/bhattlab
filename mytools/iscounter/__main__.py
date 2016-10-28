@@ -60,15 +60,15 @@ def save_summary_stats(filtered_fastq_file, output_dir, logger):
 
 def get_fastq_read_count(fastq_file, lines_per_read=4):
     line_count = 0
-    with open(fastq_file) as in:
-        for line in fastq_file:
+    with open(fastq_file) as infile:
+        for line in infile:
             line_count += 1
     return line_count / lines_per_read
 
 def get_sam_read_count(sam_file):
     line_count = 0
-    with open(sam_file) as in:
-        for line in fastq_file:
+    with open(sam_file) as infile:
+        for line in infile:
             if line[0] != '@':
                 line_count += 1
     return line_count

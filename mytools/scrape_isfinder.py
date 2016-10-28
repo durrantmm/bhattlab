@@ -6,6 +6,7 @@ isfinder_url = "https://www-is.biotoul.fr/search.php"
 values = {'tout' : 'bacteroides'}
 
 data = urllib.urlencode(values)
+print data
 req = urllib2.Request(isfinder_url, data)
 response = urllib2.urlopen(req)
 the_page = response.read()

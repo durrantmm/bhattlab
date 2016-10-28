@@ -29,13 +29,7 @@ def main(args):
             outhtml.write(r)
 
         with open(os.path.join(args['output_dir'], "%s.fasta" % IS_name), 'w') as outfasta:
-
-
-
-
-
-
-
+            pass
 
 def get_IS_links(soup):
     all_links = soup.find_all("a")

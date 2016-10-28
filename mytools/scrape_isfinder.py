@@ -7,3 +7,5 @@ page = urllib2.urlopen(wiki)
 soup = BeautifulSoup(page, "html.parser")
 
 print soup.title
+
+print soup.a

@@ -1,6 +1,7 @@
 import sys, os
 import argparse
 
+
 def main(args):
     print "Getting Nodes and Ranks..."
     nodes, ranks = get_nodes_ranks(args['nodes'])

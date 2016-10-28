@@ -19,7 +19,7 @@ def main(args):
     write_run_info(args, args['output_folder'])
     read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'], args['taxon_nodes'], logger_in=logger)
 
-    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
+    filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'])
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:

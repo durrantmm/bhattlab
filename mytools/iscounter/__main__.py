@@ -50,6 +50,7 @@ def save_summary_stats(filtered_fastq_file, output_dir):
 
     with open(results_output,'w') as out:
         header = ['InsertionSequence', '#AlignedReads', '%AlignedReads', 'InitialReadCount']
+        header.write("\t".join(header)+"\n")
         for line in results:
             out.write("\t".join(line)+"\n")
 

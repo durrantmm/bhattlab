@@ -24,7 +24,7 @@ def main(args):
             outhtml.write(r)
 
         with open(os.path.join(args['output_dir'], "%s.fasta" % IS_name), 'w') as outfasta:
-            outfasta.write(">%s %s\n" % IS_name, IS_host)
+            outfasta.write(">%s %s\n" % (IS_name, IS_host))
             outfasta.write(IS_seq)
 
 def get_IS_links(soup):

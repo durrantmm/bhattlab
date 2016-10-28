@@ -56,7 +56,7 @@ def is_bacteria(taxon, nodes):
     hierarchy = [taxon]
 
     while taxon_id != '1' and taxon_id != '0':
-        taxon_id = taxon_nodes_dict[taxon_id]
+        taxon_id = nodes[taxon_id]
         hierarchy.append(taxon_id)
         if taxon_id == '2':
             return True

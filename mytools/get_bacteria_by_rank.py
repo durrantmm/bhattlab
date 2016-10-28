@@ -7,15 +7,14 @@ def main(args):
     relevant_taxa = get_relevant_taxa(args['rank'], args['names'], nodes)
 
 
-def get_taxon_nodes(nodes_locations):
+def get_taxon_nodes(nodes_location):
     taxon_nodes_dict = {}
-    for location in nodes_locations:
-        with open(location) as nodes_in:
-            for line in nodes_in:
-                line = line.strip().split("|")
-                id = line[0].strip()
-                parent_id = line[1].strip()
-                taxon_nodes_dict[id] = parent_id
+    with open(nodes_location) as nodes_in:
+        for line in nodes_in:
+            line = line.strip().split("|")
+            id = line[0].strip()
+            parent_id = line[1].strip()
+            taxon_nodes_dict[id] = parent_id
     return taxon_nodes_dict
 
 def get_relevant_taxa(rank, names, nodes):

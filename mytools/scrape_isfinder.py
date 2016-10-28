@@ -16,7 +16,7 @@ def main(args):
         r = urllib.urlopen(args['search_result_prefix_url'] + link).read()
         soup = BeautifulSoup(r, 'lxml')
         IS_name = soup.find("div", {"id": "seq_ident"}).find("p").getText()
-        print soup.find_all("div")
+        print soup.find_all("div", {"class": "ascenseurAuto"})
 
         break
         IS_host = soup.find("div", {"class": "ascenseurAuto"}).find("p").getText().strip()

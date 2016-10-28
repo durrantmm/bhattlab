@@ -28,6 +28,7 @@ class Filter:
         if self.logger: self.logger.info("Complete Ancestral Lineage:\n\t" + str(hierarchy))
 
         hierarchy = set(hierarchy[:num_ancestral_nodes + 1])
+
         if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
 
         if paired_end:
@@ -79,7 +80,9 @@ class Filter:
         hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes)
         if self.logger: self.logger.info("Complete Ancestral Lineage:\n\t"+str(hierarchy))
 
-        hierarchy = set(hierarchy[:num_ancestral_nodes+1])
+        hierarchy = self.truncate_at_bacteria(hierarchy)
+        if self.logger: self.logger.info("Truncated Ancestral Lineage:\n\t" + str(hierarchy))
+        hierarchy = set(hierarchy)
         if self.logger: self.logger.info("All ancestral nodes included in filter:\n\t" + str(hierarchy))
 
         if paired_end:
@@ -128,3 +131,11 @@ class Filter:
             except ValueError:
                 if self.logger: self.logger.debug("There was a ValueError in filter_reads_linear()")
                 break
+
+
+    def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):
+        bacteria_index = 0
+        for i in range(len(hierarchy)):
+            if hierarchy[i] == bacteria_taxon:
+                bacteria_index = i
+        return hierarchy[:i+1]

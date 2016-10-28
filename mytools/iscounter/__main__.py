@@ -37,7 +37,7 @@ def main(args):
 
     logger.info("Analysis Complete  :)")
 
-def save_summary_stats(filtered_fastq_file, output_dir):
+def save_summary_stats(filtered_fastq_file, output_dir, taxon_filter):
     results_output = os.path.join(output_dir, "results.txt")
     initial_read_count = get_fastq_read_count(filtered_fastq_file)
     sam_files = glob(os.path.join(output_dir, "*.sam"))
@@ -45,11 +45,11 @@ def save_summary_stats(filtered_fastq_file, output_dir):
     results = []
     for sam in sam_files:
         sam_aligned_reads = get_sam_read_count(sam)
-        results.append([os.path.basename(sam).split('.')[0], str(sam_aligned_reads), str(float(sam_aligned_reads) / initial_read_count),
+        results.append([os.path.basename(sam).split('.')[0], taxon_filter, str(sam_aligned_reads), str(float(sam_aligned_reads) / initial_read_count),
                         str(initial_read_count)])
 
     with open(results_output,'w') as out:
-        header = ['InsertionSequence', '#AlignedReads', '%AlignedReads', 'InitialReadCount']
+        header = ['InsertionSequence', 'TaxonFilter', '#AlignedReads', '%AlignedReads', 'InitialReadCount']
         header.write("\t".join(header)+"\n")
         for line in results:
             out.write("\t".join(line)+"\n")

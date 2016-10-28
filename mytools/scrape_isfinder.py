@@ -17,7 +17,7 @@ def main(args):
 def get_IS_links(soup):
     all_links = soup.find_all("a")
     for link in all_links:
-        if "name=" in link.get("href"):
+        if "ficheIS" in link.get("href"):
             print link.get("href")
 
 

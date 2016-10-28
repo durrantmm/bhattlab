@@ -35,7 +35,7 @@ def build(version, fasta):
     subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])
 
 
-def align(version, refpath, fastq, output_dir, flags=('--quiet', '--no-unal', '--local')):
+def align(version, refpath, fastq, output_dir, flags=('--no-unal', '--local', '--quiet')):
     """
     Call bowtie2-align on paired read data
     :param version: Enforces bowtie2 version number
@@ -57,6 +57,7 @@ def align(version, refpath, fastq, output_dir, flags=('--quiet', '--no-unal', '-
     assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
 
     # stream output from bowtie2
-    bowtie_args = ['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' % (output_dir, os.path.basename(refpath))] + list(flags)
-    print " ".join(bowtie_args)
-    subprocess.call(bowtie_args)
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' %
+                            (output_dir, os.path.basename(refpath))] + list(flags))
+
+    subprocess.call(bowtie_args, shell=True)

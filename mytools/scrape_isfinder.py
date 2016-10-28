@@ -16,8 +16,20 @@ def main(args):
         r = urllib.urlopen(args['search_result_prefix_url'] + link).read()
         soup = BeautifulSoup(r, 'lxml')
         IS_name = soup.find("div", {"id": "seq_ident"}).find("p").getText()
-        with open(os.path.join(args['output_dir'], "%s.html" % IS_name), 'w') as outfile:
-            outfile.write(r)
+        IS_host = soup.find("div", {"class": "ascenseurAuto"}).find("p").getText().strip()
+        IS_seq = soup.find("div", {"class": "seq"}).find("p").getText().strip()
+
+        print IS_name
+        print IS_host
+        print IS_seq
+
+        break
+
+        with open(os.path.join(args['output_dir'], "%s.html" % IS_name), 'w') as outhtml:
+            outhtml.write(r)
+
+        with open(os.path.join(args['output_dir'], "%s.fasta" % IS_name), 'w') as outfasta:
+
 
 
 

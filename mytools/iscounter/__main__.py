@@ -14,21 +14,21 @@ def main(args):
 
     filtered_fastq_file = os.path.join(args['output_folder'], "filtered_reads.fq")
 
-    logger.info("Saving run info to output folder.")
+    logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])
     read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'],args['taxon_nodes'])
 
     filtered_reads = read_filter.filter_reads_linear_ismapper(args['taxon_id'], paired_end=True)
 
-    logger.info("Filtering reads and saving to output folder.")
+    logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:
         out.writelines(filtered_reads)
     logger.info("Reads saved to %s" % filtered_fastq_file)
 
-    logger.info("Building all the insertion sequence in the given directory using bowtie2:")
+    logger.info("Building all the insertion sequence in the given directory using bowtie2...")
     bowtie2.build_all(args['insertion_sequences'])
 
-    logger.info("Aligning the reads to all the insertion sequences:")
+    logger.info("Aligning the reads to all the insertion sequences...")
     bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file)
 
 

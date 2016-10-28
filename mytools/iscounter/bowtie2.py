@@ -57,5 +57,5 @@ def align(version, refpath, fastq, output_dir, flags=('--quiet', '--no-unal', '-
     assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
 
     # stream output from bowtie2
-    bowtie_args = ['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' % (output_dir, refpath)] + list(flags)
+    bowtie_args = ['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' % (output_dir, os.path.basename(refpath))] + list(flags)
     p2 = subprocess.check_call(bowtie_args, stdout=subprocess.PIPE)

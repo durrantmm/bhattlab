@@ -6,5 +6,4 @@ page = urllib2.urlopen(wiki)
 
 soup = BeautifulSoup(page)
 
-
 print soup.prettify()

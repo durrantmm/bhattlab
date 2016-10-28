@@ -75,7 +75,7 @@ class Filter:
                 break
 
 
-    def filter_reads_linear_ismapper(self, start_taxon, num_ancestral_nodes=8, stop_taxon=None):
+    def filter_reads_linear_ISCounter(self, start_taxon, num_ancestral_nodes=8, stop_taxon=None):
 
         hierarchy = shared.get_taxon_hierarchy_list(start_taxon, self.taxonomy_nodes) + ['0']
 

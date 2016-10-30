@@ -4,11 +4,10 @@ import mechanize
 import sys, os
 import argparse
 
-
-
-
 def main(args):
     page = submit_search(args['search_query'], args['search_field'], args['isfinder_search_url'])
+    output_dir = os.path.join(args['output_dir'], args['search_query'])
+    os.makedirs(output_dir)
 
     IS_links = get_IS_links(BeautifulSoup(page, 'lxml'))
 
@@ -20,10 +19,10 @@ def main(args):
         IS_seq = soup.find("div", {"class": "seq"}).getText().strip()
 
 
-        with open(os.path.join(args['output_dir'], "%s.html" % IS_name), 'w') as outhtml:
+        with open(os.path.join(output_dir, "%s.html" % IS_name), 'w') as outhtml:
             outhtml.write(r)
 
-        with open(os.path.join(args['output_dir'], "%s.fasta" % IS_name), 'w') as outfasta:
+        with open(os.path.join(output_dir, "%s.fasta" % IS_name), 'w') as outfasta:
             outfasta.write(">%s %s\n" % (IS_name, IS_host))
             outfasta.write(IS_seq)
 

@@ -86,8 +86,7 @@ class Filter:
         hierarchy = set(hierarchy)
 
         if self.logger: self.logger.info("Performing paired end filtering to only include paired reads where at "
-                                         "least one of the reads maps to the designated taxon, and both reads map to "
-                                         "some node along the ancestral lineage...")
+                                         "least one of the reads maps to the designated taxon...")
 
         while True:
 

@@ -11,10 +11,10 @@ def build_all(directory, suffix="fasta"):
         if len(glob(os.path.join(directory,"%s.*" % fasta))) == 0:
             build('2.2.9', fasta)
 
-def align_all(ref_directory, fastq_file, output_dir, suffix="fasta"):
+def align_all(ref_directory, fastq_file, output_dir, threads=1, suffix="fasta"):
     fasta_files = glob(os.path.join(ref_directory,"*.%s" % suffix))
     for fasta in fasta_files:
-        align('2.2.9', fasta, fastq_file, output_dir)
+        align('2.2.9', fasta, fastq_file, output_dir, threads=threads)
 
 
 def build(version, fasta):
@@ -35,7 +35,7 @@ def build(version, fasta):
     subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])
 
 
-def align(version, refpath, fastq, output_dir, flags=('--no-unal', '--local', '--quiet')):
+def align(version, refpath, fastq, output_dir, threads=1, flags=('--no-unal', '--local', '--quiet')):
     """
     Call bowtie2-align on paired read data
     :param version: Enforces bowtie2 version number
@@ -58,6 +58,6 @@ def align(version, refpath, fastq, output_dir, flags=('--no-unal', '--local', '-
 
     # stream output from bowtie2
     bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' %
-                            (output_dir, os.path.basename(refpath))] + list(flags))
+                            (output_dir, os.path.basename(refpath)), '-p', threads] + list(flags))
 
     subprocess.call(bowtie_args, shell=True)

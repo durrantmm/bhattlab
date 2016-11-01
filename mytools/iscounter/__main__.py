@@ -30,7 +30,8 @@ def main(args):
     bowtie2.build_all(args['insertion_sequences'])
 
     logger.info("Aligning the reads to all the insertion sequences...")
-    bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'])
+    bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'],
+                      threads=args['threads'])
 
     logger.info("Saving summary statistics to results.txt in output directory...")
     save_summary_stats(filtered_fastq_file, args['output_folder'], args['taxon_id'])
@@ -109,6 +110,10 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--output_folder', required=False,
                         default = os.path.join(output_dir,"ISMapper_%s" % timestamp),
                         help='Specify the output file')
+
+    parser.add_argument('-', '--threads', required=False,
+                        default=1, type = int,
+                        help='The number of threads to run with bowtie2.')
 
     args = parser.parse_args()
     args = vars(args)

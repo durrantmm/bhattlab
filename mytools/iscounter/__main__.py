@@ -111,7 +111,7 @@ if __name__ == "__main__":
                         default = os.path.join(output_dir,"ISMapper_%s" % timestamp),
                         help='Specify the output file')
 
-    parser.add_argument('-', '--threads', required=False,
+    parser.add_argument('-p', '--threads', required=False,
                         default=1, type = int,
                         help='The number of threads to run with bowtie2.')
 

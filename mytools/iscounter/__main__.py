@@ -13,7 +13,7 @@ def main(args):
     if not os.path.isdir(args['output_folder']):
         os.mkdir(args['output_folder'])
 
-    filtered_fastq_file = os.path.join(args['output_folder'], "filtered_reads.fq")
+    filtered_fastq_file = os.path.join(args['output_folder'], os.path.basename(args['fastq_reads'])+".filtered.fq")
 
     logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])

@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_files', nargs=2,
                         help='The two fastq files containing the STACKED reads of interest')
-    parser.add_argument('-o', '--outfile', required=True,
+    parser.add_argument('-o', '--outfile', required=False,
                         help='Optional output specification.')
     parser.add_argument('-n', '--lines_per_leaf', type=int, required=False,
                         default=4,
@@ -59,7 +59,8 @@ if __name__ == "__main__":
     outfile = args['outfile']
     lines_per_leaf = args['lines_per_leaf']
 
-    print get_shared_name(fastq_file1, fastq_file2)
+    if outfile is None: outfile = get_shared_name(fastq_file1, fastq_file2) + ".il.fq"
+    print outfile
     sys.exit()
     sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, outfile)
     print("File written to %s" % outfile)

@@ -60,8 +60,7 @@ if __name__ == "__main__":
     lines_per_leaf = args['lines_per_leaf']
 
     if outfile is None: outfile = get_shared_name(fastq_file1, fastq_file2) + ".il.fq"
-    print outfile
-    sys.exit()
+
     sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, outfile)
     print("File written to %s" % outfile)
 

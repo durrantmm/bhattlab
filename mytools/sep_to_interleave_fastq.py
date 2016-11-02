@@ -30,7 +30,7 @@ def get_shared_name(name1, name2):
 
     outname= ''
     while c1 == c2:
-        out += c1
+        outname += c1
         pos += 1
         c1 = name1[pos]
         c2 = name2[pos]

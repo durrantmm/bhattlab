@@ -26,4 +26,4 @@
 #
 #$ -cwd
 
-echo "kraken --db /srv/gsfs0/projects/bhatt/data/program_indices/kraken/kraken_custom --preload $1"
+/srv/gsfs0/projects/bhatt/moss/tools/classification_and_binning/kraken/bin/kraken --db /srv/gsfs0/projects/bhatt/data/program_indices/kraken/kraken_custom --preload --fastq-input --threads 112 $1 

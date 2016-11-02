@@ -23,6 +23,19 @@ def sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, output_file):
 
                     out_file.write("\n".join(read1+read2)+"\n")
 
+def get_shared_name(name1, name2):
+    pos = 0
+    c1 = name1[pos]
+    c2 = name2[pos]
+
+    outname= ''
+    while c1 == c2:
+        out += c1
+        pos += 1
+        c1 = name1[pos]
+        c2 = name2[pos]
+
+    return outname
 
 if __name__ == "__main__":
 
@@ -46,6 +59,8 @@ if __name__ == "__main__":
     outfile = args['outfile']
     lines_per_leaf = args['lines_per_leaf']
 
+    print get_shared_name(fastq_file1, fastq_file2)
+    sys.exit()
     sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, outfile)
     print("File written to %s" % outfile)
 

@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('fastq_files', nargs=2,
                         help='The two fastq files containing the STACKED reads of interest')
-    parser.add_argument('-o', '--outfile', required=False,
+    parser.add_argument('-o', '--outfile', required=True,
                         help='Optional output specification.')
     parser.add_argument('-n', '--lines_per_leaf', type=int, required=False,
                         default=4,

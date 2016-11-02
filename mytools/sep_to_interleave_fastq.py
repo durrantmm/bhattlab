@@ -6,23 +6,18 @@ output = False
 read_set = set()
 
 
-def destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, output_file):
+def sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, output_file):
 
-    with open(fastq_file) as file_in1:
+    with open(fastq_file1) as file_in1:
 
-        with open(fastq_file) as file_in2:
-
-            line_number = 1
-            while line_number < part_B_line:
-                file_in1.readline()
-                line_number += 1
+        with open(fastq_file2) as file_in2:
 
             with open(output_file, 'w') as out_file:
 
                 while True:
 
-                    read1 = [file_in2.readline().strip() for i in range(lines_per_leaf)]
-                    read2 = [file_in1.readline().strip() for i in range(lines_per_leaf)]
+                    read1 = [file_in1.readline().strip() for i in range(lines_per_leaf)]
+                    read2 = [file_in2.readline().strip() for i in range(lines_per_leaf)]
 
                     if len(read2[0]) == 0 or len(read1[0]) == 0: break
 
@@ -36,10 +31,8 @@ if __name__ == "__main__":
                                                  'This will REMOVE any reads without a pair.')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
-    parser.add_argument('fastq_file',
-                        help='The fastq file containing the STACKED reads of interest')
-    parser.add_argument('part_B_line', type=int,
-                        help='The line in the file where the second reads are first begin, (1-indexed).')
+    parser.add_argument('fastq_files', nargs=2,
+                        help='The two fastq files containing the STACKED reads of interest')
     parser.add_argument('-o', '--outfile', required=False,
                         help='Optional output specification.')
     parser.add_argument('-n', '--lines_per_leaf', type=int, required=False,
@@ -49,13 +42,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args = vars(args)
 
-    fastq_file = args['fastq_file']
-    part_B_line = args['part_B_line']
+    fastq_file1, fastq_file2 = args['fastq_files']
     outfile = args['outfile']
     lines_per_leaf = args['lines_per_leaf']
 
-    if outfile is None: outfile = ".".join(fastq_file.split(".")[:-1]+["INTERLEAVED",fastq_file.split(".")[-1]])
-
-    destack_and_interleave(fastq_file, part_B_line, lines_per_leaf, outfile)
+    sep_to_interleave(fastq_file1, fastq_file2, lines_per_leaf, outfile)
     print("File written to %s" % outfile)
 

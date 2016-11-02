@@ -43,16 +43,19 @@ def save_summary_stats(fastq_orig_name, filtered_fastq_file, output_dir, taxon_f
     initial_read_count = get_fastq_read_count(filtered_fastq_file)
     sam_files = glob(os.path.join(output_dir, "*.sam"))
 
+    out_header = ['FASTQFile', 'TaxonFilter', 'InitialReadCount',
+              'InsertionSequence', '#AlignedReads', '%AlignedReads']
+
     results = []
     for sam in sam_files:
         sam_aligned_reads = get_sam_read_count(sam)
-        results.append([os.path.basename(fastq_orig_name), os.path.basename(sam).split('.')[0], taxon_filter, str(sam_aligned_reads),
-                        str((float(sam_aligned_reads) / initial_read_count)*100)+"%", str(initial_read_count)])
+        results.append([os.path.basename(fastq_orig_name), taxon_filter, str(initial_read_count),
+                        os.path.basename(sam).split('.')[0], str(sam_aligned_reads),
+                        str((float(sam_aligned_reads) / initial_read_count)*100)+"%"])
 
     with open(results_output,'w') as out:
-        header = ['FASTQFile','InsertionSequence', 'TaxonFilter',
-                  '#AlignedReads', '%AlignedReads', 'InitialReadCount']
-        out.write("\t".join(header)+"\n")
+
+        out.write("\t".join(out_header)+"\n")
         for line in results:
             out.write("\t".join(line)+"\n")
 

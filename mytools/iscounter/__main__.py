@@ -104,7 +104,7 @@ if __name__ == "__main__":
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('-is', '--insertion_sequences', required=False, type=str,
-                        default=os.path.join(data_dir, "eli_IS"),
+                        default=os.path.join(data_dir, "bacteroides_IS"),
                         help='A directory containing the insertion sequences of interest, one file for')
 
     parser.add_argument('-o', '--output_folder', required=False,

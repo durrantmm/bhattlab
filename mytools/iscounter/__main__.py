@@ -44,7 +44,7 @@ def save_summary_stats(fastq_orig_name, filtered_fastq_file, output_dir, taxon_f
     sam_files = glob(os.path.join(output_dir, "*.sam"))
 
     out_header = ['FASTQFile', 'TaxonFilter', 'InitialReadCount',
-              'InsertionSequence', '#AlignedReads', '%AlignedReads']
+              'InsertionSequence', 'NumAlignedReads', 'PercAlignedReads']
 
     results = []
     for sam in sam_files:
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('-is', '--insertion_sequences', required=False, type=str,
-                        default=os.path.join(data_dir, "bacteroides_IS"),
+                        default=os.path.join(data_dir, "IS614"),
                         help='A directory containing the insertion sequences of interest, one file for')
 
     parser.add_argument('-o', '--output_folder', required=False,

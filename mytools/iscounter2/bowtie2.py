@@ -61,4 +61,4 @@ def align(version, refpath, fastq, output_dir, threads=1, flags=('--no-unal', '-
                             (output_dir, os.path.basename(refpath)), '-p', str(threads)] + list(flags))
 
     subprocess.call(bowtie_args, shell=True)
-    return
+    return '%s/%s.sam' % (output_dir, os.path.basename(refpath))

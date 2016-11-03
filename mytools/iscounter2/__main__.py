@@ -23,12 +23,10 @@ def main(args):
 
     logger.info("Aligning the fastq file to the insertion sequences...")
     sam_file_loc = bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
-    sys.exit()
-
-
     read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
 
-    filtered_reads = read_filter.filter_reads_linear_ISCounter2(args[''])
+    read_filter.filter_reads_linear_ISCounter2(sam_file_loc)
+    sys.exit()
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:

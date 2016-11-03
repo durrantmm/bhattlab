@@ -1,4 +1,4 @@
-import shared_objects
+import shared_objects, sys
 
 def read_fastq_paired_ends_interleaved(fastq_file_object, lines_per_read=4):
 
@@ -46,5 +46,22 @@ def non_paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, del
         except ValueError:
             break
 
+def get_insertion_alignments(sam_file, has_header=True):
+
+    with open(sam_file, 'r') as file_in:
+
+        if has_header: remove_sam_header(file_in)
+
+        for line in file_in:
+            print line
+            sys.exit()
 
 
+
+def remove_sam_header(sam):
+
+    for line in sam:
+        if line.startswith("@PG"):
+            break
+        else:
+            continue

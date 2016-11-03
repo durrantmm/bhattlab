@@ -13,19 +13,22 @@ def main(args):
 
     if not os.path.isdir(output_folder): os.mkdir(output_folder)
 
+    logger.info("Saving run info to output folder...")
+    write_run_info(args, args['output_folder'])
+
+
     logger.info("Building the insertion sequence indices...")
     bowtie2.build('2.2.9', args['insertion_sequence_fasta'])
 
 
     logger.info("Aligning the fastq file to the insertion sequences...")
-    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
+    sam_file_loc = bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
     sys.exit()
 
-    logger.info("Saving run info to output folder...")
-    write_run_info(args, args['output_folder'])
-    read_filter = filters.Filter(args['fastq_reads'], args['read_to_taxid'], args['taxon_nodes'], logger_in=logger)
 
-    filtered_reads = read_filter.filter_reads_linear_ISCounter_nounclassified(args['taxon_id'])
+    read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
+
+    filtered_reads = read_filter.filter_reads_linear_ISCounter2(args[''])
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:
@@ -100,7 +103,7 @@ if __name__ == "__main__":
     parser.add_argument('-fq', '--fastq_reads', required=True,
                         help='This is a fastq file containing PAIRED END reads that are in an interleaved format.')
 
-    parser.add_argument('-b', '--read_to_taxid', required=True,
+    parser.add_argument('-c', '--classification_file', required=True,
                         help='A tab-separated file where the first column is the read title and the second'
                              'column is the assigned taxon id')
 

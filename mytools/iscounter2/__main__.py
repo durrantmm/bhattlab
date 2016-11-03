@@ -19,7 +19,7 @@ def main(args):
 
     sys.exit()
     logger.info("Aligning the fastq file to the insertion sequences...")
-    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], fastq, output_dir, threads=1, flags=('--no-unal', '--local', '--quiet')):
+    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], fastq, output_dir, threads=args['threads'])
 
     logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])

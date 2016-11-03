@@ -17,9 +17,10 @@ def main(args):
     logger.info("Building the insertion sequence indices...")
     bowtie2.build('2.2.9', args['insertion_sequence_fasta'])
 
-    sys.exit()
+
     logger.info("Aligning the fastq file to the insertion sequences...")
-    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], fastq, output_dir, threads=args['threads'])
+    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
+    sys.exit()
 
     logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])

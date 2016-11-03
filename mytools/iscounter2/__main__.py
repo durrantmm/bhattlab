@@ -11,8 +11,7 @@ def main(args):
     logger = logging.getLogger()
     output_folder = os.path.basename(args['fastq_reads']).split(".")[0] + args['output_folder']
 
-    if not os.path.isdir(args['output_folder']):
-        os.mkdir(args['output_folder'])
+    if not os.path.isdir(output_folder): os.mkdir(output_folder)
 
     logger.info("Building the insertion sequence indices...")
     bowtie2.build('2.2.9', args['insertion_sequence_fasta'])

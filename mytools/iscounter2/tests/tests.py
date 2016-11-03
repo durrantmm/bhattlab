@@ -1,4 +1,4 @@
-from iscounter2.phylophilter import IO
+from ..phylophilter import IO
 import os, sys
 
 def IO_get_insertion_alignments_TEST(sam_file):

@@ -9,11 +9,17 @@ from glob import glob
 def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
+    output_folder = os.path.basename(args['fastq_reads']).split(".")[0] + args['output_folder']
 
     if not os.path.isdir(args['output_folder']):
         os.mkdir(args['output_folder'])
 
-    filtered_fastq_file = os.path.join(args['output_folder'], os.path.basename(args['fastq_reads'])+".filtered.fq")
+    logger.info("Building the insertion sequence indices...")
+    bowtie2.build('2.2.9', args['insertion_sequence_fasta'])
+
+    sys.exit()
+    logger.info("Aligning the fastq file to the insertion sequences...")
+    bowtie2.align('2.2.9', args['insertion_sequence_fasta'], fastq, output_dir, threads=1, flags=('--no-unal', '--local', '--quiet')):
 
     logger.info("Saving run info to output folder...")
     write_run_info(args, args['output_folder'])
@@ -98,18 +104,16 @@ if __name__ == "__main__":
                         help='A tab-separated file where the first column is the read title and the second'
                              'column is the assigned taxon id')
 
-    parser.add_argument('-t', '--taxon_id', required=True,
-                        help='The NCBI Taxon ID of the species of interest')
-
     parser.add_argument('-nodes', '--taxon_nodes', required=False, type=list,
                         default=[
                             os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"),
                             os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")],
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
-    parser.add_argument('-is', '--insertion_sequences', required=False, type=str,
-                        default=os.path.join(data_dir, "IS614"),
-                        help='A directory containing the insertion sequences of interest, one file for')
+    parser.add_argument('-is', '--insertion_sequence_fasta', required=False, type=str,
+                        default=os.path.join(data_dir, "Bacteroides_all.fasta"),
+                        help='A fasta file containing the insertion sequences of interest,'
+                             ' concatenated sequentially in any order.')
 
     parser.add_argument('-o', '--output_folder', required=False,
                         default = os.path.join(output_dir,"ISMapper_%s" % timestamp),

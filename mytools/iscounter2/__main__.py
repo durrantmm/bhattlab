@@ -25,8 +25,9 @@ def main(args):
     sam_file_loc = bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
     read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
 
-    read_filter.filter_reads_linear_ISCounter2(sam_file_loc)
     sys.exit()
+    read_filter.filter_reads_linear_ISCounter2(sam_file_loc)
+
 
     logger.info("Filtering reads and saving to output folder...")
     with open(filtered_fastq_file, 'w') as out:

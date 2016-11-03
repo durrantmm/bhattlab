@@ -9,7 +9,7 @@ from glob import glob
 def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
-    output_folder = args['output_folder'] + os.path.basename(args['fastq_reads']).split(".")[0]
+    output_folder = args['output_folder'] + '_' + os.path.basename(args['fastq_reads']).split(".")[0]
 
     if not os.path.isdir(output_folder): os.mkdir(output_folder)
 

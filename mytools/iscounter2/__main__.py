@@ -111,7 +111,7 @@ if __name__ == "__main__":
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('-is', '--insertion_sequence_fasta', required=False, type=str,
-                        default=os.path.join(data_dir, "Bacteroides_all.fasta"),
+                        default=os.path.join(data_dir, "IS_fastas/Bacteroides_all.fasta"),
                         help='A fasta file containing the insertion sequences of interest,'
                              ' concatenated sequentially in any order.')
 

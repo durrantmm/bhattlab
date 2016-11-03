@@ -14,7 +14,7 @@ def main(args):
     if not os.path.isdir(output_folder): os.mkdir(output_folder)
 
     logger.info("Saving run info to output folder...")
-    write_run_info(args, args['output_folder'])
+    write_run_info(args, output_folder)
 
 
     logger.info("Building the insertion sequence indices...")

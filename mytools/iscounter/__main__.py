@@ -51,7 +51,7 @@ def save_summary_stats(fastq_orig_name, filtered_fastq_file, output_dir, taxon_f
         sam_aligned_reads = get_sam_read_count(sam)
         results.append([os.path.basename(fastq_orig_name), taxon_filter, str(initial_read_count),
                         os.path.basename(sam).split('.')[0], str(sam_aligned_reads),
-                        str((float(sam_aligned_reads) / initial_read_count)*100)+"%"])
+                        str((float(sam_aligned_reads) / initial_read_count)*100)])
 
     with open(results_output,'w') as out:
 

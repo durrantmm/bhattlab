@@ -45,14 +45,14 @@ class Filter:
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-            print class1, class2
+
             # Check the reads and the classifications align
             if [read1, read2] != classes.getTitles():
                 if self.logger: self.logger.error("The reads do not match")
                 raise IndexError("The reads and the classifications need to be in the same order.")
 
             total_read_count += 1
-            if total_read_count % 100000 == 0:
+            if total_read_count % 100 == 0:
                 if self.logger: self.logger.info("Reads sorted so far: %s" % total_read_count)
 
             # Discard it if EITHER READ is UNCLASSIFIED

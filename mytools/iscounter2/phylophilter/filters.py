@@ -25,13 +25,11 @@ class Filter:
 
     def filter_reads_ISCounter2(self, aligned_reads):
 
-        IO.get_insertion_alignments()
+        IS_aligned_dict = IO.get_insertion_alignments(aligned_reads)
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
-
-            if reads.getTitles() != classes.getTitles():
-                if self.logger: self.logger.error("The reads do not match")
-                raise IndexError("The reads and the classifications need to be in the same order.")
+            print reads
+            print classes
 
         # For non-paired
 

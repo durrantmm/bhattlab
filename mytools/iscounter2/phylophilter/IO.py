@@ -65,8 +65,7 @@ def get_insertion_alignments(sam_file):
 
             out_dict[name].add(mapping)
 
-    for read in out_dict:
-        print "\t".join([read] + list(out_dict[read]))
+    return out_dict
 
 def remove_sam_header(sam):
 

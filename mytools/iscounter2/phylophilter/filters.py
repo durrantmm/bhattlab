@@ -60,7 +60,9 @@ class Filter:
                 taxonomy1 = shared.get_taxon_hierarchy_list(classes.getClassifs()[0], self.taxonomy_nodes)
                 taxonomy2 = shared.get_taxon_hierarchy_list(classes.getClassifs()[1], self.taxonomy_nodes)
                 print taxonomy1
+                print classes.getClassifs()[0], reads.getTitles()[0]
                 print taxonomy2
+                print classes.getClassifs()[1], reads.getTitles()[1]
                 sys.exit()
 
 

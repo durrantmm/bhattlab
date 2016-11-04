@@ -78,7 +78,7 @@ class Filter:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
 
-        return [taxon_total_count, taxon_IS_count, potential_transfers, intra_IS]
+        return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 
 
 def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):

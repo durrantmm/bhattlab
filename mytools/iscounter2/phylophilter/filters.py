@@ -46,7 +46,7 @@ class Filter:
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-            print read1[-10:], read2[-10:], self.aligned_read[-10:]
+            #print read1[-10:], read2[-10:], self.aligned_read[-10:]
 
             # Check the reads and the classifications align
             #if [read1, read2] != classes.getTitles():
@@ -59,17 +59,20 @@ class Filter:
 
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
-                if read1 == self.aligned_read:
-                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-                if read2 == self.aligned_read:
-                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+                try:
+                    if read1 == self.aligned_read:
+                        self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+                    if read2 == self.aligned_read:
+                        self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+                except StopIteration:
+                    pass
                 unclassif_count += 1
 
             # Check that read1 aligns to insertion sequence
+
             elif read1 == self.aligned_read:
+
                 tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
-                print read1, read2
-                print self.aligned_read, tmp_aligned_read
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 == tmp_aligned_read:
                     self.aligned_read, self.aligned_IS = self.IS_align_gen.next()

@@ -33,9 +33,11 @@ class Filter:
 
         potential_transfers = 0
         intra_IS = 0
+        unclassif_count = 0
+
         taxon_total_count = defaultdict(int)
         taxon_IS_count = defaultdict(lambda: defaultdict(int))
-        unclassif_count = 0
+
 
         total_read_count = 0
         total_classified_reads = 0
@@ -47,9 +49,9 @@ class Filter:
             class1, class2 = classes.getClassifs()
 
             # Check the reads and the classifications align
-            if [read1, read2] != classes.getTitles():
-                if self.logger: self.logger.error("The reads do not match")
-                raise IndexError("The reads and the classifications need to be in the same order.")
+            #if [read1, read2] != classes.getTitles():
+            #    if self.logger: self.logger.error("The reads do not match")
+            #    raise IndexError("The reads and the classifications need to be in the same order.")
 
             total_read_count += 1
             if total_read_count % 100 == 0:

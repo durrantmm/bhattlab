@@ -2,6 +2,7 @@ import sys
 
 import IO
 import shared
+from collections import defaultdict
 
 
 class Filter:
@@ -25,18 +26,46 @@ class Filter:
 
     def filter_reads_ISCounter2(self, aligned_reads):
 
+        if self.logger: self.logger.info("Loading the insertion sequence alignments...")
         IS_aligned_dict = IO.get_insertion_alignments(aligned_reads)
+
+
+        potential_transfers = set()
+        intra_IS = set()
+        taxon_total_count = defaultdict(int)
+        taxon_IS_count = defaultdict(lambda: defaultdict(int))
+        unclassif_count = 0
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
-            print reads
-            print classes
+            if classes.getClassifs()[0] == '0' or classes.getClassifs[1] == '0':
+                unclassif_count += 1
+            elif reads.getTitles()[0] in IS_aligned_dict.keys():
+                if reads.getTitles()[1] in IS_aligned_dict.keys():
+                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
+                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+                else:
+                    taxon_total_count[classes.getClassifs()[1]] += 1
 
-        # For non-paired
+            elif reads.getTitles()[1] in IS_aligned_dict.keys():
+                if reads.getTitles()[0] in IS_aligned_dict.keys():
+                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
+                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+                else:
+                    taxon_total_count[classes.getClassifs()[0]] += 1
+
+            elif classes.getClassifs()[0] == classes.getClassifs()[1]:
+                taxon_total_count[classes.getClassifs()[0]] += 1
+
+            else:
+                taxonomy1 = shared.get_taxon_hierarchy_list(classes.getClassifs()[0], self.taxonomy_nodes)
+                taxonomy2 = shared.get_taxon_hierarchy_list(classes.getClassifs()[1], self.taxonomy_nodes)
+                print taxonomy1
+                print taxonomy2
+                sys.exit()
 
 
 
-
-    def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):
+def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):
         bacteria_index = 0
         for i in range(len(hierarchy)):
             if hierarchy[i] == bacteria_taxon:

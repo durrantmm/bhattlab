@@ -65,7 +65,7 @@ def get_insertion_alignments(sam_file):
 
             out_dict[name].add(mapping)
 
-    return out_dict
+    return dict(out_dict)
 
 def remove_sam_header(sam):
 

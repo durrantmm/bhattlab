@@ -27,6 +27,7 @@ def main(args):
 
     read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
 
+    logger.info("Invoking the Jansen Protocol...")
     read_filter.filter_reads_ISCounter2(sam_file_loc)
     sys.exit()
 

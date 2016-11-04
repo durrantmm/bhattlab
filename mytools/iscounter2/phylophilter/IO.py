@@ -74,4 +74,5 @@ def get_insertion_alignments(sam_file, has_header=True):
 def remove_sam_header(sam):
     line = sam.readline()
     while not line.startswith("@PG"):
+        print line
         line = sam.readline()

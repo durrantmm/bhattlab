@@ -47,20 +47,23 @@ def non_paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, del
         except ValueError:
             break
 
+
 def get_insertion_alignments(sam_file):
     has_header = False
     with open(sam_file, 'r') as file_in:
         if file_in.readline()[0] == '@': has_header = True
 
-    out_dict = defaultdict(lambda: defaultdict(int))
+    out_dict = defaultdict(set)
     with open(sam_file, 'r') as file_in:
 
         if has_header: remove_sam_header(file_in)
 
         for line in file_in:
-            print line
-            sys.exit()
+            line = line.strip().split()
+            name = line[0]
+            mapping = line[2]
 
+            print name, mapping
 
 
 def remove_sam_header(sam):

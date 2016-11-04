@@ -52,7 +52,8 @@ class Filter:
                 raise IndexError("The reads and the classifications need to be in the same order.")
 
             total_read_count += 1
-
+            if total_read_count % 100000 == 0:
+                if self.logger: self.logger.info("Reads sorted so far: %s" % total_read_count)
 
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':

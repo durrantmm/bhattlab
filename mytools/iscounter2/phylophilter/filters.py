@@ -30,49 +30,71 @@ class Filter:
         IS_aligned_dict = IO.get_insertion_alignments(aligned_reads)
 
 
-        potential_transfers = set()
-        intra_IS = set()
+        potential_transfers = []
+        intra_IS = []
         taxon_total_count = defaultdict(int)
         taxon_IS_count = defaultdict(lambda: defaultdict(int))
         unclassif_count = 0
         total_read_count = 0
+
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+            read1, read2 = reads.getTitles()
+            class1, class2 = classes.getClassifs()
+
+            # Check the reads and the classifications align
+            if [read1, read2] != classes.getTitles():
+                if self.logger: self.logger.error("The reads do not match")
+                raise IndexError("The reads and the classifications need to be in the same order.")
+
             total_read_count += 1
-            if classes.getClassifs()[0] == '0' or classes.getClassifs()[0] == '0':
+
+            # Discard it if EITHER READ is UNCLASSIFIED
+            if class1 == '0' or class2 == '0':
                 unclassif_count += 1
-            elif reads.getTitles()[0] in IS_aligned_dict.keys():
-                if reads.getTitles()[1] in IS_aligned_dict.keys():
-                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
-                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+
+            # Check that read1 aligns to insertion sequence
+            elif read1 in IS_aligned_dict.keys():
+                # Check that read2 aligns to insertion sequence, send to intra_IS
+                if read2 in IS_aligned_dict.keys():
+                    intra_IS.append(read1+ "|" + "|".join(list(IS_aligned_dict[read1])))
+                    intra_IS.append(read2 + "|" + "|".join(list(IS_aligned_dict[read2])))
+
+                # Otherwise, increment the read2 taxon_IS_count
                 else:
-                    taxon_total_count[classes.getClassifs()[1]] += 1
-                    for IS in IS_aligned_dict[reads.getTitles()[0]]:
-                        taxon_IS_count[classes.getClassifs()[1]][IS] += 1
+                    taxon_total_count[class2] += 1
+                    for IS in IS_aligned_dict[read1]:
+                        taxon_IS_count[class2][IS] += 1
 
-            elif reads.getTitles()[1] in IS_aligned_dict.keys():
-                if reads.getTitles()[0] in IS_aligned_dict.keys():
-                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[0]])))
-                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[1]])))
+            # Check that read2 aligns to insertion sequence
+            elif read2 in IS_aligned_dict.keys():
+                # Check that read1 aligns to insertion sequence, send to intra_IS
+                if read1 in IS_aligned_dict.keys():
+                    intra_IS.append(read1 + "|" + "|".join(list(IS_aligned_dict[read1])))
+                    intra_IS.append(read2 + "|" + "|".join(list(IS_aligned_dict[read2])))
+
+                # Otherwise, increment the read1 taxon_IS_count
                 else:
-                    taxon_total_count[classes.getClassifs()[0]] += 1
-                    for IS in IS_aligned_dict[reads.getTitles()[1]]:
-                        taxon_IS_count[classes.getClassifs()[0]][IS] += 1
+                    taxon_total_count[class1] += 1
+                    for IS in IS_aligned_dict[class2]:
+                        taxon_IS_count[class1][IS] += 1
 
-            elif classes.getClassifs()[0] == classes.getClassifs()[1]:
-                taxon_total_count[classes.getClassifs()[0]] += 1
+            # If they are the same class, and neither maps to IS.
+            elif class1 == class2:
+                taxon_total_count[class1] += 1
 
+            # If they are different class, check for relatedness.
             else:
-                taxonomy1 = shared.get_taxon_hierarchy_list(classes.getClassifs()[0], self.taxonomy_nodes)
-                taxonomy2 = shared.get_taxon_hierarchy_list(classes.getClassifs()[1], self.taxonomy_nodes)
+                taxonomy1 = shared.get_taxon_hierarchy_list(class1, self.taxonomy_nodes)
+                taxonomy2 = shared.get_taxon_hierarchy_list(class2, self.taxonomy_nodes)
 
                 if shared.is_parent_child(taxonomy1, taxonomy2):
                     if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
-                        taxon_total_count[classes.getClassifs()[0]] += 1
+                        taxon_total_count[class1] += 1
                     else:
-                        taxon_total_count[classes.getClassifs()[1]] += 1
+                        taxon_total_count[class2] += 1
                 else:
-                    potential_transfers.add(reads.getTitles()[0] + "|" + classes.getClassifs()[0])
-                    potential_transfers.add(reads.getTitles()[1] + "|" + classes.getClassifs()[1])
+                    potential_transfers.append(read1 + "|" + class1)
+                    potential_transfers.append(read2 + "|" + class1)
 
         if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)

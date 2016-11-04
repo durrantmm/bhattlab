@@ -36,7 +36,7 @@ def main(args):
                 print "\t".join([str(taxon), str(IS), str(taxon_total_count[taxon]),
                                  str(taxon_IS_count[taxon][IS])])
         except KeyError:
-            print "\t".join([str(taxon), "NO_MATCHING_INSERTION_SEQUENCES",
+            print "\t".join([str(taxon), "NO_MATCH",
                              str(taxon_total_count[taxon]), "NA"])
 
     logger.info("Analysis Complete  :)")

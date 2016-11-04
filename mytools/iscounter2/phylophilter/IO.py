@@ -55,11 +55,11 @@ def get_insertion_alignments(sam_file, has_header=False):
         current_name = first_line[0]
         current_set = set([first_line[2]])
 
-        print first_line
+        print first_line[0], first_line[2]
 
         for line in sam_file:
             line = line.strip().split()
-            print line
+            print line[0], line[2]
 
             name = line[0]
             if name == current_name:

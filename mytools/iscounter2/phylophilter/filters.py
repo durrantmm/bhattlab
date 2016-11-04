@@ -48,7 +48,7 @@ class Filter:
         for reads, classes in izip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
             total_read_count += 1
             loop_counter += 1
-            if loop_counter == 100000:
+            if loop_counter == 1000000:
                 self.logger.info("Total Reads Processed: %d" % total_read_count)
                 loop_counter = 0
 

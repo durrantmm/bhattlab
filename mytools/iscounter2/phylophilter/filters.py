@@ -46,7 +46,7 @@ class Filter:
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-            print read1, read2, self.aligned_read
+            #print read1, read2, self.aligned_read
 
             # Check the reads and the classifications align
             #if [read1, read2] != classes.getTitles():
@@ -68,6 +68,8 @@ class Filter:
             # Check that read1 aligns to insertion sequence
             elif read1 == self.aligned_read:
                 tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
+                print read1, read2
+                print self.aligned_read, tmp_aligned_read
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 == tmp_aligned_read:
                     self.aligned_read, self.aligned_IS = self.IS_align_gen.next()

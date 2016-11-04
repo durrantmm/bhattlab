@@ -45,3 +45,11 @@ def which_parent_child(start_taxon1, hierarchy1, start_taxon2, hierarchy2):
     if (start_taxon2 not in hierarchy1) and (start_taxon1 in hierarchy2):
         return 1
     return False
+
+def loop_counter(loop_count, total_read_count, logger, loop_count_out=1000000):
+    loop_count += 1
+    if loop_count == loop_count_out:
+        logger.info("Total Reads Processed: %d" % total_read_count)
+        loop_counter = 0
+    return loop_count
+

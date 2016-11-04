@@ -42,28 +42,21 @@ class Filter:
 
         saved_taxonomies = {}
         self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-        loop_counter = 0
+        loop_count = 0
 
         if self.logger: self.logger.info("Beginning read classification and read sorting...")
         for reads, classes in izip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
             total_read_count += 1
-            loop_counter += 1
-            if loop_counter == 1000000:
-                self.logger.info("Total Reads Processed: %d" % total_read_count)
-                loop_counter = 0
+            loop_count = shared.loop_counter(loop_count, total_read_count, self.logger)
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
             #print read1[-10:], read2[-10:], self.aligned_read[-10:]
 
             # Check the reads and the classifications align
-            #if [read1, read2] != classes.getTitles():
-            #    if self.logger: self.logger.error("The reads do not match")
-            #    raise IndexError("The reads and the classifications need to be in the same order.")
-
-
-            #if total_read_count % 100 == 0:
-            #    if self.logger: self.logger.info("Reads sorted so far: %s" % total_read_count)
+            if [read1, read2] != classes.getTitles():
+                if self.logger: self.logger.error("The reads do not match")
+                raise IndexError("The reads and the classifications need to be in the same order.")
 
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
@@ -76,8 +69,7 @@ class Filter:
             # Check that read1 aligns to insertion sequence
             elif read1 == self.aligned_read:
                 tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
-                #print read1, read2
-                #print self.aligned_read, tmp_aligned_read
+
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 == tmp_aligned_read:
                     self.aligned_read, self.aligned_IS = self.IS_align_gen.next()

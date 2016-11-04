@@ -71,8 +71,8 @@ class Filter:
                     else:
                         taxon_total_count[classes.getClassifs()[1]] += 1
                 else:
-                    potential_transfers.add(reads.getTitles()[0] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[0]])))
-                    potential_transfers.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[1]])))
+                    potential_transfers.add(reads.getTitles()[0] + "|" + classes.getClassifs()[0])
+                    potential_transfers.add(reads.getTitles()[1] + "|" + classes.getClassifs()[1])
 
         if self.logger():
             self.logger.info("Total Read Count: %s" % total_read_count)

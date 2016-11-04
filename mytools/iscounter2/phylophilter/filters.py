@@ -35,7 +35,9 @@ class Filter:
         taxon_total_count = defaultdict(int)
         taxon_IS_count = defaultdict(lambda: defaultdict(int))
         unclassif_count = 0
+
         total_read_count = 0
+        total_classified_reads = 0
 
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
             read1, read2 = reads.getTitles()
@@ -47,6 +49,7 @@ class Filter:
                 raise IndexError("The reads and the classifications need to be in the same order.")
 
             total_read_count += 1
+
 
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
@@ -62,6 +65,7 @@ class Filter:
                 # Otherwise, increment the read2 taxon_IS_count
                 else:
                     taxon_total_count[class2] += 1
+                    total_classified_reads += 1
                     for IS in IS_aligned_dict[read1]:
                         taxon_IS_count[class2][IS] += 1
 
@@ -75,11 +79,13 @@ class Filter:
                 # Otherwise, increment the read1 taxon_IS_count
                 else:
                     taxon_total_count[class1] += 1
+                    total_classified_reads += 1
                     for IS in IS_aligned_dict[class2]:
                         taxon_IS_count[class1][IS] += 1
 
             # If they are the same class, and neither maps to IS.
             elif class1 == class2:
+                total_classified_reads += 1
                 taxon_total_count[class1] += 1
 
             # If they are different class, check for relatedness.
@@ -99,6 +105,7 @@ class Filter:
         if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
+            self.logger.info("Total Classified and Counted: %s" % total_classified_reads)
             self.logger.info("Total potential transfers: %d" % (len(potential_transfers)/2))
             self.logger.info("Total intra-IS read pairs: %d" % (len(intra_IS)/2))
 

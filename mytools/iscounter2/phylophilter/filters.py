@@ -83,7 +83,7 @@ class Filter:
                 else:
                     taxon_total_count[class1] += 1
                     total_classified_reads += 1
-                    for IS in IS_aligned_dict[class2]:
+                    for IS in IS_aligned_dict[read2]:
                         taxon_IS_count[class1][IS] += 1
 
             # If they are the same class, and neither maps to IS.

@@ -98,17 +98,17 @@ class Filter:
 
             # If they are different class, check for relatedness.
             else:
-                #try:
-                    #taxonomy1 = saved_taxonomies[class1]
-                #except KeyError:
-                taxonomy1 = shared.get_taxon_hierarchy_set(class1, self.taxonomy_nodes)
-                    #saved_taxonomies[class1] = taxonomy1
+                try:
+                    taxonomy1 = saved_taxonomies[class1]
+                except KeyError:
+                    taxonomy1 = shared.get_taxon_hierarchy_set(class1, self.taxonomy_nodes)
+                    saved_taxonomies[class1] = taxonomy1
 
-                #try:
-                    #taxonomy2 = saved_taxonomies[class2]
-                #except KeyError:
-                taxonomy2 = shared.get_taxon_hierarchy_set(class2, self.taxonomy_nodes)
-                    #saved_taxonomies[class2] = taxonomy2
+                try:
+                    taxonomy2 = saved_taxonomies[class2]
+                except KeyError:
+                    taxonomy2 = shared.get_taxon_hierarchy_set(class2, self.taxonomy_nodes)
+                    saved_taxonomies[class2] = taxonomy2
 
                 if shared.is_parent_child(class1, taxonomy1, class2, taxonomy2):
                     if shared.which_parent_child(class1, taxonomy1, class2, taxonomy2) == 0:

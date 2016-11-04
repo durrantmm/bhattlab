@@ -42,7 +42,7 @@ class Filter:
 
         saved_taxonomies = {}
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
-
+            print total_read_count
             self.aligned_read, self.aligned_IS = IS_align_gen.next()
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()

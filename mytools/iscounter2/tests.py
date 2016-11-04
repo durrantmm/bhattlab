@@ -3,12 +3,9 @@ import os, sys
 
 def IO_get_insertion_alignments_TEST(sam_file):
 
-    count = 0
     for line in IO.get_insertion_alignments(sam_file):
         print line
         print
-        count += 1
-        if count == 4: break
 
 if __name__ == "__main__":
     current_dir = os.path.dirname(__file__)

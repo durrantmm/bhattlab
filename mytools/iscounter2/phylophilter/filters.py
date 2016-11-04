@@ -99,8 +99,8 @@ class Filter:
         if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
-            self.logger.info("Total potential transfers: %d" % len(potential_transfers)/2)
-            self.logger.info("Total intra-IS read pairs: %d" % len(intra_IS)/2)
+            self.logger.info("Total potential transfers: %d" % (len(potential_transfers)/2))
+            self.logger.info("Total intra-IS read pairs: %d" % (len(intra_IS)/2))
 
         return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 

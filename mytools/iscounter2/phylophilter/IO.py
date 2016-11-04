@@ -48,18 +48,19 @@ def non_paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, del
             break
 
 
-def get_insertion_alignments(sam_file, has_header=True):
-
-    if has_header: remove_sam_header(sam_file)
+def get_insertion_alignments(sam_file, has_header=False):
 
     while True:
-        for line in sam_file:
-            print line
-            yield line
-        break
+        first_line = sam_file.readline().strip().split()
+        current_name = first_line[0]
+        current_set = set([first_line[2]])
 
-def remove_sam_header(sam):
-    for line in sam:
-        print line
-        if line.startswith('@PG'):
-            break
+        for line in sam_file:
+            line = line.strip().split()
+            name = line[0]
+            if name == current_name:
+                current_set.add(line[2])
+            else:
+                yield (current_name, current_set)
+                current_name = name
+                current_set = set(line[2])

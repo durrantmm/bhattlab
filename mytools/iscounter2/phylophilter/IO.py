@@ -63,4 +63,4 @@ def get_insertion_alignments(sam_file, has_header=False):
             else:
                 yield (current_name, current_set)
                 current_name = name
-                current_set = set(line[2])
+                current_set = set([line[2]])

@@ -16,14 +16,11 @@ def main(args):
     logger.info("Saving run info to output folder...")
     write_run_info(args, output_folder)
 
-
     logger.info("Building the insertion sequence indices...")
     bowtie2.build('2.2.9', args['insertion_sequence_fasta'])
 
-
     logger.info("Aligning the fastq file to the insertion sequences...")
     sam_file_loc = bowtie2.align('2.2.9', args['insertion_sequence_fasta'], args['fastq_reads'], output_folder, threads=args['threads'])
-
 
     read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
 

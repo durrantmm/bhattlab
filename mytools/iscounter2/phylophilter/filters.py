@@ -41,7 +41,14 @@ class Filter:
 
         saved_taxonomies = {}
         self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+        loop_counter = 0
+
+        if self.logger: self.logger.info("Beginning read classification and read sorting...")
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+            loop_counter += 1
+            if loop_counter == 10000:
+                self.logger.info("Total Reads Processed: %d" % total_read_count)
+                loop_counter = 0
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()

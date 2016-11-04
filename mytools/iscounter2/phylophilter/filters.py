@@ -35,8 +35,9 @@ class Filter:
         taxon_total_count = defaultdict(int)
         taxon_IS_count = defaultdict(lambda: defaultdict(int))
         unclassif_count = 0
+        total_read_count = 0
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
-
+            total_read_count += 1
             if classes.getClassifs()[0] == '0' or classes.getClassifs()[0] == '0':
                 unclassif_count += 1
             elif reads.getTitles()[0] in IS_aligned_dict.keys():
@@ -74,7 +75,11 @@ class Filter:
                     potential_transfers.add(reads.getTitles()[0] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
                     potential_transfers.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
 
-                sys.exit()
+        if self.logger():
+            self.logger.info("Total Read Count: %s" % total_read_count)
+            self.logger.info("Total Unclassified: %s" % unclassif_count)
+
+        return [taxon_total_count, taxon_IS_count, potential_transfers, intra_IS]
 
 
 def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):

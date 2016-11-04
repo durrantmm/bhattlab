@@ -46,7 +46,7 @@ class Filter:
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-            #print read1[-10:], read2[-10:], self.aligned_read[-10:]
+            print read1[-10:], read2[-10:], self.aligned_read[-10:]
 
             # Check the reads and the classifications align
             #if [read1, read2] != classes.getTitles():

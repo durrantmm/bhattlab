@@ -37,7 +37,7 @@ class Filter:
         unclassif_count = 0
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
-            if classes.getClassifs()[0] == '0' or classes.getClassifs[1] == '0':
+            if classes.getClassifs()[0] == '0' or classes.getClassifs()[0] == '0':
                 unclassif_count += 1
             elif reads.getTitles()[0] in IS_aligned_dict.keys():
                 if reads.getTitles()[1] in IS_aligned_dict.keys():
@@ -62,7 +62,6 @@ class Filter:
                 print taxonomy1
                 print taxonomy2
                 sys.exit()
-
 
 
 def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):

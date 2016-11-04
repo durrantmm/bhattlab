@@ -30,37 +30,33 @@ def main(args):
     logger.info("Invoking the Jansen Protocol...")
     taxon_total_count, taxon_IS_count, potential_transfers, intra_IS = read_filter.filter_reads_ISCounter2(sam_file_loc)
 
-    for taxon in taxon_total_count.keys():
-        try:
-            for IS in taxon_IS_count[taxon]:
-                print "\t".join([str(taxon), str(IS), str(taxon_total_count[taxon]),
-                                 str(taxon_IS_count[taxon][IS])])
-        except KeyError:
-            print "\t".join([str(taxon), "NO_MATCH",
-                             str(taxon_total_count[taxon]), "NA"])
+    logger.info("Saving results to file... ")
+    out_file = save_summary_stats(args['fastq_reads'], taxon_total_count, taxon_IS_count, potential_transfers, intra_IS, output_folder)
+    logger.info("Results saved to %s" % out_file)
 
     logger.info("Analysis Complete  :)")
 
-def save_summary_stats(fastq_orig_name, filtered_fastq_file, output_dir, taxon_filter):
+
+def save_summary_stats(fastq_file, taxon_total_count, taxon_IS_count, potential_transfers, intra_IS,
+                       output_folder, names_dict=None, verbose=False):
     results_output = os.path.join(output_dir, "results.txt")
-    initial_read_count = get_fastq_read_count(filtered_fastq_file)
-    sam_files = glob(os.path.join(output_dir, "*.sam"))
 
-    out_header = ['FASTQFile', 'TaxonFilter', 'InitialReadCount',
-              'InsertionSequence', 'NumAlignedReads', 'PercAlignedReads']
+    out_header = ['FASTQFile', 'Taxon', 'InsertionSequence', 'TotalTaxonCount', 'NumAlignedReads', 'FreqAlignedReads']
 
-    results = []
-    for sam in sam_files:
-        sam_aligned_reads = get_sam_read_count(sam)
-        results.append([os.path.basename(fastq_orig_name), taxon_filter, str(initial_read_count),
-                        os.path.basename(sam).split('.')[0], str(sam_aligned_reads),
-                        str((float(sam_aligned_reads) / initial_read_count)*100)])
+    with open(results_output, 'w') as out:
+        for taxon in taxon_total_count.keys():
+            try:
+                for IS in taxon_IS_count[taxon]:
+                    out.write("\t".join([str(fastq_file), str(taxon), str(IS), str(taxon_total_count[taxon]),
+                                         str(taxon_IS_count[taxon][IS]),
+                                         str(taxon_IS_count[taxon][IS]/float(taxon_total_count[taxon]))])+'\n')
+            except KeyError:
+                if verbose:
+                    out.write("\t".join([str(fastq_file), str(taxon), "NO MATCH", str(taxon_total_count[taxon]),
+                                         "NA", "NA"])+'\n')
 
-    with open(results_output,'w') as out:
 
-        out.write("\t".join(out_header)+"\n")
-        for line in results:
-            out.write("\t".join(line)+"\n")
+
 
 
 def get_fastq_read_count(fastq_file, lines_per_read=4):

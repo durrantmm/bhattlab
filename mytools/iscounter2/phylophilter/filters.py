@@ -43,10 +43,11 @@ class Filter:
         saved_taxonomies = {}
         self.aligned_read, self.aligned_IS = IS_align_gen.next()
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
-            print total_read_count
+
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-
+            print read1, read2
+            print self.aligned_read
             # Check the reads and the classifications align
             #if [read1, read2] != classes.getTitles():
             #    if self.logger: self.logger.error("The reads do not match")

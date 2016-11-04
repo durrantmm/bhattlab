@@ -33,9 +33,11 @@ def main(args):
     for taxon in taxon_total_count.keys():
         try:
             for IS in taxon_IS_count[taxon]:
-                print "\t".join([taxon, IS, taxon_total_count[taxon], taxon_IS_count[taxon][IS]])
+                print "\t".join([str(taxon), str(IS), str(taxon_total_count[taxon]),
+                                 str(taxon_IS_count[taxon][IS])])
         except KeyError:
-            print "\t".join([taxon, "NO_MATCHING_INSERTION_SEQUENCES", taxon_total_count[taxon], "NA"])
+            print "\t".join([str(taxon), "NO_MATCHING_INSERTION_SEQUENCES",
+                             str(taxon_total_count[taxon]), "NA"])
 
     logger.info("Analysis Complete  :)")
 

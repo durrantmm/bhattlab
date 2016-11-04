@@ -28,8 +28,6 @@ class Filter:
 
         if self.logger: self.logger.info("Loading the insertion sequence alignments...")
         IS_align_gen = IO.read_insertion_alignments(open(aligned_reads, 'r'))
-        if self.logger: self.logger.info("Total aligned single reads: %s" % num_aligned)
-
 
         potential_transfers = 0
         intra_IS = 0

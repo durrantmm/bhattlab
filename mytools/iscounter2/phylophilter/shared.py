@@ -32,16 +32,16 @@ def get_taxon_hierarchy_set(taxon_id, taxon_nodes_dict):
 
     return hierarchy
 
-def is_parent_child(hierarchy1, hierarchy2):
-    if hierarchy1[0] not in hierarchy2 and hierarchy2[0] in hierarchy1:
+def is_parent_child(start_taxon1, hierarchy1, start_taxon2, hierarchy2):
+    if (start_taxon1 not in hierarchy2) and (start_taxon2 in hierarchy1):
         return True
-    if hierarchy2[0] not in hierarchy1 and hierarchy1[0] in hierarchy2:
+    if (start_taxon2 not in hierarchy1) and (start_taxon1 in hierarchy2):
         return True
     return False
 
-def which_parent_child(hierarchy1, hierarchy2):
-    if hierarchy1[0] not in hierarchy2 and hierarchy2[0] in hierarchy1:
+def which_parent_child(start_taxon1, hierarchy1, start_taxon2, hierarchy2):
+    if (start_taxon1 not in hierarchy2) and (start_taxon2 in hierarchy1):
         return 0
-    if hierarchy2[0] not in hierarchy1 and hierarchy1[0] in hierarchy2:
+    if (start_taxon2 not in hierarchy1) and (start_taxon1 in hierarchy2):
         return 1
     return False

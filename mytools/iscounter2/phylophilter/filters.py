@@ -31,8 +31,8 @@ class Filter:
         if self.logger: self.logger.info("Total aligned single reads: %s" % num_aligned)
 
 
-        potential_transfers = []
-        intra_IS = []
+        potential_transfers = 0
+        intra_IS = 0
         taxon_total_count = defaultdict(int)
         taxon_IS_count = defaultdict(lambda: defaultdict(int))
         unclassif_count = 0
@@ -40,7 +40,9 @@ class Filter:
         total_read_count = 0
         total_classified_reads = 0
 
+        saved_taxonomies = {}
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
 
@@ -61,8 +63,9 @@ class Filter:
 
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 in IS_aligned_dict.keys():
-                    intra_IS.append(read1+ "|" + "|".join(list(IS_aligned_dict[read1])))
-                    intra_IS.append(read2 + "|" + "|".join(list(IS_aligned_dict[read2])))
+                    #intra_IS.append(read1)
+                    #intra_IS.append(read2)
+                    intra_IS += 1
 
                 # Otherwise, increment the read2 taxon_IS_count
                 else:
@@ -76,8 +79,9 @@ class Filter:
 
                 # Check that read1 aligns to insertion sequence, send to intra_IS
                 if read1 in IS_aligned_dict.keys():
-                    intra_IS.append(read1 + "|" + "|".join(list(IS_aligned_dict[read1])))
-                    intra_IS.append(read2 + "|" + "|".join(list(IS_aligned_dict[read2])))
+                    #intra_IS.append(read1)
+                    #intra_IS.append(read2)
+                    intra_IS += 1
 
                 # Otherwise, increment the read1 taxon_IS_count
                 else:
@@ -93,10 +97,19 @@ class Filter:
 
             # If they are different class, check for relatedness.
             else:
-                taxonomy1 = shared.get_taxon_hierarchy_list(class1, self.taxonomy_nodes)
-                taxonomy2 = shared.get_taxon_hierarchy_list(class2, self.taxonomy_nodes)
+                try:
+                    taxonomy1 = saved_taxonomies[class1]
+                except KeyError:
+                    taxonomy1 = shared.get_taxon_hierarchy_set(class1, self.taxonomy_nodes)
+                    saved_taxonomies[class1] = taxonomy1
 
-                if shared.is_parent_child(taxonomy1, taxonomy2):
+                try:
+                    taxonomy2 = saved_taxonomies[class2]
+                except KeyError:
+                    taxonomy2 = shared.get_taxon_hierarchy_set(class2, self.taxonomy_nodes)
+                    saved_taxonomies[class2] = taxonomy2
+
+                if shared.is_parent_child(class1, taxonomy1, class2, taxonomy2):
                     if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
                         total_classified_reads += 1
                         taxon_total_count[class1] += 1
@@ -105,15 +118,16 @@ class Filter:
                         total_classified_reads += 1
                         taxon_total_count[class2] += 1
                 else:
-                    potential_transfers.append(read1 + "|" + class1)
-                    potential_transfers.append(read2 + "|" + class1)
+                    # potential_transfers.append("|".join([read1, class1]))
+                    # potential_transfers.append("|".join([read2, class2]))
+                    potential_transfers += 1
 
         if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
             self.logger.info("Total Classified and Counted: %s" % total_classified_reads)
-            self.logger.info("Total potential transfers: %d" % (len(potential_transfers)/2))
-            self.logger.info("Total intra-IS read pairs: %d" % (len(intra_IS)/2))
+            self.logger.info("Total potential transfers: %d" % (potential_transfers/2))
+            self.logger.info("Total intra-IS read pairs: %d" % (intra_IS/2))
 
         return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 

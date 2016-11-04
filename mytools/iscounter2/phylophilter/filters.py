@@ -29,9 +29,9 @@ class Filter:
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
 
-        if reads.getTitles() != read_class.getTitles():
-            if self.logger: self.logger.error("The reads do not match")
-            raise IndexError("The reads and the classifications need to be in the same order.")
+            if reads.getTitles() != classes.getTitles():
+                if self.logger: self.logger.error("The reads do not match")
+                raise IndexError("The reads and the classifications need to be in the same order.")
 
         # For non-paired
 

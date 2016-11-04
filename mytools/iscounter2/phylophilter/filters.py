@@ -95,8 +95,11 @@ class Filter:
 
                 if shared.is_parent_child(taxonomy1, taxonomy2):
                     if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
+                        total_classified_reads += 1
                         taxon_total_count[class1] += 1
+
                     else:
+                        total_classified_reads += 1
                         taxon_total_count[class2] += 1
                 else:
                     potential_transfers.append(read1 + "|" + class1)

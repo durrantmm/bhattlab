@@ -60,5 +60,6 @@ def get_insertion_alignments(sam_file, has_header=True):
 
 def remove_sam_header(sam):
     for line in sam:
+        print line
         if line.startswith('@PG'):
             break

@@ -23,11 +23,11 @@ class Filter:
         self.taxonomy_nodes = shared.get_taxon_nodes(taxonomy_nodes, self.logger)
         self.taxonomy_names = None
 
-    def filter_reads_linear_ISCounter2(self, aligned_reads):
+    def filter_reads_ISCounter2(self, aligned_reads):
 
+        IO.get_insertion_alignments()
+        for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
-        reads = self.fastq_paired_gen.next()
-        read_class = self.read_to_taxid_paired_gen.next()
 
         if reads.getTitles() != read_class.getTitles():
             if self.logger: self.logger.error("The reads do not match")

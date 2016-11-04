@@ -62,7 +62,7 @@ def get_insertion_alignments(sam_file):
         for line in file_in:
             count += 1
             line = line.strip().split()
-            name = line[0]
+            name = line[0].strip('@')
             mapping = line[2]
 
             out_dict[name].add(mapping)

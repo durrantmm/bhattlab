@@ -3,7 +3,7 @@ import os, sys
 
 def IO_get_insertion_alignments_TEST(sam_file):
 
-    for line in IO.get_insertion_alignments(sam_file):
+    for line in IO.read_insertion_alignments(sam_file):
         print line
         print
 

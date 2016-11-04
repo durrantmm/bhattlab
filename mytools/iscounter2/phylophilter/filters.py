@@ -45,6 +45,7 @@ class Filter:
         saved_taxonomies = {}
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
+            self.aligned_read, self.aligned_IS = IS_align_gen.next()
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
 
@@ -59,39 +60,35 @@ class Filter:
 
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
+                if read1 == self.aligned_read:
+                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
+                if read2 == self.aligned_read:
+                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
                 unclassif_count += 1
 
             # Check that read1 aligns to insertion sequence
-            elif read1 in IS_aligned_dict.keys():
-
+            elif read1 == self.aligned_read:
+                tmp_aligned_read, tmp_aligned_IS = IS_align_gen.next()
                 # Check that read2 aligns to insertion sequence, send to intra_IS
-                if read2 in IS_aligned_dict.keys():
-                    #intra_IS.append(read1)
-                    #intra_IS.append(read2)
+                if read2 == tmp_aligned_read:
+                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
                     intra_IS += 1
 
                 # Otherwise, increment the read2 taxon_IS_count
                 else:
                     taxon_total_count[class2] += 1
                     total_classified_reads += 1
-                    for IS in IS_aligned_dict[read1]:
+                    for IS in self.aligned_IS:
                         taxon_IS_count[class2][IS] += 1
+                    self.aligned_read, self.aligned_IS = tmp_aligned_read, tmp_aligned_IS
 
             # Check that read2 aligns to insertion sequence
-            elif read2 in IS_aligned_dict.keys():
-
-                # Check that read1 aligns to insertion sequence, send to intra_IS
-                if read1 in IS_aligned_dict.keys():
-                    #intra_IS.append(read1)
-                    #intra_IS.append(read2)
-                    intra_IS += 1
-
-                # Otherwise, increment the read1 taxon_IS_count
-                else:
-                    taxon_total_count[class1] += 1
-                    total_classified_reads += 1
-                    for IS in IS_aligned_dict[read2]:
-                        taxon_IS_count[class1][IS] += 1
+            elif read2 == self.aligned_read:
+                taxon_total_count[class1] += 1
+                total_classified_reads += 1
+                for IS in self.aligned_IS:
+                    taxon_IS_count[class1][IS] += 1
+                self.aligned_read, self.aligned_IS = IS_align_gen.next()
 
             # If they are the same class, and neither maps to IS.
             elif class1 == class2:

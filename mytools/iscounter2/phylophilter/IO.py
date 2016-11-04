@@ -48,7 +48,7 @@ def non_paired_reads_to_taxids(reads_to_taxids_file_object, has_header=True, del
             break
 
 
-def get_insertion_alignments(sam_file, has_header=False):
+def read_insertion_alignments(sam_file):
 
     while True:
         try:
@@ -56,20 +56,20 @@ def get_insertion_alignments(sam_file, has_header=False):
             current_name = first_line[0]
             current_set = set([first_line[2]])
 
-            print first_line[0], first_line[2]
+            #print first_line[0], first_line[2]
 
             for line in sam_file:
                 line = line.strip().split()
 
                 name = line[0]
                 if name == current_name:
-                    print line[0], line[2]
+                    #print line[0], line[2]
                     current_set.add(line[2])
                 else:
                     yield (current_name, current_set)
-                    print line[0], line[2]
+                    #print line[0], line[2]
                     current_name = name
                     current_set = set([line[2]])
         except IndexError:
             break
-    yield (current_name, current_set)
+    yield (current_name.strip('@'), current_set)

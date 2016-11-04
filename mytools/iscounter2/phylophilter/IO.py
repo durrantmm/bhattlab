@@ -53,19 +53,21 @@ def get_insertion_alignments(sam_file):
     with open(sam_file, 'r') as file_in:
         if file_in.readline()[0] == '@': has_header = True
 
+    count = 0
     out_dict = defaultdict(set)
     with open(sam_file, 'r') as file_in:
 
         if has_header: remove_sam_header(file_in)
 
         for line in file_in:
+            count += 1
             line = line.strip().split()
             name = line[0]
             mapping = line[2]
 
             out_dict[name].add(mapping)
 
-    return dict(out_dict)
+    return dict(out_dict),
 
 def remove_sam_header(sam):
 

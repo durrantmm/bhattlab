@@ -45,7 +45,7 @@ class Filter:
 
             read1, read2 = reads.getTitles()
             class1, class2 = classes.getClassifs()
-
+            print class1, class2
             # Check the reads and the classifications align
             if [read1, read2] != classes.getTitles():
                 if self.logger: self.logger.error("The reads do not match")

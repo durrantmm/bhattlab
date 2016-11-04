@@ -60,10 +60,6 @@ class Filter:
             else:
                 taxonomy1 = shared.get_taxon_hierarchy_list(classes.getClassifs()[0], self.taxonomy_nodes)
                 taxonomy2 = shared.get_taxon_hierarchy_list(classes.getClassifs()[1], self.taxonomy_nodes)
-                print taxonomy1
-                print classes.getClassifs()[0], reads.getTitles()[0]
-                print taxonomy2
-                print classes.getClassifs()[1], reads.getTitles()[1]
 
                 if shared.is_parent_child(taxonomy1, taxonomy2):
                     if shared.which_parent_child(taxonomy1, taxonomy2) == 0:

@@ -27,7 +27,7 @@ class Filter:
     def filter_reads_ISCounter2(self, aligned_reads):
 
         if self.logger: self.logger.info("Loading the insertion sequence alignments...")
-        IS_align_gen = IO.read_insertion_alignments(open(aligned_reads, 'r'))
+        self.IS_align_gen = IO.read_insertion_alignments(open(aligned_reads, 'r'))
 
         potential_transfers = 0
         intra_IS = 0
@@ -41,7 +41,7 @@ class Filter:
         total_classified_reads = 0
 
         saved_taxonomies = {}
-        self.aligned_read, self.aligned_IS = IS_align_gen.next()
+        self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
         for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
 
             read1, read2 = reads.getTitles()
@@ -60,17 +60,17 @@ class Filter:
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
                 if read1 == self.aligned_read:
-                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                 if read2 == self.aligned_read:
-                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                 unclassif_count += 1
 
             # Check that read1 aligns to insertion sequence
             elif read1 == self.aligned_read:
-                tmp_aligned_read, tmp_aligned_IS = IS_align_gen.next()
+                tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 == tmp_aligned_read:
-                    self.aligned_read, self.aligned_IS = IS_align_gen.next()
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                     intra_IS += 1
 
                 # Otherwise, increment the read2 taxon_IS_count
@@ -87,7 +87,7 @@ class Filter:
                 total_classified_reads += 1
                 for IS in self.aligned_IS:
                     taxon_IS_count[class1][IS] += 1
-                self.aligned_read, self.aligned_IS = IS_align_gen.next()
+                self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
 
             # If they are the same class, and neither maps to IS.
             elif class1 == class2:

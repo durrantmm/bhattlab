@@ -30,6 +30,9 @@ class Filter:
         IS_aligned_dict, num_aligned = IO.get_insertion_alignments(aligned_reads)
         if self.logger: self.logger.info("Total aligned single reads: %s" % num_aligned)
 
+        print IS_aligned_dict.keys()
+        sys.exit()
+
         potential_transfers = []
         intra_IS = []
         taxon_total_count = defaultdict(int)

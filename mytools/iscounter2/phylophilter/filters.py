@@ -110,7 +110,7 @@ class Filter:
                     saved_taxonomies[class2] = taxonomy2
 
                 if shared.is_parent_child(class1, taxonomy1, class2, taxonomy2):
-                    if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
+                    if shared.which_parent_child(class1, taxonomy1, class2, taxonomy2) == 0:
                         total_classified_reads += 1
                         taxon_total_count[class1] += 1
 

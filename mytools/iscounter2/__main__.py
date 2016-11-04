@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
     current_dir = os.path.dirname(__file__)
     data_dir = os.path.join(current_dir, "data")
-    output_dir = os.path.join(current_dir, "output")
+    output_dir = os.path.join(current_dir, "output2")
     timestamp = ":".join([str(datetime.now().time()), str(datetime.now().date())])
 
     # setup the option parser

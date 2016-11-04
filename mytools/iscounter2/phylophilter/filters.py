@@ -46,8 +46,9 @@ class Filter:
 
         if self.logger: self.logger.info("Beginning read classification and read sorting...")
         for reads, classes in izip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+            total_read_count += 1
             loop_counter += 1
-            if loop_counter == 10000:
+            if loop_counter == 100000:
                 self.logger.info("Total Reads Processed: %d" % total_read_count)
                 loop_counter = 0
 
@@ -60,7 +61,7 @@ class Filter:
             #    if self.logger: self.logger.error("The reads do not match")
             #    raise IndexError("The reads and the classifications need to be in the same order.")
 
-            total_read_count += 1
+
             #if total_read_count % 100 == 0:
             #    if self.logger: self.logger.info("Reads sorted so far: %s" % total_read_count)
 

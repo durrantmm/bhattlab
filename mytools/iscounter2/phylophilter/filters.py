@@ -63,6 +63,17 @@ class Filter:
                 print classes.getClassifs()[0], reads.getTitles()[0]
                 print taxonomy2
                 print classes.getClassifs()[1], reads.getTitles()[1]
+
+                if shared.is_parent_child(taxonomy1, taxonomy2):
+                    if self.logger: self.logger.info("PARENT-CHILD")
+                    if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
+                        taxon_total_count[classes.getClassifs()[0]] += 1
+                    else:
+                        taxon_total_count[classes.getClassifs()[1]] += 1
+                else:
+                    potential_transfers.add(reads.getTitles()[0] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
+                    potential_transfers.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+
                 sys.exit()
 
 

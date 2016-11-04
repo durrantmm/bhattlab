@@ -31,8 +31,11 @@ def main(args):
     taxon_total_count, taxon_IS_count, potential_transfers, intra_IS = read_filter.filter_reads_ISCounter2(sam_file_loc)
 
     for taxon in taxon_total_count.keys():
-        for IS in taxon_IS_count[taxon]:
-            print "\t".join([taxon, IS, taxon_total_count[taxon], taxon_IS_count[taxon][IS]])
+        try:
+            for IS in taxon_IS_count[taxon]:
+                print "\t".join([taxon, IS, taxon_total_count[taxon], taxon_IS_count[taxon][IS]])
+        except KeyError:
+            print "\t".join([taxon, "NO_MATCHING_INSERTION_SEQUENCES", taxon_total_count[taxon], "NA"])
 
     logger.info("Analysis Complete  :)")
 

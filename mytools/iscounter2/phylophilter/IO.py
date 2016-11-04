@@ -53,26 +53,10 @@ def get_insertion_alignments(sam_file, has_header=True):
     if has_header: remove_sam_header(sam_file)
 
     while True:
-        line = sam_file.readline().strip().split()
-        name = line[0]
-        ISs = set()
-        print name
-        try:
-            while len(line[0]) != 0:
-                while line[0] != name:
-                    print line[0]
-                    ISs.add(line[2])
-                    line = sam_file.readline().strip().split()
-                name = line[0]
-                yield [name, ISs]
-
-            raise IndexError()
-
-        except IndexError:
-            break
-
+        for line in sam_file:
+            yield line
+        break
 def remove_sam_header(sam):
-    line = sam.readline()
-    while line.startswith("@PG"):
-        print line
-        line = sam.readline()
+    for line in sam:
+        if line.startswith('@PG'):
+            break

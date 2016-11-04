@@ -4,7 +4,7 @@ import os, sys
 def IO_get_insertion_alignments_TEST(sam_file):
 
     for name, ISs in IO.get_insertion_alignments(sam_file):
-        print name ISs
+        print name, ISs
 
 
 

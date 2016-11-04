@@ -28,23 +28,11 @@ def main(args):
     read_filter = filters.Filter(args['fastq_reads'], args['classification_file'], args['taxon_nodes'], logger_in=logger)
 
     logger.info("Invoking the Jansen Protocol...")
-    read_filter.filter_reads_ISCounter2(sam_file_loc)
-    sys.exit()
+    taxon_total_count, taxon_IS_count, potential_transfers, intra_IS = read_filter.filter_reads_ISCounter2(sam_file_loc)
 
-    logger.info("Filtering reads and saving to output folder...")
-    with open(filtered_fastq_file, 'w') as out:
-        out.writelines(filtered_reads)
-    logger.info("Reads saved to %s" % filtered_fastq_file)
-
-    logger.info("Building all the insertion sequence in the given directory using bowtie2...")
-    bowtie2.build_all(args['insertion_sequences'])
-
-    logger.info("Aligning the reads to all the insertion sequences...")
-    bowtie2.align_all(args['insertion_sequences'], filtered_fastq_file, args['output_folder'],
-                      threads=args['threads'])
-
-    logger.info("Saving summary statistics to results.txt in output directory...")
-    save_summary_stats(args['fastq_reads'], filtered_fastq_file, args['output_folder'], args['taxon_id'])
+    for taxon in taxon_total_count.keys():
+        for IS in taxon_IS_count[taxon]:
+            print "\t".join([taxon, IS, taxon_total_count[taxon], taxon_IS_count[taxon][IS]])
 
     logger.info("Analysis Complete  :)")
 

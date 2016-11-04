@@ -46,6 +46,8 @@ class Filter:
                     intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
                 else:
                     taxon_total_count[classes.getClassifs()[1]] += 1
+                    for IS in IS_aligned_dict[reads.getTitles()[0]]:
+                        taxon_IS_count[classes.getClassifs()[1]][IS] += 1
 
             elif reads.getTitles()[1] in IS_aligned_dict.keys():
                 if reads.getTitles()[0] in IS_aligned_dict.keys():
@@ -53,6 +55,8 @@ class Filter:
                     intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[1]])))
                 else:
                     taxon_total_count[classes.getClassifs()[0]] += 1
+                    for IS in IS_aligned_dict[reads.getTitles()[1]]:
+                        taxon_IS_count[classes.getClassifs()[0]][IS] += 1
 
             elif classes.getClassifs()[0] == classes.getClassifs()[1]:
                 taxon_total_count[classes.getClassifs()[0]] += 1

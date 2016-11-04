@@ -60,31 +60,20 @@ class Filter:
             # Discard it if EITHER READ is UNCLASSIFIED
             if class1 == '0' or class2 == '0':
                 if read1 == self.aligned_read:
-                    try: self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-                    except StopIteration: pass
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                 if read2 == self.aligned_read:
-                    try: self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-                    except StopIteration: pass
-
-
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                 unclassif_count += 1
 
             # Check that read1 aligns to insertion sequence
-
             elif read1 == self.aligned_read:
-                try: tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
-                except StopIteration:
-                    taxon_total_count[class2] += 1
-                    total_classified_reads += 1
-                    for IS in self.aligned_IS:
-                        taxon_IS_count[class2][IS] += 1
-
-
+                tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
+                print read1, read2
+                print self.aligned_read, tmp_aligned_read
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 == tmp_aligned_read:
+                    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
                     intra_IS += 1
-                    try: self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-                    except StopIteration: continue
 
                 # Otherwise, increment the read2 taxon_IS_count
                 else:
@@ -92,8 +81,7 @@ class Filter:
                     total_classified_reads += 1
                     for IS in self.aligned_IS:
                         taxon_IS_count[class2][IS] += 1
-                    try: self.aligned_read, self.aligned_IS = tmp_aligned_read, tmp_aligned_IS
-                    except StopIteration: continue
+                    self.aligned_read, self.aligned_IS = tmp_aligned_read, tmp_aligned_IS
 
             # Check that read2 aligns to insertion sequence
             elif read2 == self.aligned_read:

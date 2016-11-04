@@ -74,7 +74,7 @@ class Filter:
                     potential_transfers.add(reads.getTitles()[0] + "|" + classes.getClassifs()[0])
                     potential_transfers.add(reads.getTitles()[1] + "|" + classes.getClassifs()[1])
 
-        if self.logger():
+        if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
 

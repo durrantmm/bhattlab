@@ -27,7 +27,7 @@ class Filter:
     def filter_reads_ISCounter2(self, aligned_reads):
 
         if self.logger: self.logger.info("Loading the insertion sequence alignments...")
-        self.IS_align_gen = IO.read_insertion_alignments(open(aligned_reads, 'r'))
+        self.IS_align_gen = IO.read_insertion_alignments(open(aligned_reads, 'r'), aligned_reads)
 
         potential_transfers = 0
         intra_IS = 0

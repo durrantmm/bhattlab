@@ -3,10 +3,14 @@ import os, sys
 
 def IO_get_insertion_alignments_TEST(sam_file):
 
-    for name, ISs in IO.get_insertion_alignments(sam_file):
-        print name, ISs
-
-
+    filein = IO.get_insertion_alignments(sam_file)
+    print filein.next()
+    print
+    print filein.next()
+    print
+    print filein.next()
+    print
+    print filein.next()
 
 if __name__ == "__main__":
     current_dir = os.path.dirname(__file__)

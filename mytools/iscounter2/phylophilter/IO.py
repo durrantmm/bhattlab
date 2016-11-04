@@ -54,6 +54,7 @@ def get_insertion_alignments(sam_file, has_header=True):
 
     while True:
         for line in sam_file:
+            print line
             yield line
         break
 def remove_sam_header(sam):

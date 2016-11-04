@@ -31,14 +31,15 @@ def main(args):
     taxon_total_count, taxon_IS_count, potential_transfers, intra_IS = read_filter.filter_reads_ISCounter2(sam_file_loc)
 
     logger.info("Saving results to file... ")
-    out_file = save_summary_stats(args['fastq_reads'], taxon_total_count, taxon_IS_count, potential_transfers, intra_IS, output_folder)
+    out_file = save_summary_stats(args['fastq_reads'], taxon_total_count, taxon_IS_count, potential_transfers,
+                                  intra_IS, output_folder)
     logger.info("Results saved to %s" % out_file)
 
     logger.info("Analysis Complete  :)")
 
 
 def save_summary_stats(fastq_file, taxon_total_count, taxon_IS_count, potential_transfers, intra_IS,
-                       output_folder, names_dict=None, verbose=False):
+                       output_dir, names_dict=None, verbose=False):
     results_output = os.path.join(output_dir, "results.txt")
 
     out_header = ['FASTQFile', 'Taxon', 'InsertionSequence', 'TotalTaxonCount', 'NumAlignedReads', 'FreqAlignedReads']
@@ -54,7 +55,7 @@ def save_summary_stats(fastq_file, taxon_total_count, taxon_IS_count, potential_
                 if verbose:
                     out.write("\t".join([str(fastq_file), str(taxon), "NO MATCH", str(taxon_total_count[taxon]),
                                          "NA", "NA"])+'\n')
-
+    return results_output
 
 
 

@@ -49,8 +49,8 @@ class Filter:
 
             elif reads.getTitles()[1] in IS_aligned_dict.keys():
                 if reads.getTitles()[0] in IS_aligned_dict.keys():
-                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
-                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+                    intra_IS.add(reads.getTitles()[0]+ "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[0]])))
+                    intra_IS.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[1]])))
                 else:
                     taxon_total_count[classes.getClassifs()[0]] += 1
 
@@ -66,14 +66,13 @@ class Filter:
                 print classes.getClassifs()[1], reads.getTitles()[1]
 
                 if shared.is_parent_child(taxonomy1, taxonomy2):
-                    if self.logger: self.logger.info("PARENT-CHILD")
                     if shared.which_parent_child(taxonomy1, taxonomy2) == 0:
                         taxon_total_count[classes.getClassifs()[0]] += 1
                     else:
                         taxon_total_count[classes.getClassifs()[1]] += 1
                 else:
-                    potential_transfers.add(reads.getTitles()[0] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[0]])))
-                    potential_transfers.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles[1]])))
+                    potential_transfers.add(reads.getTitles()[0] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[0]])))
+                    potential_transfers.add(reads.getTitles()[1] + "|" + "|".join(list(IS_aligned_dict[reads.getTitles()[1]])))
 
         if self.logger():
             self.logger.info("Total Read Count: %s" % total_read_count)

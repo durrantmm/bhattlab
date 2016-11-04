@@ -3,6 +3,7 @@ import sys
 import IO
 import shared
 from collections import defaultdict
+from itertools import izip
 
 
 class Filter:
@@ -44,9 +45,9 @@ class Filter:
         loop_counter = 0
 
         if self.logger: self.logger.info("Beginning read classification and read sorting...")
-        for reads, classes in zip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+        for reads, classes in izip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
             loop_counter += 1
-            if loop_counter == 10000:
+            if loop_counter == 100:
                 self.logger.info("Total Reads Processed: %d" % total_read_count)
                 loop_counter = 0
 

@@ -60,6 +60,9 @@ class Filter:
 
             # Check that read1 aligns to insertion sequence
             elif read1 in IS_aligned_dict.keys():
+                print "WE HAVE AN ALIGNED READ: %s" % (read1 + "|" + class1)
+                print "IT'S PAIR IS: %s" (read2 + "|" + class1)
+                sys.exit()
                 # Check that read2 aligns to insertion sequence, send to intra_IS
                 if read2 in IS_aligned_dict.keys():
                     intra_IS.append(read1+ "|" + "|".join(list(IS_aligned_dict[read1])))
@@ -74,6 +77,9 @@ class Filter:
 
             # Check that read2 aligns to insertion sequence
             elif read2 in IS_aligned_dict.keys():
+                print "WE HAVE AN ALIGNED READ: %s" % (read2 + "|" + class1)
+                print "IT'S PAIR IS: %s"(read1 + "|" + class1)
+                sys.exit()
                 # Check that read1 aligns to insertion sequence, send to intra_IS
                 if read1 in IS_aligned_dict.keys():
                     intra_IS.append(read1 + "|" + "|".join(list(IS_aligned_dict[read1])))

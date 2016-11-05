@@ -9,9 +9,9 @@ def main(args):
         header = infile.readline().strip().split()
         for line in infile:
             line = {header[i]:line.strip().split()[i] for i in range(len(header))}
-            print line
+            results_dict[line['Date']][line['Taxon']][line['InsertionSequence']] = (line['InitialReadCount'], line['NumAlignedReads'])
 
-
+    print results_dict
 
 if __name__ == "__main__":
 

@@ -43,9 +43,12 @@ def main(args):
                         consolidation_dict[date][taxon][IS][0] += results_dict[date][child][IS][0]
                         consolidation_dict[date][taxon][IS][1] += results_dict[date][child][IS][1]
 
-        print consolidation_dict
-        sys.exit()
-
+    for date in consolidation_dict:
+        for taxon in consolidation_dict[date]:
+            for IS in consolidation_dict[date][taxon]:
+                total_reads = consolidation_dict[date][taxon][IS][0]
+                num_aligned_reads = consolidation_dict[date][taxon][IS][1]
+                print "\t".join([date, taxon+"-CONS", IS, total_reads, num_aligned_reads])
 
 def get_taxon_nodes(nodes_locations, logger=None):
     assert type(nodes_locations) is list, "The nodes location must be a list of file locations."

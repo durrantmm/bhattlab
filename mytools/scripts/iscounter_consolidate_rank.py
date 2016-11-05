@@ -43,6 +43,9 @@ def main(args):
                         for IS in results_dict[date][child]:
                             consolidation_dict[date][taxon][IS][0] += results_dict[date][child][IS][0]
                             consolidation_dict[date][taxon][IS][1] += results_dict[date][child][IS][1]
+                for IS in results_dict[date][taxon]:
+                    consolidation_dict[date][taxon][IS][0] += results_dict[date][taxon][IS][0]
+                    consolidation_dict[date][taxon][IS][1] += results_dict[date][taxon][IS][1]
 
     for date in consolidation_dict:
         for taxon in consolidation_dict[date]:

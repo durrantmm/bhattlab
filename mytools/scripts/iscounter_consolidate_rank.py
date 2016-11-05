@@ -28,8 +28,8 @@ def main(args):
                 cur_taxon = taxon_dict[cur_taxon][1]
                 children.add(cur_taxon)
 
-            for taxon in sub_taxa:
-                sub_taxa[taxon] = sub_taxa[taxon]-set([taxon])
+        for taxon in sub_taxa:
+            sub_taxa[taxon] = sub_taxa[taxon]-set([taxon])
 
 
         print sub_taxa

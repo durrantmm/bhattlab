@@ -17,7 +17,7 @@ def main(args):
             print taxon
             for IS in results_dict[date][taxon]:
                 print IS
-                for final in results_dict[dict][date][taxon]:
+                for final in results_dict[date][taxon][IS]:
                     print final,
                 print
 

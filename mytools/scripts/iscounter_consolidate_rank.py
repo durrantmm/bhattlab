@@ -6,8 +6,9 @@ def main(args):
     header = ''
     results_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
     with open(args['results']) as infile:
-        header = infile.readline()
+        header = infile.readline().strip().split()
         for line in infile:
+            line = {header[i]:line.strip().split()[i] for i in range(len(header))}
             print line
 
 

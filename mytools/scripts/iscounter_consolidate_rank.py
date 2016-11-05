@@ -17,8 +17,8 @@ def main(args):
     taxon_dict = get_taxon_nodes(args['nodes'])
 
     for date in results_dict:
-        sub_taxa = defaultdict(set)
         for taxon in results_dict[date]:
+            sub_taxa = defaultdict(set)
             cur_taxon = taxon_dict[taxon][1]
             children = set([taxon])
             while cur_taxon != '1':
@@ -27,6 +27,11 @@ def main(args):
                         sub_taxa[cur_taxon].add(child)
                 cur_taxon = taxon_dict[cur_taxon][1]
                 children.add(cur_taxon)
+
+            for taxon in sub_taxa:
+                sub_taxa[taxon] = sub_taxa[taxon]-taxon
+
+
         print sub_taxa
         sys.exit()
 

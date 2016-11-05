@@ -15,6 +15,7 @@ def main(args):
             all_taxa.add(line['Taxon'])
 
     taxon_dict = get_taxon_nodes(args['nodes'])
+    consolidation_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
 
     for date in results_dict:
         sub_taxa = defaultdict(set)
@@ -31,14 +32,18 @@ def main(args):
 
 
         for taxon in sub_taxa:
-            print taxon, sub_taxa[taxon]
             sub_taxa[taxon] = sub_taxa[taxon]-set([taxon])
-            print taxon, sub_taxa[taxon]
 
+        for taxon in results_dict[date]:
+            if taxon in sub_taxa.keys():
+                children = sub_taxa[taxon]
+                for child in children:
+                    for IS in taxon_dict[date][child]:
+                        consolidation_dict[date][taxon][IS][0] += taxon_dict[date][child][IS][0]
+                        consolidation_dict[date][taxon][IS][1] += taxon_dict[date][child][IS][1]
 
-
+        print consolidation_dict
         sys.exit()
-
 
 
 def get_taxon_nodes(nodes_locations, logger=None):

@@ -15,7 +15,7 @@ def main(args):
             all_taxa.add(line['Taxon'])
 
     taxon_dict = get_taxon_nodes(args['nodes'])
-    consolidation_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
+    consolidation_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: (0,0))))
 
     for date in results_dict:
         sub_taxa = defaultdict(set)

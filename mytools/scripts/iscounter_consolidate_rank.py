@@ -15,11 +15,11 @@ def main(args):
         print date
         for taxon in results_dict[date]:
             print taxon
-        for IS in results_dict[date][taxon]:
-            print IS
-        for final in results_dict[dict][date][taxon]:
-            print final,
-        print
+            for IS in results_dict[date][taxon]:
+                print IS
+            for final in results_dict[dict][date][taxon]:
+                print final,
+            print
 
 if __name__ == "__main__":
 

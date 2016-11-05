@@ -11,7 +11,8 @@ def main(args):
             line = {header[i]:line.strip().split()[i] for i in range(len(header))}
             results_dict[line['Date']][line['Taxon']][line['InsertionSequence']] = (line['InitialReadCount'], line['NumAlignedReads'])
 
-    print results_dict
+    for date in results_dict:
+        print date
 
 if __name__ == "__main__":
 

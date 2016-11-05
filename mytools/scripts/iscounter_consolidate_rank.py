@@ -49,7 +49,7 @@ def main(args):
             for IS in consolidation_dict[date][taxon]:
                 total_reads = consolidation_dict[date][taxon][IS][0]
                 num_aligned_reads = consolidation_dict[date][taxon][IS][1]
-                print "\t".join([date, taxon+"-CONS", IS, total_reads, num_aligned_reads])
+                print "\t".join([date, taxon+"-CONS", IS, str(total_reads), str(num_aligned_reads)])
 
 def get_taxon_nodes(nodes_locations, logger=None):
     assert type(nodes_locations) is list, "The nodes location must be a list of file locations."

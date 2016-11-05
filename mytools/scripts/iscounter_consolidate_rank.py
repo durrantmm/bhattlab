@@ -29,14 +29,14 @@ def main(args):
                 cur_taxon = taxon_dict[cur_taxon][1]
                 children.add(cur_taxon)
 
-        print sub_taxa
+
         for taxon in sub_taxa:
             print taxon, sub_taxa[taxon]
             sub_taxa[taxon] = sub_taxa[taxon]-set([taxon])
             print taxon, sub_taxa[taxon]
 
 
-        print sub_taxa
+
         sys.exit()
 
 

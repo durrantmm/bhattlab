@@ -13,6 +13,9 @@ def main(args):
 
     for date in results_dict:
         print date
+        for taxon in results_dict[date]:
+            print taxon,
+        print
 
 if __name__ == "__main__":
 

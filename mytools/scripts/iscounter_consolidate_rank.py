@@ -6,19 +6,31 @@ def main(args):
 
     header = ''
     results_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
+    all_taxa = set()
     with open(args['results']) as infile:
         header = infile.readline().strip().split()
         for line in infile:
             line = {header[i]:line.strip().split()[i] for i in range(len(header))}
             results_dict[line['Date']][line['Taxon']][line['InsertionSequence']] = (line['InitialReadCount'], line['NumAlignedReads'])
+            all_taxa.add(line['Taxon'])
 
     taxon_dict = get_taxon_nodes(args['nodes'])
-    print taxon_dict
-    sys.exit()
+
     for date in results_dict:
         sub_taxa = defaultdict(set)
         for taxon in results_dict[date]:
-            pass
+            cur_taxon = taxon_dict[taxon][1]
+            children = set(taxon)
+            while cur_taxon != '1':
+                if taxon_dict[cur_taxon][0] == 'species' or taxon_dict[cur_taxon][0] == 'genus':
+                    for child in children:
+                        sub_taxa[cur_taxon].add(child)
+                cur_taxon = taxon_dict[cur_taxon][1]
+                children.add(cur_taxon)
+        print sub_taxa
+        sys.exit()
+
+
 
 def get_taxon_nodes(nodes_locations, logger=None):
     assert type(nodes_locations) is list, "The nodes location must be a list of file locations."

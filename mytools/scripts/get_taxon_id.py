@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Quickly get the taxon id for a given')
     parser.add_argument('name', help='FILL THIS OUT')
     parser.add_argument('-names','--taxon_names_location', required = False,
-                        default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/TaxonomyDatabase/names.dmp",
+                        default="/srv/gsfs0/projects/bhatt/mdurrant/my_code/bhattlab/mytools/iscounter2/data/TaxonomyDatabase/names.dmp",
                         help='FILL THIS OUT')
 
 

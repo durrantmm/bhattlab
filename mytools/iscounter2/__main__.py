@@ -42,7 +42,7 @@ def save_summary_stats(fastq_file, taxon_total_count, taxon_IS_count, potential_
     out_header = ['Date', 'Taxon', 'InsertionSequence', 'InitialReadCount', 'NumAlignedReads', 'FreqAlignedReads']
 
     with open(results_output, 'w') as out:
-        out.write(out_header+'\n')
+        out.write("\t".join(out_header)+'\n')
         for taxon in taxon_total_count.keys():
             try:
                 for IS in taxon_IS_count[taxon]:

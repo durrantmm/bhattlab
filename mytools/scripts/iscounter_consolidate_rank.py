@@ -20,7 +20,7 @@ def main(args):
         sub_taxa = defaultdict(set)
         for taxon in results_dict[date]:
             cur_taxon = taxon_dict[taxon][1]
-            children = set(taxon)
+            children = set([taxon])
             while cur_taxon != '1':
                 if taxon_dict[cur_taxon][0] == 'species' or taxon_dict[cur_taxon][0] == 'genus':
                     for child in children:

@@ -11,7 +11,8 @@ def main(args):
         header = infile.readline().strip().split()
         for line in infile:
             line = {header[i]:line.strip().split()[i] for i in range(len(header))}
-            results_dict[line['Date']][line['Taxon']][line['InsertionSequence']] = (line['InitialReadCount'], line['NumAlignedReads'])
+            results_dict[line['Date']][line['Taxon']][line['InsertionSequence']] = (int(line['InitialReadCount']),
+                                                                                    int(line['NumAlignedReads']))
             all_taxa.add(line['Taxon'])
 
     taxon_dict = get_taxon_nodes(args['nodes'])

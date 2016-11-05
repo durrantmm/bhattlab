@@ -39,9 +39,10 @@ def main(args):
             if taxon in sub_taxa.keys():
                 children = sub_taxa[taxon]
                 for child in children:
-                    for IS in results_dict[date][child]:
-                        consolidation_dict[date][taxon][IS][0] += results_dict[date][child][IS][0]
-                        consolidation_dict[date][taxon][IS][1] += results_dict[date][child][IS][1]
+                    if child in results_dict[date]:
+                        for IS in results_dict[date][child]:
+                            consolidation_dict[date][taxon][IS][0] += results_dict[date][child][IS][0]
+                            consolidation_dict[date][taxon][IS][1] += results_dict[date][child][IS][1]
 
     for date in consolidation_dict:
         for taxon in consolidation_dict[date]:

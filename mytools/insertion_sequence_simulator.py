@@ -2,6 +2,7 @@ import argparse
 import sys
 from collections import defaultdict
 from Bio import SeqIO
+from random import randrange
 
 # start here when the script is launched
 
@@ -9,7 +10,23 @@ def main(args):
 
     ref = get_reference(args['reference'])
     n_indices = get_n_indices(ref.seq)
-    print len(n_indices)
+
+    insertion_site = 0
+    while valid_insertion_site(insertion_site, len(ref.seq)):
+        insertion_site = randrange(0, len(ref.seq)+1)
+    print insertion_site
+
+def valid_insertion_site(insertion_site, n_indices, ref_len):
+    if insertion_site < 500 or insertion_site > ref_len-500:
+        return False
+    else:
+        for nrange in n_indices:
+            if insertion_site > nrange[0]-500 and insertion_site < nrange[1]:
+                return False
+            elif insertion_site < nrange[1]+500 and insertion_site > nrange[0]:
+                return False
+        return True
+
 
 def get_reference(reference_loc):
     reference = {}

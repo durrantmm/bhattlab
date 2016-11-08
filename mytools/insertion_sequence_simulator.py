@@ -7,7 +7,7 @@ from Bio import SeqIO
 
 def main(args):
     reference = {}
-    with open() as refin:
+    with open(args['reference']) as refin:
         reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
     print reference
 

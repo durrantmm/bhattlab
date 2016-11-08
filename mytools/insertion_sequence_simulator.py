@@ -1,11 +1,15 @@
 import argparse
 import sys
 from collections import defaultdict
+from Bio import SeqIO
 
 # start here when the script is launched
 
 def main(args):
-
+    reference = {}
+    with open() as refin:
+        reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
+    print reference
 
 
 def get_n_indices(ref_file):
@@ -29,9 +33,3 @@ if __name__ == "__main__":
 
 
     main(args)
-
-
-
-
-
-

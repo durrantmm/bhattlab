@@ -21,6 +21,7 @@ def get_n_indices(ref_seq):
         if nuc == 'N':
             n_indices.append(index)
         index+=1
+    return n_indices
 
 
 

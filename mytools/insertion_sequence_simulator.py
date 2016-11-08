@@ -9,7 +9,7 @@ from random import randrange
 def main(args):
 
     ref = get_reference(args['reference'])
-    insertion = get_insertion(args('insertion'))
+    insertion = get_insertion(args['insertion'])
     n_indices = get_n_indices(ref.seq)
 
     insertion_sites = []
@@ -29,7 +29,7 @@ def main(args):
 
 
 
-def valid_insertion_site(insertion_site, n_indices, ref_le, insertion_sites):
+def valid_insertion_site(insertion_site, n_indices, ref_len, insertion_sites):
     if insertion_site < 500 or insertion_site > ref_len-500:
         return False
 

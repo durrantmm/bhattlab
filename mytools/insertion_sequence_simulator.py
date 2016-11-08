@@ -11,14 +11,15 @@ def main(args):
         reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
 
     ref = reference[ reference.keys()[0]]
-    for line in ref.seq:
-        print line
+    n_indices = get_n_indices(ref.seq)
 
-
-def get_n_indices(ref_file):
-    for line in ref_file:
-        if line.startswith(">"):
-            print line
+def get_n_indices(ref_seq):
+    index = 0
+    n_indices = []
+    for nuc in ref_seq:
+        if nuc == 'N':
+            n_indices.append(index)
+        index+=1
 
 
 

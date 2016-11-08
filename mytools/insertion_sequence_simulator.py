@@ -9,28 +9,40 @@ from random import randrange
 def main(args):
 
     ref = get_reference(args['reference'])
+    insertion = get_insertion(args('insertion'))
     n_indices = get_n_indices(ref.seq)
 
     insertion_sites = []
 
     while len(insertion_sites) < int(args['number']):
         insertion_site = 0
-        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
+        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq), insertion_sites):
             insertion_site = randrange(0, len(ref.seq)+1)
         insertion_sites.append(insertion_site)
-        print insertion_sites
-    print insertion_sites
+        ref.seq = ref.seq[:insertion_site] + insertion.seq + ref.seq[insertion_site]
 
-def valid_insertion_site(insertion_site, n_indices, ref_len):
+    with open(args['output'],'w') as outfile:
+        SeqIO.write(ref, outfile, "fasta")
+
+
+
+
+
+
+def valid_insertion_site(insertion_site, n_indices, ref_le, insertion_sites):
     if insertion_site < 500 or insertion_site > ref_len-500:
         return False
-    else:
-        for nrange in n_indices:
-            if insertion_site > nrange[0]-500 and insertion_site < nrange[1]:
-                return False
-            elif insertion_site < nrange[1]+500 and insertion_site > nrange[0]:
-                return False
-        return True
+
+    for site in insertion_sites:
+        if insertion_site < site+2000 and insertion_site > site-2000:
+            return False
+
+    for nrange in n_indices:
+        if insertion_site > nrange[0]-500 and insertion_site < nrange[1]:
+            return False
+        elif insertion_site < nrange[1]+500 and insertion_site > nrange[0]:
+            return False
+    return True
 
 
 def get_reference(reference_loc):
@@ -39,6 +51,14 @@ def get_reference(reference_loc):
         reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
     ref = reference[ reference.keys()[0]]
     return ref
+
+
+def get_insertion(insertion_loc):
+    insertion = {}
+    with open(insertion_loc) as insert_in:
+        reference = SeqIO.to_dict(SeqIO.parse(insert_in, "fasta"))
+    insertion = insertion[ insertion.keys()[0]]
+    return insertion
 
 def get_n_indices(ref_seq):
     index = 0
@@ -71,6 +91,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Quickly get the taxon id for a given')
     parser.add_argument('-r', '--reference', required=True, help='FILL THIS OUT')
     parser.add_argument('-i', '--insertion', required=True, help='FILL THIS OUT')
+    parser.add_argument('-o', '--output', required=False, default="inserted_seq.fasta", help='FILL THIS OUT')
     parser.add_argument('-n', '--number', required=False, default=1, help='FILL THIS OUT')
 
     args = parser.parse_args()

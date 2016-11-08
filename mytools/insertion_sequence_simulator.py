@@ -9,7 +9,8 @@ def main(args):
     reference = {}
     with open(args['reference']) as refin:
         reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
-    print reference
+
+    print reference[ reference.keys()[0]].SeqRecord
 
 
 def get_n_indices(ref_file):

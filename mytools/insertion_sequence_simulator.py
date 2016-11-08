@@ -11,7 +11,7 @@ def main(args):
         reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
 
     ref = reference[ reference.keys()[0]]
-    for line in ref.Seq:
+    for line in ref.seq:
         print line
 
 

@@ -12,7 +12,7 @@ def main(args):
     n_indices = get_n_indices(ref.seq)
 
     insertion_site = 0
-    while valid_insertion_site(insertion_site, len(ref.seq)):
+    while valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
         insertion_site = randrange(0, len(ref.seq)+1)
     print insertion_site
 

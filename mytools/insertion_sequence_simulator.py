@@ -16,14 +16,20 @@ def main(args):
 
     while len(insertion_sites) < int(args['number']):
         insertion_site = 0
-        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq), insertion_sites):
+        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
             insertion_site = randrange(0, len(ref.seq)+1)
         insertion_sites.append(insertion_site)
-        ref.seq = ref.seq[:insertion_site] + insertion.seq + ref.seq[insertion_site]
+
+    new_seq = ""
+    start_site = 0
+    for site in insertion_sites:
+        new_seq = new_seq + ref.seq[start_site:site] + insertion.seq
+        start_site = site
+    new_seq = new_seq + ref.seq[start_site:]
+    ref.seq = new_seq
 
     with open(args['output'],'w') as outfile:
         SeqIO.write(ref, outfile, "fasta")
-
 
 
 

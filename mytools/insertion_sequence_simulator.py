@@ -16,7 +16,7 @@ def main(args):
 
     while len(insertion_sites) < int(args['number']):
         insertion_site = 0
-        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
+        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq), insertion_sites):
             insertion_site = randrange(0, len(ref.seq)+1)
         insertion_sites.append(insertion_site)
 

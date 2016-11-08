@@ -22,6 +22,8 @@ def main(args):
             insertion_site = randrange(0, len(ref.seq)+1)
         insertion_sites.append(insertion_site)
 
+    insertion_sites.sort()
+    print insertion_sites
     new_seq = ""
     start_site = 0
     for site in insertion_sites:

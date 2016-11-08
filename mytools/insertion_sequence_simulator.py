@@ -9,7 +9,7 @@ def main(args):
 
     ref = get_reference(args['reference'])
     n_indices = get_n_indices(ref.seq)
-    print ref.seq[n_indices[0][0]-1: n_indices[0][1]+2]
+    print len(n_indices)
 
 def get_reference(reference_loc):
     reference = {}

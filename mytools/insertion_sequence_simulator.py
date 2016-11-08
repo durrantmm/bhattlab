@@ -9,6 +9,8 @@ from random import randrange
 def main(args):
 
     ref = get_reference(args['reference'])
+    print("Reference sequence length: %s" % len(ref.seq))
+
     insertion = get_insertion(args['insertion'])
     n_indices = get_n_indices(ref.seq)
 
@@ -27,6 +29,8 @@ def main(args):
         start_site = site
     new_seq = new_seq + ref.seq[start_site:]
     ref.seq = new_seq
+
+    print("New reference sequence length: %d" % len(ref.seq))
 
     with open(args['output'],'w') as outfile:
         SeqIO.write(ref, outfile, "fasta")

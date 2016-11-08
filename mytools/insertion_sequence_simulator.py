@@ -105,7 +105,7 @@ if __name__ == "__main__":
     parser.add_argument('-r', '--reference', required=True, help='FILL THIS OUT')
     parser.add_argument('-i', '--insertion', required=True, help='FILL THIS OUT')
     parser.add_argument('-o', '--output', required=False, default="inserted_seq.fasta", help='FILL THIS OUT')
-    parser.add_argument('-n', '--number', required=False, default=1, help='FILL THIS OUT')
+    parser.add_argument('-n', '--number', required=False, default=1, type=int, help='FILL THIS OUT')
 
     args = parser.parse_args()
     args = vars(args)

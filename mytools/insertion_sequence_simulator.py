@@ -6,13 +6,17 @@ from Bio import SeqIO
 # start here when the script is launched
 
 def main(args):
-    reference = {}
-    with open(args['reference']) as refin:
-        reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
 
-    ref = reference[ reference.keys()[0]]
+    ref = get_reference(args['reference'])
     n_indices = get_n_indices(ref.seq)
-    print n_indices
+    print ref.seq[n_indices[0][0]-10, n_indices[0][1]+10]
+
+def get_reference(reference_loc):
+    reference = {}
+    with open(reference_loc) as refin:
+        reference = SeqIO.to_dict(SeqIO.parse(refin, "fasta"))
+    ref = reference[ reference.keys()[0]]
+    return ref
 
 def get_n_indices(ref_seq):
     index = 0

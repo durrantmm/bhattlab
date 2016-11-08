@@ -13,7 +13,7 @@ def main(args):
 
     insertion_sites = []
 
-    while len(insertion_sites) < args['number']:
+    while len(insertion_sites) < int(args['number']):
         insertion_site = 0
         while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
             insertion_site = randrange(0, len(ref.seq)+1)

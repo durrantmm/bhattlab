@@ -56,7 +56,7 @@ def get_reference(reference_loc):
 def get_insertion(insertion_loc):
     insertion = {}
     with open(insertion_loc) as insert_in:
-        reference = SeqIO.to_dict(SeqIO.parse(insert_in, "fasta"))
+        insertion = SeqIO.to_dict(SeqIO.parse(insert_in, "fasta"))
     insertion = insertion[ insertion.keys()[0]]
     return insertion
 

@@ -25,6 +25,7 @@ def main(args):
     new_seq = ""
     start_site = 0
     for site in insertion_sites:
+        print "Inserting sequence at index %d" % site
         new_seq = new_seq + ref.seq[start_site:site] + insertion.seq
         start_site = site
     new_seq = new_seq + ref.seq[start_site:]

@@ -12,6 +12,7 @@ def main(args):
 
     ref = reference[ reference.keys()[0]]
     n_indices = get_n_indices(ref.seq)
+    print n_indices
 
 def get_n_indices(ref_seq):
     index = 0

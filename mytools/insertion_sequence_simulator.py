@@ -11,10 +11,12 @@ def main(args):
     ref = get_reference(args['reference'])
     n_indices = get_n_indices(ref.seq)
 
+    insertion_sites = []
     insertion_site = 0
-    while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
-        insertion_site = randrange(0, len(ref.seq)+1)
-    print insertion_site
+    while len(insertion_sites) < args['number']:
+        while not valid_insertion_site(insertion_site, n_indices, len(ref.seq)):
+            insertion_site = randrange(0, len(ref.seq)+1)
+    print insertion_sites
 
 def valid_insertion_site(insertion_site, n_indices, ref_len):
     if insertion_site < 500 or insertion_site > ref_len-500:

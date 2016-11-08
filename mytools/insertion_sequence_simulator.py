@@ -17,9 +17,22 @@ def main(args):
 def get_n_indices(ref_seq):
     index = 0
     n_indices = []
+    contig_start = -1
+    contig_end = -1
     for nuc in ref_seq:
+
         if nuc == 'N':
-            n_indices.append(index)
+            if index == contig_end+1:
+                contig_end += 1
+            else:
+                contig_start = index
+                contig_end = index
+
+        elif contig_end >= 0:
+            n_indices.append((contig_start, contig_end))
+            contig_start = -1
+            contig_end = -1
+
         index+=1
     return n_indices
 

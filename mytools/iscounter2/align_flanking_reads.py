@@ -25,7 +25,7 @@ def main(args):
 
     with open(out_prefix+'.fq', 'w') as fq_out:
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
-                                                args['out_prefix'], logger)
+                                                fq_out, logger)
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -106,7 +106,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
         else:
             continue
 
-    return out_fastq.name
+    return out_fastq
 
 
 

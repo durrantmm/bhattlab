@@ -87,8 +87,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                     if IS == insertion and class2 in taxa:
                         logger.info("Flanking read classified as %s: %s" % (class2, read2))
                         outread = reads.getReads()[1]
-                        outread[0] = "%s:TAXON-%s" % (outread[0], class2)
-                        outread[-1] = outread[-1].strip()
+                        outread[0], outread[-1] = ("%s:TAXON-%s" % (outread[0], class2), outread[-1].strip())
                         out_fastq.write("\n".join(outread) + "\n")
                         flanking_reads_count += 1
 
@@ -101,8 +100,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                 if IS == insertion and class1 in taxa:
                     logger.info("Flanking read classified as %s: %s" % (class1, read1))
                     outread = reads.getReads()[0]
-                    outread[0] = "%s:TAXON-%s" % (outread[0], class1)
-                    outread[-1] = outread[-1].strip()
+                    outread[0], outread[-1] = ("%s:TAXON-%s" % (outread[0], class1), outread[-1].strip())
                     out_fastq.write("\n".join(outread)+"\n")
                     flanking_reads_count += 1
 

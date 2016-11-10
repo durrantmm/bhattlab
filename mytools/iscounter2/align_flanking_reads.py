@@ -79,12 +79,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
             else:
                 for IS in aligned_IS:
                     if IS == insertion:
-                        print read1
-                        print class1
-                        print read2
-                        print class2
-                        print aligned_read
-                        print
+                        logger.info("Flanking read classified as %s: %s") % (class2, read2)
 
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
@@ -94,12 +89,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
 
             for IS in aligned_IS:
                 if IS == insertion:
-                    print read1
-                    print class1
-                    print read2
-                    print class2
-                    print aligned_read
-                    print
+                    logger.info("Flanking read classified as %s: %s") % (class1, read1)
             aligned_read, aligned_IS = IS_sam.next()
 
         # If they are the same class, and neither maps to IS.

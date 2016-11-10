@@ -25,6 +25,8 @@ def main(args):
 
     filtered_fastq = ''
     with open(args['out_prefix']+'.fq', 'w') as fq_out:
+        fq_out.write("TEST1\n")
+        fq_out.write("TEST2\n")
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 fq_out, logger)
 

@@ -123,12 +123,18 @@ class Filter:
                     # potential_transfers.append("|".join([read2, class2]))
                     potential_transfers += 1
 
+            if total_read_count != unclassif_count + total_classified_reads + potential_transfers + intra_IS:
+                print reads
+                print classes
+                print self.aligned_IS
+                sys.exit()
+
         if self.logger:
             self.logger.info("Total Read Count: %s" % total_read_count)
             self.logger.info("Total Unclassified: %s" % unclassif_count)
             self.logger.info("Total Classified and Counted: %s" % total_classified_reads)
-            self.logger.info("Total potential transfers: %d" % (potential_transfers/2))
-            self.logger.info("Total intra-IS read pairs: %d" % (intra_IS/2))
+            self.logger.info("Total potential transfers: %d" % (potential_transfers))
+            self.logger.info("Total intra-IS read pairs: %d" % (intra_IS))
 
         return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 

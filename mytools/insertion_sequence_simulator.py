@@ -39,9 +39,6 @@ def main(args):
         SeqIO.write(ref, outfile, "fasta")
 
 
-
-
-
 def valid_insertion_site(insertion_site, n_indices, ref_len, insertion_sites):
     if insertion_site < 500 or insertion_site > ref_len-500:
         return False

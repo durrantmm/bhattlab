@@ -20,7 +20,7 @@ def main(args):
 
     IS_sam = IO.read_insertion_alignments(open(args['insertion_sam']), args['insertion_sam'])
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
-    classifs = IO.paired_reads_to_taxids(args['classifications'])
+    classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
     with open(out_prefix+'.fq', 'w') as fq_out:
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], out_prefix, logger)

@@ -81,9 +81,9 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                 for IS in aligned_IS:
                     if IS == insertion and class2 in taxa:
                         logger.info("Flanking read classified as %s: %s" % (class2, read2))
+                        outread = reads.getReads()[1]
+                        print outread
                         flanking_reads_count += 1
-
-
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
 
@@ -93,6 +93,8 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
             for IS in aligned_IS:
                 if IS == insertion and class1 in taxa:
                     logger.info("Flanking read classified as %s: %s" % (class1, read1))
+                    outread = reads.getReads()[0]
+                    print outread
                     flanking_reads_count += 1
 
 

@@ -155,7 +155,7 @@ if __name__ == "__main__":
     parser.add_argument('-sam', '--insertion_sam', required=True,
                         help='The insertion-aligned sam file')
 
-    parser.add_argument('-t', '--taxon', required=True, type=list, nargs='*',
+    parser.add_argument('-t', '--taxon', required=True, nargs='*',
                         help='The taxon of interest to analyze')
 
     parser.add_argument('-g', '--genome', required=True,

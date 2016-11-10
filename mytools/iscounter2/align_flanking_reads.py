@@ -83,6 +83,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         print class1
                         print read2
                         print class2
+                        print aligned_read
                 sys.exit()
 
 

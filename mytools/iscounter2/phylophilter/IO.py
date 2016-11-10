@@ -76,7 +76,7 @@ def read_insertion_alignments(sam_file, sam_loc):
         yield (current_name.strip('@'), current_set)
         sam_file = open(sam_loc, 'r')
 
-def read_insertion_once(sam_file):
+def read_insertion_alignments_once(sam_file):
 
     while True:
         try:

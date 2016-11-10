@@ -28,8 +28,8 @@ def create_out_prefix(args):
     out_prefix = out_prefix + os.path.basename(args['fastq']).split('.')[0]
 
     out_prefix = out_prefix + "_taxa_%s_" % "_".join(list(args['taxon']))
-    out_prefix = out_prefix + "_reads_flanking_%s_" % args['insertion_sequence']
-    out_prefix = out_prefix + "_aligned_to_%s" % os.path.basename(args['genome']).split('.')[0]
+    out_prefix = out_prefix + "reads_flanking_%s_" % args['insertion_sequence']
+    out_prefix = out_prefix + "aligned_to_%s" % os.path.basename(args['genome']).split('.')[0]
 
     return out_prefix
 

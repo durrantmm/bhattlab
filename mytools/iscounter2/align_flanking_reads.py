@@ -1,6 +1,6 @@
 import argparse, logging
 import sys, os
-import pprint, json
+import pprint, ast
 from datetime import datetime
 from phylophilter import filters
 import bowtie2
@@ -14,15 +14,13 @@ def main(args):
 
     print run_info
 def get_run_info(iscounter_out):
-    print iscounter_out
-
     runinfo_file = glob(iscounter_out+ "/*run_info*")
     if len(runinfo_file) != 1:
         print "There needs to be one file that contains the run info."
         sys.exit()
     runinfo_file = runinfo_file[0]
-    print runinfo_file
-    runinfo = json.load(open(runinfo_file))
+
+    runinfo = ast.literal_eval(open(runinfo_file).read())
     return runinfo
 
 

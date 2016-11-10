@@ -35,7 +35,7 @@ def create_out_prefix(args):
 
 
 def filter_flanks(IS_sam, fastq, classifs, taxa, out_folder):
-    print IS_sam, fastq, calssifs, taxa, out_folder
+    print IS_sam, fastq, classifs, taxa, out_folder
     sys.exit()
     saved_taxonomies = {}
     self.aligned_read, self.aligned_IS = self.IS_align_gen.next()

@@ -24,7 +24,8 @@ def main(args):
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
     with open(out_prefix+'.fq', 'w') as fq_out:
-        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['out_prefix'], logger)
+        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion'],
+                                                args['out_prefix'], logger)
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -37,7 +38,7 @@ def create_out_prefix(args):
     return out_prefix
 
 
-def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, out_fastq, logger=None):
+def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, logger=None):
 
     taxa = set(list(taxa))
     aligned_read, aligned_IS = IS_sam.next()
@@ -77,8 +78,13 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, out_fastq, logger=None
             # Otherwise, increment the read2 taxon_IS_count
             else:
                 for IS in aligned_IS:
-                    print IS
+                    if IS == insertion:
+                        print read1
+                        print class1
+                        print read2
+                        print class2
                 sys.exit()
+
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
 

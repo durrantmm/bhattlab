@@ -34,7 +34,7 @@ def create_out_prefix(args):
     return out_prefix
 
 
-def filter_flanks(self, IS_sam, fastq, classifs, taxa, out_folder):
+def filter_flanks(IS_sam, fastq, classifs, taxa, out_folder):
 
     sys.exit()
     saved_taxonomies = {}

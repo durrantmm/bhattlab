@@ -92,15 +92,19 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
         elif read2 == aligned_read:
 
             for IS in aligned_IS:
-                print IS
-            sys.exit()
+                if IS == insertion:
+                    print read1
+                    print class1
+                    print read2
+                    print class2
+                    print aligned_read
             aligned_read, aligned_IS = IS_sam.next()
 
         # If they are the same class, and neither maps to IS.
         else:
             continue
 
-    return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
+    return out_fastq.name
 
 
 

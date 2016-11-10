@@ -75,3 +75,30 @@ def read_insertion_alignments(sam_file, sam_loc):
                 break
         yield (current_name.strip('@'), current_set)
         sam_file = open(sam_loc, 'r')
+
+def read_insertion_once(sam_file):
+
+    while True:
+        try:
+            first_line = sam_file.readline().strip().split()
+            current_name = first_line[0]
+            current_set = set([first_line[2]])
+
+            #print first_line[0], first_line[2]
+
+            for line in sam_file:
+                line = line.strip().split()
+
+                name = line[0]
+                if name == current_name:
+                    #print line[0], line[2]
+                    current_set.add(line[2])
+                else:
+                    yield (current_name, current_set)
+                    #print line[0], line[2]
+                    current_name = name
+                    current_set = set([line[2]])
+        except IndexError:
+            break
+    yield (current_name.strip('@'), current_set)
+

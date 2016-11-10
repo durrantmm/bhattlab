@@ -24,7 +24,7 @@ def main(args):
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
     with open(out_prefix+'.fq', 'w') as fq_out:
-        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion'],
+        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 args['out_prefix'], logger)
 
 def create_out_prefix(args):

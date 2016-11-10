@@ -79,12 +79,10 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
             # Otherwise, increment the read2 taxon_IS_count
             else:
                 for IS in aligned_IS:
-                    if IS == insertion:
+                    if IS == insertion and class2 in taxa:
                         logger.info("Flanking read classified as %s: %s" % (class2, read2))
-                        if class2 not in taxa:
-                            print read1, read2
-                            print class1, class2
-                            print aligned_read
+                        flanking_reads_count += 1
+
 
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
@@ -93,18 +91,19 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
         elif read2 == aligned_read:
 
             for IS in aligned_IS:
-                if IS == insertion:
+                if IS == insertion and class1 in taxa:
                     logger.info("Flanking read classified as %s: %s" % (class1, read1))
-                    if class1 not in taxa:
-                        print read1, read2
-                        print class1, class2
-                        print aligned_read
+                    flanking_reads_count += 1
+
+
             aligned_read, aligned_IS = IS_sam.next()
 
         # If they are the same class, and neither maps to IS.
         else:
             continue
 
+        logger.info("Total reads counted: %d") % total_read_count
+        logger.info("Total flanking reads meeting criteria: %d") % flanking_reads_count
     return out_fastq
 
 

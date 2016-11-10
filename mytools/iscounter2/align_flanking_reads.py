@@ -87,7 +87,6 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
             # Check that read2 aligns to insertion sequence, send to intra_IS
             if read2 == tmp_aligned_read:
                 aligned_read, aligned_IS = IS_sam.next()
-                continue
 
             # Otherwise, increment the read2 taxon_IS_count
             else:
@@ -111,7 +110,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                     outread = reads.getReads()[0]
                     outread[0], outread[-1] = ("%s:TAXON-%s" % (outread[0], class1), outread[-1].strip())
                     print outread
-                    print out_fastq.write("\n".join(outread)+"\n")
+                    out_fastq.write("\n".join(outread)+"\n")
                     flanking_reads_count += 1
 
 

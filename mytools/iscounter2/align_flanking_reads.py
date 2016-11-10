@@ -44,7 +44,7 @@ def create_out_prefix(args):
 
 
 def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, logger=None):
-    print out_fastq
+
     taxa = set(list(taxa))
     aligned_read, aligned_IS = IS_sam.next()
     loop_count = 0
@@ -89,6 +89,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         outread = reads.getReads()[1]
                         outread[0] = "%s:TAXON-%s" % (outread[0], class2)
                         out_fastq.write("\n".join(outread) + "\n")
+                        outread[-1] = outread[-1].strip()
                         flanking_reads_count += 1
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
@@ -101,6 +102,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                     logger.info("Flanking read classified as %s: %s" % (class1, read1))
                     outread = reads.getReads()[0]
                     outread[0] = "%s:TAXON-%s" % (outread[0], class1)
+                    outread[-1] = outread[-1].strip()
                     out_fastq.write("\n".join(outread)+"\n")
                     flanking_reads_count += 1
 

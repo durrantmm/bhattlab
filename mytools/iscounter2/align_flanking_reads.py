@@ -58,7 +58,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
     flanking_reads_count = 0
 
     out_fastq.write("Test3\n")
-    sys.exit()
+
     if logger: logger.info("Beginning read filtering...")
     for reads, classes in izip(fastq, classifs):
         total_read_count += 1
@@ -97,7 +97,9 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         outread = reads.getReads()[1]
                         outread[0], outread[-1] = ("%s:TAXON-%s" % (outread[0], class2), outread[-1].strip())
                         print outread
-                        print out_fastq.write("\n".join(outread) + "\n")
+                        out_fastq.write("\n".join(outread) + "\n")
+                        out_fastq.write("TEST4")
+                        sys.exit()
                         flanking_reads_count += 1
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS

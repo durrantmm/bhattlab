@@ -24,7 +24,7 @@ def main(args):
     filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], fastq_out)
 
 def create_out_prefix(args):
-    out_prefix = os.path.dirname(os.abspath(args['insertion_sam']))
+    out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))
     out_prefix = out_prefix + os.path.basename(args['fastq'])
     out_prefix = out_prefix + "_taxa_%s_" % "_".join(list(args['taxon']))
     out_prefix = out_prefix + "_reads_flanking_%s_" % args['insertion_sequence']
@@ -130,15 +130,6 @@ def filter_flanks(self, IS_sam, fastq, taxa, out_folder):
 
     return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 
-def get_run_info(iscounter_out):
-    runinfo_file = glob(iscounter_out+ "/*run_info*")
-    if len(runinfo_file) != 1:
-        print "There needs to be one file that contains the run info."
-        sys.exit()
-    runinfo_file = runinfo_file[0]
-
-    runinfo = ast.literal_eval(open(runinfo_file).read())
-    return runinfo
 
 
 if __name__ == "__main__":

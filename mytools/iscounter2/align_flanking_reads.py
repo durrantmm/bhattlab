@@ -25,7 +25,7 @@ def main(args):
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
-    out_prefix = out_prefix + os.path.basename(args['fastq'])
+    out_prefix = out_prefix + os.path.basename(args['fastq']).split('.')[0]
 
     out_prefix = out_prefix + "_taxa_%s_" % "_".join(list(args['taxon']))
     out_prefix = out_prefix + "_reads_flanking_%s_" % args['insertion_sequence']

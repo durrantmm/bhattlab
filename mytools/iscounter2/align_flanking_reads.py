@@ -2,9 +2,10 @@ import argparse, logging
 import sys, os
 import pprint, ast
 from datetime import datetime
-from phylophilter import filters, IO
+from phylophilter import filters, IO, shared
 import bowtie2
 from glob import glob
+from itertools import izip
 
 def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
@@ -21,7 +22,8 @@ def main(args):
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
     classifs = IO.paired_reads_to_taxids(args['classifications'])
 
-    filtered_fastq = filter_flanks(IS_sam, fastq, classifs, args['taxon'], out_prefix+'.fq')
+    with open(out_prefix+'.fq', 'w') as fq_out:
+        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], out_prefix, logger)
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -34,17 +36,17 @@ def create_out_prefix(args):
     return out_prefix
 
 
-def filter_flanks(IS_sam, fastq, classifs, taxa, out_folder):
-    print IS_sam, fastq, classifs, taxa, out_folder
-    sys.exit()
-    saved_taxonomies = {}
-    self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, out_fastq, logger=None):
+
+    taxa = set(list(taxa))
+    aligned_read, aligned_IS = IS_sam.next()
     loop_count = 0
 
-    if self.logger: self.logger.info("Beginning read classification and read sorting...")
-    for reads, classes in izip(self.fastq_paired_gen, self.read_to_taxid_paired_gen):
+    total_read_count = 0
+    if logger: logger.info("Beginning read filtering...")
+    for reads, classes in izip(fastq, classifs):
         total_read_count += 1
-        loop_count = shared.loop_counter(loop_count, total_read_count, self.logger)
+        loop_count = shared.loop_counter(loop_count, total_read_count, logger)
 
         read1, read2 = reads.getTitles()
         class1, class2 = classes.getClassifs()
@@ -52,80 +54,44 @@ def filter_flanks(IS_sam, fastq, classifs, taxa, out_folder):
 
         # Check the reads and the classifications align
         if [read1, read2] != classes.getTitles():
-            if self.logger: self.logger.error("The reads do not match")
+            if logger: logger.error("The reads do not match")
             raise IndexError("The reads and the classifications need to be in the same order.")
 
         # Discard it if EITHER READ is UNCLASSIFIED
-        if class1 == '0' or class2 == '0':
-            if read1 == self.aligned_read:
-                self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-            if read2 == self.aligned_read:
-                self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-            unclassif_count += 1
+        if class1 not in taxa and class2 not in taxa:
+            if read1 == aligned_read:
+                aligned_read, aligned_IS = IS_sam.next()
+            if read2 == aligned_read:
+                aligned_read, aligned_IS = IS_sam.next()
 
         # Check that read1 aligns to insertion sequence
-        elif read1 == self.aligned_read:
-            tmp_aligned_read, tmp_aligned_IS = self.IS_align_gen.next()
+        elif read1 == aligned_read:
+            tmp_aligned_read, tmp_aligned_IS = IS_sam.next()
 
             # Check that read2 aligns to insertion sequence, send to intra_IS
             if read2 == tmp_aligned_read:
-                self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
-                intra_IS += 1
+                aligned_read, aligned_IS = IS_sam.next()
+                continue
 
             # Otherwise, increment the read2 taxon_IS_count
             else:
-                taxon_total_count[class2] += 1
-                total_classified_reads += 1
-                for IS in self.aligned_IS:
-                    taxon_IS_count[class2][IS] += 1
-                self.aligned_read, self.aligned_IS = tmp_aligned_read, tmp_aligned_IS
+                for IS in aligned_IS:
+                    print IS
+                sys.exit()
+
+                aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
 
         # Check that read2 aligns to insertion sequence
-        elif read2 == self.aligned_read:
-            taxon_total_count[class1] += 1
-            total_classified_reads += 1
-            for IS in self.aligned_IS:
-                taxon_IS_count[class1][IS] += 1
-            self.aligned_read, self.aligned_IS = self.IS_align_gen.next()
+        elif read2 == aligned_read:
+
+            for IS in aligned_IS:
+                print IS
+            sys.exit()
+            aligned_read, aligned_IS = IS_sam.next()
 
         # If they are the same class, and neither maps to IS.
-        elif class1 == class2:
-            total_classified_reads += 1
-            taxon_total_count[class1] += 1
-
-        # If they are different class, check for relatedness.
         else:
-            try:
-                taxonomy1 = saved_taxonomies[class1]
-            except KeyError:
-                taxonomy1 = shared.get_taxon_hierarchy_set(class1, self.taxonomy_nodes)
-                saved_taxonomies[class1] = taxonomy1
-
-            try:
-                taxonomy2 = saved_taxonomies[class2]
-            except KeyError:
-                taxonomy2 = shared.get_taxon_hierarchy_set(class2, self.taxonomy_nodes)
-                saved_taxonomies[class2] = taxonomy2
-
-            if shared.is_parent_child(class1, taxonomy1, class2, taxonomy2):
-                if shared.which_parent_child(class1, taxonomy1, class2, taxonomy2) == 0:
-                    total_classified_reads += 1
-                    taxon_total_count[class1] += 1
-
-                else:
-                    total_classified_reads += 1
-                    taxon_total_count[class2] += 1
-            else:
-                # potential_transfers.append("|".join([read1, class1]))
-                # potential_transfers.append("|".join([read2, class2]))
-                potential_transfers += 1
-
-        if total_read_count != unclassif_count + total_classified_reads + potential_transfers + intra_IS:
-            raise ArithmeticError("Something is not adding up correctly...")
-            print reads
-            print classes
-            print self.aligned_IS
-            sys.exit()
+            continue
 
     return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 

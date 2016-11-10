@@ -28,7 +28,7 @@ def main(args):
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 fq_out, logger)
 
-    logger.info("Flanking reads saved to output fastq: %s") % filtered_fastq
+    logger.info("Flanking reads saved to output fastq: %s" % filtered_fastq)
 
     logger.info("Building the given genome file...")
     bowtie2.build('2.2.9', args['genome'])

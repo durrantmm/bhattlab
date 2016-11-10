@@ -14,6 +14,7 @@ def main(args):
     IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
     fastq = get_fastq(run_info['fastq_reads'])
 
+    print run_info
     print fastq.next()
 
 def get_fastq(fastq_loc):

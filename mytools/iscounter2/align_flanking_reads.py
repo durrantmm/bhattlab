@@ -11,8 +11,18 @@ def main(args):
     logger = logging.getLogger()
 
     run_info = get_run_info(args['iscounter_output_folder'])
+    IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
 
-    print run_info
+def get_IS_alignment(iscounter_out, fasta_file):
+    runinfo_file = glob(os.path.join([iscounter_out, fasta_file])+".sam")
+    if len(runinfo_file) != 1:
+        print "There needs to be one file that contains the insertion sequence sam file"
+        sys.exit()
+    runinfo_file = runinfo_file[0]
+
+    runinfo = ast.literal_eval(open(runinfo_file).read())
+    return runinfo
+
 def get_run_info(iscounter_out):
     runinfo_file = glob(iscounter_out+ "/*run_info*")
     if len(runinfo_file) != 1:

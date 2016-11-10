@@ -13,9 +13,10 @@ def main(args):
 
     out_prefix = ''
     if not args['out_prefix']:
-        out_prefix = create_out_prefix(args)
-    else:
-        out_prefix = args['out_prefix']
+        args['out_prefix'] = create_out_prefix(args)
+
+    if not args['classifications']:
+        args['classifications'] = args['fastq']+'.results.tsv'
 
 
     IS_sam = IO.read_insertion_alignments(open(args['insertion_sam']), args['insertion_sam'])
@@ -23,7 +24,7 @@ def main(args):
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
     with open(out_prefix+'.fq', 'w') as fq_out:
-        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], out_prefix, logger)
+        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['out_prefix'], logger)
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -117,7 +118,7 @@ if __name__ == "__main__":
     parser.add_argument('-sam', '--insertion_sam', required=True,
                         help='The insertion-aligned sam file')
 
-    parser.add_argument('-c', '--classifications', required=True,
+    parser.add_argument('-c', '--classifications', required=False,
                         help='The output prefix to use')
 
     parser.add_argument('-t', '--taxon', required=True, nargs='*',

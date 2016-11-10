@@ -14,7 +14,7 @@ def main(args):
 
 def get_run_info(iscounter_out):
     print iscounter_out
-    print os.path.join(iscounter_out, "/*")
+    print os.path.join([iscounter_out, "/*"])
     print glob(os.path.join(iscounter_out, "/*"))
 
 

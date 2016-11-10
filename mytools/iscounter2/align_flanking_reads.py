@@ -12,8 +12,14 @@ def main(args):
 
     run_info = get_run_info(args['iscounter_output_folder'])
     IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
+    fastq = get_fastq(run_info['fastq_reads'])
 
-    print IS_sam.next()
+    print fastq.next()
+
+def get_fastq(fastq_loc):
+    fastq_file = IO.read_fastq_paired_ends_interleaved(open(fastq_loc))
+    return fastq_file
+
 
 def get_IS_alignment(iscounter_out, fasta_file):
     sam_file = glob(os.path.join(iscounter_out, fasta_file)+".sam")

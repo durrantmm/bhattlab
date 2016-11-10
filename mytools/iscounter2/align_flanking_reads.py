@@ -27,6 +27,9 @@ def main(args):
     with open(args['out_prefix']+'.fq', 'w') as fq_out:
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 fq_out, logger)
+
+    logger.info("Flanking reads saved to output fastq: %s") % filtered_fastq
+
     logger.info("Building the given genome file...")
     bowtie2.build('2.2.9', args['genome'])
     genome_aligned_sam_loc = bowtie2.align_genome('2.2.9', args['genome'], filtered_fastq, args['out_prefix'])

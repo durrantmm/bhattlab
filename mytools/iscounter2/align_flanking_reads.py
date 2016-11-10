@@ -23,9 +23,11 @@ def main(args):
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
+    filtered_fastq = ''
     with open(out_prefix+'.fq', 'w') as fq_out:
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 fq_out, logger)
+    print filtered_fastq
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -39,7 +41,7 @@ def create_out_prefix(args):
 
 
 def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, logger=None):
-
+    print out_fastq
     taxa = set(list(taxa))
     aligned_read, aligned_IS = IS_sam.next()
     loop_count = 0

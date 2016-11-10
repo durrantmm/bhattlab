@@ -110,7 +110,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
 
     logger.info("Total reads counted: %d" % total_read_count)
     logger.info("Total flanking reads meeting criteria: %d" % flanking_reads_count)
-    return out_fastq
+    return out_fastq.name
 
 
 

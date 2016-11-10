@@ -88,8 +88,8 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         logger.info("Flanking read classified as %s: %s" % (class2, read2))
                         outread = reads.getReads()[1]
                         outread[0] = "%s:TAXON-%s" % (outread[0], class2)
-                        out_fastq.write("\n".join(outread) + "\n")
                         outread[-1] = outread[-1].strip()
+                        out_fastq.write("\n".join(outread) + "\n")
                         flanking_reads_count += 1
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS

@@ -95,7 +95,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
             for IS in aligned_IS:
                 if IS == insertion:
                     logger.info("Flanking read classified as %s: %s" % (class1, read1))
-                    if class2 not in taxa:
+                    if class1 not in taxa:
                         print read1, read2
                         print class1, class2
                         print aligned_read

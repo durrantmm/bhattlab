@@ -10,10 +10,28 @@ def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
 
+    out_prefix = ''
+    if not args['out_prefix']:
+        out_prefix = create_out_prefix(args)
+    else:
+        out_prefix = args['out_prefix']
+    print out_prefix
+    sys.exit()
+
     IS_sam = IO.read_insertion_alignments(open(args['insertion_sam']), args['insertion_sam'])
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
 
-    filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], args['iscounter_output_folder'])
+    filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], fastq_out)
+
+def create_out_prefix(args):
+    out_prefix = os.path.dirname(os.abspath(args['insertion_sam']))
+    out_prefix = out_prefix + os.path.basename(args['fastq'])
+    out_prefix = out_prefix + "_taxa_%s_" % "_".join(list(args['taxon']))
+    out_prefix = out_prefix + "_reads_flanking_%s_" % args['insertion_sequence']
+    out_prefix = out_prefix + "_aligned_to_%s" % os.path.basename(args['genome']).split('.')[0]
+
+    return out_prefix
+
 
 def filter_flanks(self, IS_sam, fastq, taxa, out_folder):
     out_fastq_file = fastq.name
@@ -137,7 +155,7 @@ if __name__ == "__main__":
     parser.add_argument('-fq', '--fastq', required=True,
                         help='The original fastq file of interest')
 
-    parser.add_argument('-is', '--insertion_sequence', required=True,
+    parser.add_argument('-is', '--insertion_sequence', required=True, type=str,
                         help='The insertion sequence in the results that are to be analyzed')
 
     parser.add_argument('-sam', '--insertion_sam', required=True,
@@ -148,6 +166,8 @@ if __name__ == "__main__":
 
     parser.add_argument('-g', '--genome', required=True,
                         help='A genome, or other fasta file of interest, to align the flanks to.')
+    parser.add_argument('-o', '--out_prefix', required=False,
+                        help='The output prefix to use')
 
     args = parser.parse_args()
     args = vars(args)

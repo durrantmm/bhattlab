@@ -140,6 +140,8 @@ class Filter:
         return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 
 
+
+
 def truncate_at_bacteria(self, hierarchy, bacteria_taxon='2'):
         bacteria_index = 0
         for i in range(len(hierarchy)):

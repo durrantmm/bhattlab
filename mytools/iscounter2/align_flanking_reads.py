@@ -47,7 +47,7 @@ def create_out_prefix(args):
 
 
 def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, logger=None):
-
+    print out_fastq
     taxa = set(list(taxa))
     aligned_read, aligned_IS = IS_sam.next()
     loop_count = 0

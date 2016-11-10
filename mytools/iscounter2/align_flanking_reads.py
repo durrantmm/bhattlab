@@ -10,8 +10,7 @@ def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
 
-    run_info = get_run_info(args['iscounter_output_folder'])
-    IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
+    IS_sam = IO.read_insertion_alignments(open(args['insertion_sam']), args['insertion_sam'])
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
 
     filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], args['iscounter_output_folder'])
@@ -113,17 +112,6 @@ def filter_flanks(self, IS_sam, fastq, taxa, out_folder):
 
     return [dict(taxon_total_count), dict(taxon_IS_count), potential_transfers, intra_IS]
 
-def get_IS_alignment(iscounter_out, fasta_file):
-    sam_file = glob(os.path.join(iscounter_out, fasta_file)+".sam")
-    if len(sam_file) != 1:
-        print "There needs to be one file that contains the insertion sequence sam file"
-        sys.exit()
-    sam_file = sam_file[0]
-
-    sam = IO.read_insertion_alignments_once(open(sam_file))
-
-    return sam
-
 def get_run_info(iscounter_out):
     runinfo_file = glob(iscounter_out+ "/*run_info*")
     if len(runinfo_file) != 1:
@@ -146,13 +134,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
 
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
-    parser.add_argument('-f', '--iscounter_output_folder', required=True,
-                        help='This is the output folder of the ISCounter output of interest.')
     parser.add_argument('-fq', '--fastq', required=True,
                         help='The original fastq file of interest')
 
     parser.add_argument('-is', '--insertion_sequence', required=True,
                         help='The insertion sequence in the results that are to be analyzed')
+
+    parser.add_argument('-sam', '--insertion_sam', required=True,
+                        help='The insertion-aligned sam file')
 
     parser.add_argument('-t', '--taxon', required=True, type=list, nargs='*',
                         help='The taxon of interest to analyze')

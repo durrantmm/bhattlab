@@ -21,6 +21,7 @@ def get_run_info(iscounter_out):
         print "There needs to be one file that contains the run info."
         sys.exit()
     runinfo_file = runinfo_file[0]
+    print runinfo_file
     runinfo = json.load(open(runinfo_file))
     return runinfo
 

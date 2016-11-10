@@ -15,13 +15,13 @@ def main(args):
         out_prefix = create_out_prefix(args)
     else:
         out_prefix = args['out_prefix']
-    print out_prefix
-    sys.exit()
+
 
     IS_sam = IO.read_insertion_alignments(open(args['insertion_sam']), args['insertion_sam'])
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
+    classifs = IO.paired_reads_to_taxids(args['classifications'])
 
-    filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], fastq_out)
+    filtered_fastq = filter_flanks(IS_sam, fastq, classifs, args['taxon'], out_prefix+'.fq')
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'
@@ -34,9 +34,7 @@ def create_out_prefix(args):
     return out_prefix
 
 
-def filter_flanks(self, IS_sam, fastq, taxa, out_folder):
-    out_fastq_file = fastq.name
-    print out_fastq_file
+def filter_flanks(self, IS_sam, fastq, classifs, taxa, out_folder):
 
     sys.exit()
     saved_taxonomies = {}
@@ -153,11 +151,15 @@ if __name__ == "__main__":
     parser.add_argument('-sam', '--insertion_sam', required=True,
                         help='The insertion-aligned sam file')
 
+    parser.add_argument('-c', '--classifications', required=False,
+                        help='The output prefix to use')
+
     parser.add_argument('-t', '--taxon', required=True, nargs='*',
                         help='The taxon of interest to analyze')
 
     parser.add_argument('-g', '--genome', required=True,
                         help='A genome, or other fasta file of interest, to align the flanks to.')
+
     parser.add_argument('-o', '--out_prefix', required=False,
                         help='The output prefix to use')
 

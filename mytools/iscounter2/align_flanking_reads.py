@@ -24,7 +24,7 @@ def main(args):
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
     filtered_fastq = ''
-    with open(out_prefix+'.fq', 'w') as fq_out:
+    with open(args['out_prefix']+'.fq', 'w') as fq_out:
         filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
                                                 fq_out, logger)
     print filtered_fastq

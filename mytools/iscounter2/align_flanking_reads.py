@@ -84,7 +84,6 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         print read2
                         print class2
                         print aligned_read
-                sys.exit()
 
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS

@@ -124,6 +124,7 @@ class Filter:
                     potential_transfers += 1
 
             if total_read_count != unclassif_count + total_classified_reads + potential_transfers + intra_IS:
+                raise ArithmeticError("Something is not adding up correctly...")
                 print reads
                 print classes
                 print self.aligned_IS

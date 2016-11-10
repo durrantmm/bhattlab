@@ -1,6 +1,6 @@
 import argparse, logging
 import sys, os
-import pprint
+import pprint, json
 from datetime import datetime
 from phylophilter import filters
 import bowtie2
@@ -12,10 +12,17 @@ def main(args):
 
     run_info = get_run_info(args['iscounter_output_folder'])
 
+    print run_info
 def get_run_info(iscounter_out):
     print iscounter_out
 
-    print glob(iscounter_out+ "/*")
+    runinfo_file = glob(iscounter_out+ "/*run_info*")
+    if len(runinfo_file) != 1:
+        print "There needs to be one file that contains the run info."
+        sys.exit()
+    runinfo_file = runinfo_file[0]
+    runinfo = json.load(runinfo_file)
+    return runinfo
 
 
 if __name__ == "__main__":

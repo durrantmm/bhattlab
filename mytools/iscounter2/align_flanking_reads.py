@@ -117,7 +117,7 @@ if __name__ == "__main__":
     parser.add_argument('-sam', '--insertion_sam', required=True,
                         help='The insertion-aligned sam file')
 
-    parser.add_argument('-c', '--classifications', required=False,
+    parser.add_argument('-c', '--classifications', required=True,
                         help='The output prefix to use')
 
     parser.add_argument('-t', '--taxon', required=True, nargs='*',

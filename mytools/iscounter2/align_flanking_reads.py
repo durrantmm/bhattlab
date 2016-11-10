@@ -13,7 +13,7 @@ def main(args):
     run_info = get_run_info(args['iscounter_output_folder'])
 
 def get_run_info(iscounter_out):
-    os.path.join(iscounter_out, "/*")
+    print os.path.join(iscounter_out, "/*")
     print glob(os.path.join(iscounter_out, "/*"))
 
 

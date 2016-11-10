@@ -10,7 +10,7 @@ def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
     output_folder = args['output_folder'] + '_' + os.path.basename(args['fastq_reads']).split(".")[0]
-
+    args['fastq_reads'] = os.abspath(args['fastq_reads'])
     if not os.path.isdir(output_folder): os.mkdir(output_folder)
 
     logger.info("Saving run info to output folder...")
@@ -98,8 +98,8 @@ if __name__ == "__main__":
 
     parser.add_argument('-nodes', '--taxon_nodes', required=False, type=list,
                         default=[
-                            os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"),
-                            os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")],
+                            os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp")),
+                            os.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp"))],
                         help='Location of the NCBI Taxonomy Database nodes.txt file', nargs='*')
 
     parser.add_argument('-is', '--insertion_sequence_fasta', required=False, type=str,
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                              ' concatenated sequentially in any order.')
 
     parser.add_argument('-o', '--output_folder', required=False,
-                        default = os.path.join(output_dir,"ISMapper_%s" % timestamp),
+                        default = os.abspath(os.path.join(output_dir,"ISMapper_%s" % timestamp)),
                         help='Specify the output file')
 
     parser.add_argument('-p', '--threads', required=False,

@@ -11,23 +11,11 @@ def main(args):
     logger = logging.getLogger()
 
     run_info = get_run_info(args['iscounter_output_folder'])
-    print run_info
     IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
-    fastq = get_fastq(run_info)
+    fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
 
 
     print fastq.next()
-
-def get_fastq(run_info):
-    try:
-        fastq_file = IO.read_fastq_paired_ends_interleaved(open(run_info['fastq_reads']))
-    except IOError:
-        improved = os.path.join(run_info['insertion_sequence_fasta'], run_info['fastq_reads'])
-        print improved
-        sys.exit()
-
-    return fastq_file
-
 
 def get_IS_alignment(iscounter_out, fasta_file):
     sam_file = glob(os.path.join(iscounter_out, fasta_file)+".sam")
@@ -64,6 +52,8 @@ if __name__ == "__main__":
     # add universal arguments, arguments to be specified regardless of the type of arguments that follow.
     parser.add_argument('-f', '--iscounter_output_folder', required=True,
                         help='This is the output folder of the ISCounter output of interest.')
+    parser.add_argument('-fq', '--fastq', required=True,
+                        help='The original fastq file of interest')
 
     parser.add_argument('-is', '--insertion_sequence', required=True,
                         help='The insertion sequence in the results that are to be analyzed')

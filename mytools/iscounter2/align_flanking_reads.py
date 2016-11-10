@@ -84,6 +84,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                         print read2
                         print class2
                         print aligned_read
+                        print
 
 
                 aligned_read, aligned_IS = tmp_aligned_read, tmp_aligned_IS
@@ -98,6 +99,7 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
                     print read2
                     print class2
                     print aligned_read
+                    print
             aligned_read, aligned_IS = IS_sam.next()
 
         # If they are the same class, and neither maps to IS.

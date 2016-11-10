@@ -36,7 +36,7 @@ def build(version, fasta):
 
 
 def align(version, refpath, fastq, output_dir, threads=1, flags=('--no-unal', '--local', '--quiet',
-                                                                 '--all', '--reorder','--no-head')):
+                                                                 '--reorder','--no-head')):
     """
     Call bowtie2-align on paired read data
     :param version: Enforces bowtie2 version number
@@ -63,3 +63,32 @@ def align(version, refpath, fastq, output_dir, threads=1, flags=('--no-unal', '-
 
     subprocess.call(bowtie_args, shell=True)
     return '%s/%s.sam' % (output_dir, os.path.basename(refpath))
+
+def align_genome(version, refpath, fastq, output_prefix, threads=1, flags=('--no-unal', '--local', '--quiet',
+                                                                 '--all', '--reorder','--no-head')):
+    """
+    Call bowtie2-align on paired read data
+    :param version: Enforces bowtie2 version number
+    :param refpath: Path to bowtie2 index files (.bt2)
+    :param fastq: File.
+    :param flags: A tuple of bowtie2 flags such as --local
+    :return:
+    """
+
+    # check that we have access to bowtie2
+    try:
+        subprocess.check_output(['bowtie2', '-h'])
+    except OSError:
+        raise RuntimeError('bowtie2 not found; check if it is installed and in $PATH\n')
+
+    # check that version is the expected version
+    stdout = subprocess.check_output(['bowtie2', '--version'])
+    local_version = stdout.split('\n')[0].split()[-1]
+    assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
+
+    # stream output from bowtie2
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S', output_prefix+'.sam',
+                            '-p', str(threads)] + list(flags))
+
+    subprocess.call(bowtie_args, shell=True)
+    return output_prefix+'.sam'

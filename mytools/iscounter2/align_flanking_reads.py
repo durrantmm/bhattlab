@@ -15,7 +15,7 @@ def main(args):
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
 
     filtered_fastq = filter_flanks(IS_sam, fastq, args['taxon'], args['iscounter_output_folder'])
-    open("file").
+
 def filter_flanks(self, IS_sam, fastq, taxa, out_folder):
     out_fastq_file = fastq.name
     print out_fastq_file

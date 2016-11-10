@@ -16,7 +16,7 @@ def main(args):
     print IS_sam.next()
 
 def get_IS_alignment(iscounter_out, fasta_file):
-    sam_file = glob(os.path.join([iscounter_out, fasta_file])+".sam")
+    sam_file = glob(os.path.join(iscounter_out, fasta_file)+".sam")
     if len(sam_file) != 1:
         print "There needs to be one file that contains the insertion sequence sam file"
         sys.exit()

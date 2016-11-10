@@ -13,13 +13,19 @@ def main(args):
     run_info = get_run_info(args['iscounter_output_folder'])
     print run_info
     IS_sam = get_IS_alignment(args['iscounter_output_folder'], os.path.basename(run_info['insertion_sequence_fasta']))
-    fastq = get_fastq(run_info['fastq_reads'])
+    fastq = get_fastq(run_info)
 
 
     print fastq.next()
 
-def get_fastq(fastq_loc):
-    fastq_file = IO.read_fastq_paired_ends_interleaved(open(fastq_loc))
+def get_fastq(run_info):
+    try:
+        fastq_file = IO.read_fastq_paired_ends_interleaved(open(run_info['fastq_reads']))
+    except IOError:
+        common_path = os.path.commonprefix([run_info['insertion_sequence_fasta'], run_info['fastq_reads']])
+        print common_path
+        sys.exit()
+
     return fastq_file
 
 

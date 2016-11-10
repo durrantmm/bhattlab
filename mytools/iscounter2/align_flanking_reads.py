@@ -22,8 +22,8 @@ def get_fastq(run_info):
     try:
         fastq_file = IO.read_fastq_paired_ends_interleaved(open(run_info['fastq_reads']))
     except IOError:
-        common_path = os.path.commonprefix([run_info['insertion_sequence_fasta'], run_info['fastq_reads']])
-        print common_path
+        improved = os.path.join(run_info['insertion_sequence_fasta'], run_info['fastq_reads'])
+        print improved
         sys.exit()
 
     return fastq_file

@@ -32,12 +32,18 @@ def main(args):
         for read in filtered_reads:
             out.write("\n".join(read)+'\n')
 
-
-
     logger.info("Building the given genome file...")
     bowtie2.build('2.2.9', args['genome'])
     genome_aligned_sam_loc = bowtie2.align_genome('2.2.9', args['genome'], filtered_fastq, args['out_prefix'])
-    print genome_aligned_sam_loc
+
+    logger.info("%d of the %d reads aligned to the reference genome..." % (count_lines(genome_aligned_sam_loc),
+                                                                           len(filtered_reads)))
+
+def count_lines(path):
+    count = 0
+    for line in open(path):
+        count+=1
+    return count
 
 def create_out_prefix(args):
     out_prefix = os.path.dirname(os.path.abspath(args['insertion_sam']))+'/'

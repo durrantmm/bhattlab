@@ -95,21 +95,22 @@ def align_genome(version, refpath, fastq, output_prefix, threads=1, flags=('--no
 
 def sam_to_bam(samfile):
     prefix = os.path.join(os.path.dirname(samfile), os.path.basename(samfile).split('.')[0])
-    samtools_args = " ".join(['samtools view -b -S -o', prefix+'.bam', samfile])
+    bam_out = prefix+'.bam'
+    samtools_args = " ".join(['samtools view -b -S -o', bam_out, samfile])
 
     subprocess.call(samtools_args, shell=True)
-    return samfile.split('.')[0]+'.bam'
+    return bam_out
 
 def bamsort(bamfile):
     prefix = os.path.join(os.path.dirname(bamfile), os.path.basename(bamfile).split('.')[0])
+    bam_out = prefix+".sorted.bam"
     samtools_args = "samtools sort -T %s/tmp/aln.sorted -o %saln.sorted.bam %saln.bam" % (prefix+".sorted",
-                                                                                          prefix+".sorted.bam",
+                                                                                          bam_out,
                                                                                           prefix+".bam")
     subprocess.call(samtools_args, shell=True)
-    return prefix+".sorted.bam"
+    return bam_out
 
 def bamindex(bamfile):
-    prefix = os.path.join(os.path.dirname(bamfile), os.path.basename(bamfile).split('.')[0])
     samtools_args = "samtools index %s" % bamfile
 
     subprocess.call(samtools_args, shell=True)

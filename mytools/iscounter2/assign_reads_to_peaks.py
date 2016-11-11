@@ -48,7 +48,7 @@ def get_peaks(peaks_path):
         for line in peaks_in:
             line = line.strip().split()
             peaks.append((int(line[0]), int(line[1])))
-            peaks_dict["-".join([line[0],line[1]])] = 0
+            peaks_dict["-".join([args['name'], line[0],line[1]])] = 0
 
     return peaks, peaks_dict
 
@@ -64,6 +64,8 @@ if __name__ == "__main__":
                         help='The sam file of interest')
     parser.add_argument('-p', '--peaks_path', required=True,
                         help='The peaks file of interest')
+    parser.add_argument('-n', '--name', required=True,
+                        help='The name of the analysis')
 
 
     args = parser.parse_args()

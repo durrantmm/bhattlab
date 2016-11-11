@@ -48,7 +48,7 @@ def get_peaks(peaks_path):
         for line in peaks_in:
             line = line.strip().split()
             peaks.append((int(line[0]), int(line[1])))
-            peaks_dict["-".join([args['name'], line[0],line[1]])] = 0
+            peaks_dict["-".join([line[0],line[1]])] = 0
 
     return peaks, peaks_dict
 

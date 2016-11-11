@@ -2,7 +2,7 @@ import argparse, sys, os
 
 def main(args):
     peaks, peaks_dict = get_peaks(args['peaks_path'])
-    sam = get_sam(args['sam_path'])
+    sam, total_reads = get_sam(args['sam_path'])
 
 
     for read in sam:
@@ -11,7 +11,8 @@ def main(args):
         nearest_peak = get_nearest_peak(pos, peaks)
         peaks_dict[nearest_peak] += 1
 
-    print peaks_dict
+    for peak in peaks_dict:
+        print "\t".join([peak, str(total_reads), peaks_dict[peak]])
 
 def get_nearest_peak(pos, peaks):
     nearest_peak = sys.maxint

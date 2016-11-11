@@ -65,7 +65,7 @@ def align(version, refpath, fastq, output_dir, threads=1, flags=('--no-unal', '-
     return '%s/%s.sam' % (output_dir, os.path.basename(refpath))
 
 def align_genome(version, refpath, fastq, output_prefix, threads=1, flags=('--no-unal', '--local', '--quiet',
-                                                                 '--all', '--reorder','--no-head')):
+                                                                 '--all', '--reorder')):
     """
     Call bowtie2-align on paired read data
     :param version: Enforces bowtie2 version number

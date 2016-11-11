@@ -44,8 +44,10 @@ def main(args):
     logger.info("Sorting and indexing the alignment...")
     bamfile = bowtie2.sam_to_bam(genome_aligned_sam_loc)
     logger.info("New bamfile saved to %s" % bamfile)
+
     bamfile = bowtie2.bamsort(bamfile)
     logger.info("Sorted bamfile saved to %s" % bamfile)
+
     bamfile = bowtie2.bamindex(bamfile)
     logger.info("Final indexed bam file saved to %s" % bamfile)
 

@@ -24,8 +24,9 @@ def get_sam(sam_path):
     sam = []
     with open(sam_path) as sam_in:
         for line in sam_in:
-            line = line.strip().split()
-            sam.append(line)
+            if '@' not in line:
+                line = line.strip().split()
+                sam.append(line)
 
     return sam
 

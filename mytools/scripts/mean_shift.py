@@ -28,4 +28,5 @@ n_clusters_ = len(labels_unique)
 
 for k in range(n_clusters_):
     my_members = labels == k
+    print my_members
     print "cluster {0}: {1}".format(k, X[my_members, 0])

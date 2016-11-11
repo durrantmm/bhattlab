@@ -15,10 +15,17 @@ def main(args):
         print "\t".join([peak, str(total_reads), str(peaks_dict[peak])])
 
 def get_nearest_peak(pos, peaks):
-    nearest_peak = sys.maxint
+    nearest_peak = ""
+    dist_to_peak = sys.maxint
     for peak in peaks:
-        if abs(pos-peak[0]) < nearest_peak or abs(pos-peak[1]) < nearest_peak:
+        if abs(pos-peak[0]) < dist_to_peak:
             nearest_peak = "-".join([str(peak[0]), str(peak[1])])
+            dist_to_peak = abs(pos-peak[0])
+
+        if abs(pos-peak[1]) < dist_to_peak:
+            nearest_peak = "-".join([str(peak[0]), str(peak[1])])
+            dist_to_peak = abs(pos - peak[0])
+
     return nearest_peak
 
 def get_sam(sam_path):

@@ -11,7 +11,10 @@ def main(args):
         peaks_dict[nearest_peak] += 1
 
     for peak in peaks:
-        print "\t".join([args['name'], "-".join([peak]), str(total_reads), str(peaks_dict["-".join(peak)])])
+        print "\t".join([args['name'],
+                         "-".join([peak]),
+                         str(total_reads),
+                         str(peaks_dict["-".join(peak)])])
 
 def get_nearest_peak(pos, peaks):
     nearest_peak = ""

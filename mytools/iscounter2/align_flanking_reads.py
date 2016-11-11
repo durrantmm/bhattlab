@@ -53,10 +53,13 @@ def main(args):
 
     logger.info("Analysis Complete :)")
 
-def count_lines(path, exclude=set('#')):
+def count_lines(path, exclude=set('@')):
     count = 0
     for line in open(path):
-        count+=1
+        for char in exclude:
+            if char in line:
+                continue
+        count += 0
     return count
 
 def create_out_prefix(args):

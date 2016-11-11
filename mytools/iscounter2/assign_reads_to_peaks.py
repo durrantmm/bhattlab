@@ -6,7 +6,7 @@ def main(args):
 
 
     for read in sam:
-        pos = sam[3]
+        pos = int(sam[3])
         nearest_peak = get_nearest_peak(pos, peaks)
         peaks_dict[nearest_peak] += 1
 
@@ -18,6 +18,7 @@ def get_nearest_peak(pos, peaks):
         if abs(pos-peak[0]) < nearest_peak or abs(pos-peak[1]) < nearest_peak:
             nearest_peak = "-".join([str(peak[0]), str(peak[1])])
     return nearest_peak
+
 def get_sam(sam_path):
     sam = []
     with open(sam_path) as sam_in:

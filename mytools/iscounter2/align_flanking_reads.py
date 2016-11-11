@@ -23,12 +23,12 @@ def main(args):
     fastq = IO.read_fastq_paired_ends_interleaved(open(args['fastq']))
     classifs = IO.paired_reads_to_taxids(open(args['classifications']))
 
-    filtered_fastq = ''
-    with open(args['out_prefix']+'.fq', 'w') as fq_out:
-        fq_out.write("TEST1\n")
-        fq_out.write("TEST2\n")
-        filtered_fastq = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'],
-                                                fq_out, logger)
+
+    filtered_reads = filter_flanks_to_fastq(IS_sam, fastq, classifs, args['taxon'], args['insertion_sequence'], logger)
+    filtered_fastq = args['out_prefix']+'.fq'
+    with open(filtered_fastq,'w') as out:
+        for read in filtered_reads:
+            out.write("\n".join(read)+'\n')
 
     logger.info("Flanking reads saved to output fastq: %s" % filtered_fastq)
 
@@ -48,7 +48,7 @@ def create_out_prefix(args):
     return out_prefix
 
 
-def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, logger=None):
+def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, logger=None):
     taxa = set(list(taxa))
     aligned_read, aligned_IS = IS_sam.next()
     loop_count = 0
@@ -121,8 +121,9 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, out_fastq, 
     logger.info("Total reads counted: %d" % total_read_count)
     logger.info("Total flanking reads meeting criteria: %d" % flanking_reads_count)
 
-    for line in outreads:
-        print line
+    with open(out_fastq_loc) as out:
+        for read in outreads:
+            out.write("\t".)
 
     return out_fastq.name
 

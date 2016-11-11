@@ -23,13 +23,15 @@ def get_nearest_peak(pos, peaks):
 
 def get_sam(sam_path):
     sam = []
+    read_count = 0
     with open(sam_path) as sam_in:
         for line in sam_in:
             if '@' not in line:
                 line = line.strip().split()
                 sam.append(line)
+                read_count += 1
 
-    return sam
+    return sam, read_count
 
 
 def get_peaks(peaks_path):

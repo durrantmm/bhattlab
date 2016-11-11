@@ -9,7 +9,7 @@ def main(args):
         nearest_peak = get_nearest_peak(pos, peaks)
         peaks_dict[nearest_peak] += 1
 
-    print sum(peaks.values())
+    print sum(peaks_dict.values())
     for peak in peaks:
         key = [str(elem) for elem in list(peak)]
         print "\t".join([args['name'],

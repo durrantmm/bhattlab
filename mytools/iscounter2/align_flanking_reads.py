@@ -39,12 +39,16 @@ def main(args):
 
     logger.info("%d of the %d flanking reads aligned to the reference genome..." % (count_lines(genome_aligned_sam_loc),
                                                                            len(filtered_reads)))
+    logger.info("Aligned reads saved to %s" % genome_aligned_sam_loc)
+
     logger.info("Sorting and indexing the alignment...")
     bamfile = bowtie2.sam_to_bam(genome_aligned_sam_loc)
+    logger.info("New bamfile saved to %s" % bamfile)
     bamfile = bowtie2.bamsort(bamfile)
+    logger.info("Sorted bamfile saved to %s" % bamfile)
     bamfile = bowtie2.bamindex(bamfile)
-
     logger.info("Final indexed bam file saved to %s" % bamfile)
+
     logger.info("Analysis Complete :)")
 
 def count_lines(path):

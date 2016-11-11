@@ -34,6 +34,7 @@ def main(args):
 
     logger.info("Building the given genome file...")
     bowtie2.build('2.2.9', args['genome'])
+    logger.info("Aligning the flanking reads to the genome...")
     genome_aligned_sam_loc = bowtie2.align_genome('2.2.9', args['genome'], filtered_fastq, args['out_prefix'])
 
     logger.info("%d of the %d flanking reads aligned to the reference genome..." % (count_lines(genome_aligned_sam_loc),

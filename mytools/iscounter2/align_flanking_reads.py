@@ -56,8 +56,6 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, logger=None
     total_read_count = 0
     flanking_reads_count = 0
 
-    out_fastq.write("Test3\n")
-
     outreads = []
     if logger: logger.info("Beginning read filtering...")
     for reads, classes in izip(fastq, classifs):

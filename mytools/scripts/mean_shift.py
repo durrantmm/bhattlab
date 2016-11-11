@@ -3,13 +3,14 @@ import sys
 from sklearn.cluster import MeanShift, estimate_bandwidth
 
 def read_nums(file_int):
-    nums = []
-    for line in file_int:
-        line = line.strip()
-        try:
-            nums.append(int(line))
-        except ValueError:
-            continue
+    with open(file_int) as infile:
+        nums = []
+        for line in infile:
+            line = line.strip()
+            try:
+                nums.append(int(line))
+            except ValueError:
+                continue
     return nums
 
 x = read_nums(sys.argv[1])

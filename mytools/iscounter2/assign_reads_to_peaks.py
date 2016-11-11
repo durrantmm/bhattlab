@@ -12,7 +12,7 @@ def main(args):
         peaks_dict[nearest_peak] += 1
 
     for peak in peaks_dict:
-        print "\t".join([peak, str(total_reads), peaks_dict[peak]])
+        print "\t".join([peak, str(total_reads), str(peaks_dict[peak])])
 
 def get_nearest_peak(pos, peaks):
     nearest_peak = sys.maxint

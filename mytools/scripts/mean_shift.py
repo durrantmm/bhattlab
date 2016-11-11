@@ -29,4 +29,4 @@ n_clusters_ = len(labels_unique)
 for k in range(n_clusters_):
     my_members = labels == k
     for num in X[my_members, 0]:
-        print "\t".join(k, num)
+        print "\t".join([k, num])

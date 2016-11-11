@@ -6,6 +6,7 @@ def main(args):
 
 
     for read in sam:
+        print read
         pos = int(read[3])
         nearest_peak = get_nearest_peak(pos, peaks)
         peaks_dict[nearest_peak] += 1

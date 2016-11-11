@@ -17,7 +17,7 @@ def read_nums(file_int):
 x = read_nums(sys.argv[1])
 
 X = np.array(zip(x,np.zeros(len(x))), dtype=np.int)
-bandwidth = estimate_bandwidth(X, quantile=0.1)
+bandwidth = estimate_bandwidth(X, quantile=0.01)
 ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
 ms.fit(X)
 labels = ms.labels_

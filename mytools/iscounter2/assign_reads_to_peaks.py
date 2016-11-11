@@ -3,7 +3,6 @@ import argparse, sys, os
 def main(args):
     peaks, peaks_dict = get_peaks(args['peaks_path'])
     sam, total_reads = get_sam(args['sam_path'])
-    print peaks_dict
 
     for read in sam:
         pos = int(read[3])

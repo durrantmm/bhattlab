@@ -1,7 +1,18 @@
 import argparse, sys, os
 
 def main(args):
-    print get_peaks(args['peaks_path'])
+    peaks = get_peaks(args['peaks_path'])
+    sam = get_sam(args['sam_path'])
+
+def get_sam(sam_path):
+    sam = []
+    with open(sam_path) as sam_in:
+        for line in sam_in:
+            line = line.strip().split()
+            print line
+
+    return sam
+
 
 def get_peaks(peaks_path):
     peaks = []

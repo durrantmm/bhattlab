@@ -11,11 +11,11 @@ def read_nums(file_int):
                 nums.append(int(line))
             except ValueError:
                 continue
+    nums.sort()
     return nums
 
 x = read_nums(sys.argv[1])
-print x
-sys.exit()
+
 X = np.array(zip(x,np.zeros(len(x))), dtype=np.int)
 bandwidth = estimate_bandwidth(X, quantile=0.1)
 ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)

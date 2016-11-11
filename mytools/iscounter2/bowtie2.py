@@ -104,9 +104,7 @@ def sam_to_bam(samfile):
 def bamsort(bamfile):
     prefix = os.path.join(os.path.dirname(bamfile), os.path.basename(bamfile).split('.')[0])
     bam_out = prefix+".sorted.bam"
-    samtools_args = "samtools sort -T %s/tmp/aln.sorted -o %saln.sorted.bam %saln.bam" % (prefix+".sorted",
-                                                                                          bam_out,
-                                                                                          prefix+".bam")
+    samtools_args = "samtools sort -T %s -o %s %s" % (prefix+".sorted", bam_out, prefix+".bam")
     subprocess.call(samtools_args, shell=True)
     return bam_out
 

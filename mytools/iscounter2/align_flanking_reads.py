@@ -121,11 +121,8 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, logger=None
     logger.info("Total reads counted: %d" % total_read_count)
     logger.info("Total flanking reads meeting criteria: %d" % flanking_reads_count)
 
-    with open(out_fastq_loc) as out:
-        for read in outreads:
-            out.write("\t".)
 
-    return out_fastq.name
+    return outreads
 
 
 

@@ -92,3 +92,25 @@ def align_genome(version, refpath, fastq, output_prefix, threads=1, flags=('--no
 
     subprocess.call(bowtie_args, shell=True)
     return output_prefix+'.sam'
+
+def sam_to_bam(samfile):
+
+    samtools_args = " ".join(['samtools view -b -S -o', samfile.split('.')[0]+'.bam', samfile])
+
+    subprocess.call(samtools_args, shell=True)
+    return samfile.split('.')[0]+'.bam'
+
+def bamsort(bamfile):
+    prefix = bamfile.split('.')[0]
+    samtools_args = "samtools sort -T %s/tmp/aln.sorted -o %saln.sorted.bam %saln.bam" % (prefix+".sorted",
+                                                                                          prefix+".sorted.bam",
+                                                                                          prefix+".bam")
+    subprocess.call(samtools_args, shell=True)
+    return prefix+".sorted.bam"
+
+def bamindex(bamfile):
+    prefix = bamfile.split('.')[0]
+    samtools_args = "samtools index %s" % bamfile
+
+    subprocess.call(samtools_args, shell=True)
+    return bamfile

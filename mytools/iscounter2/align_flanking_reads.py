@@ -36,8 +36,15 @@ def main(args):
     bowtie2.build('2.2.9', args['genome'])
     genome_aligned_sam_loc = bowtie2.align_genome('2.2.9', args['genome'], filtered_fastq, args['out_prefix'])
 
-    logger.info("%d of the %d reads aligned to the reference genome..." % (count_lines(genome_aligned_sam_loc),
+    logger.info("%d of the %d flanking reads aligned to the reference genome..." % (count_lines(genome_aligned_sam_loc),
                                                                            len(filtered_reads)))
+    logger.info("Sorting and indexing the alignment...")
+    bamfile = bowtie2.sam_to_bam(genome_aligned_sam_loc)
+    bamfile = bowtie2.bamsort(bamfile)
+    bamfile = bowtie2.bamindex(bamfile)
+
+    logger.info("Final indexed bam file saved to %s" % bamfile)
+    logger.info("Analysis Complete :)")
 
 def count_lines(path):
     count = 0
@@ -126,7 +133,6 @@ def filter_flanks_to_fastq(IS_sam, fastq, classifs, taxa, insertion, logger=None
 
     logger.info("Total reads counted: %d" % total_read_count)
     logger.info("Total flanking reads meeting criteria: %d" % flanking_reads_count)
-
 
     return outreads
 

@@ -53,7 +53,7 @@ def main(args):
 
     logger.info("Analysis Complete :)")
 
-def count_lines(path):
+def count_lines(path, exclude=set('#')):
     count = 0
     for line in open(path):
         count+=1

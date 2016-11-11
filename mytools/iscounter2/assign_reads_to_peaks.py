@@ -1,7 +1,7 @@
 import argparse, sys, os
 
 def main(args):
-    print peaks
+    get_peaks(args['peaks_path'])
 
 def get_peaks(peaks_path):
     peaks = []

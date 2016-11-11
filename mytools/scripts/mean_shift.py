@@ -26,6 +26,7 @@ cluster_centers = ms.cluster_centers_
 labels_unique = np.unique(labels)
 n_clusters_ = len(labels_unique)
 
+print "\t".join(['num','pos'])
 for k in range(n_clusters_):
     my_members = labels == k
     for num in X[my_members, 0]:

@@ -12,7 +12,7 @@ def main(args):
 
     for peak in peaks:
         print "\t".join([args['name'],
-                         "-".join(list(peak)),
+                         "-".join([str(elem) for elem in list(peak)]),
                          str(total_reads),
                          str(peaks_dict["-".join(peak)])])
 

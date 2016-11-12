@@ -9,12 +9,14 @@ def main(args):
             pos = int(read[3])
             nearest_peak = get_nearest_peak(pos, peaks)
             peaks_dict[nearest_peak] += 1
+
         for peak in peaks:
             key = [str(elem) for elem in list(peak)]
             print "\t".join([args['name'],
                              "-".join(key),
                              str(total_reads),
                              str(peaks_dict["-".join(key)])])
+
     if args['type'] == "within":
         out_reads = []
         for read in sam:
@@ -47,12 +49,11 @@ def get_nearest_peak(pos, peaks):
     return nearest_peak
 
 def is_within_peak(pos, peaks):
-    nearest_peak = ""
     dist_to_peak = sys.maxint
 
     for peak in peaks:
         if pos > peak[0] and pos < peak[1]:
-            return True, peak
+            return True, "-".join([str(peak[0]), str(peak[1])])
 
     return False, None
 

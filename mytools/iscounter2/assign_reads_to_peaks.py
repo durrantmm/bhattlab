@@ -19,7 +19,7 @@ def main(args):
         out_reads = []
         for read in sam:
             pos = int(read[3])
-            is_within, nearest_peak = get_nearest_peak(pos, peaks)
+            is_within, nearest_peak = is_within_peak(pos, peaks)
             if is_within:
                 peaks_dict[nearest_peak] += 1
 

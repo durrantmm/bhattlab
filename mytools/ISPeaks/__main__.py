@@ -1,18 +1,47 @@
 import argparse, logging
 import sys, os
-from pprint import pprint
+from pprint import pprint, pformat
 from datetime import datetime
 from glob import glob
+import bowtie2
 
 def main(args):
-    logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
+    logger.info("Here are the arguments as they given:\n\n%s\n" % pformat(args))
 
-    print args['which']
+    logger.info("Creating the output directory...")
+    try: os.makedirs(args['output_dir'])
+    except: pass
+
+    if args['which'] == 'single':
+        logger.info("Executing the ISPeaks SINGLE protocol...")
+        exec_single(args, logger)
+
+    elif args['which'] == 'merged':
+        logger.error("Merged is not yet implemented.")
+        sys.exit()
+
+    else:
+        logger.error("Something weird just happened...")
+
+def exec_single(args, logger):
+    logger.info("Aligning the FASTQ files to the insertion sequences...")
+    fastq1_path, fastq2_path = args['fastqs'][0], args['fastqs'][1]
+    insertion_path = args['insertion_fasta']
+    outdir = args['output_dir']
+    threads = args['threads']
+
+    logger.info("Building the insertion fasta file for alignment...")
+    bowtie2.build('2.2.9', insertion_path, logger)
+    logger.info("Aligning the file %s to the file %s" % (fastq1_path, insertion_path))
+    bowtie2.align_fastq_to_insertions('2.2.9', insertion_path, fastq1_path, outdir, threads)
+
+def exec_merged(args, logger):
+    pass
 
 def genome_fasta(s):
     try:
-        print s
         genome, taxon= s.split(',')
         if not os.path.isfile(genome): raise TypeError("Genome fasta is not a file.")
         return int(taxon), genome
@@ -65,6 +94,8 @@ def output_folder(path):
                 raise TypeError()
         return path
     except:
+        ##### TEMPORARY TO MAKE THINGS FASTER, DELETE THIS NEXT LINE LATER #####
+        return path
         raise argparse.ArgumentTypeError('Output folder must be empty or non-existent.')
 
 def taxon_nodes(path):
@@ -92,6 +123,7 @@ if __name__ == "__main__":
                                                       'the peak calls.')
     parser_merged.set_defaults(which="merged")
 
+    # SINGLE arguments
     parser_single.add_argument('-fq', '--fastqs', required=True, nargs = 2, type=fastq_file,
                         help='Two fastq files containing the forward and reverse strands, in that order.')
 
@@ -101,7 +133,7 @@ if __name__ == "__main__":
                              'forward reads, and the second file corresponds to the reverse reads, in the same order'
                              'with no reads excluded.')
 
-    parser_single.add_argument('-o', '--output-folder', required=True, type=output_folder,
+    parser_single.add_argument('-o', '--output-dir', required=True, type=output_folder,
                         help='Specify the output folder to create. If already created, it must be empty.')
 
     parser_single.add_argument('-is', '--insertion-fasta', required=True, type=insertion_fasta,
@@ -128,6 +160,10 @@ if __name__ == "__main__":
     parser_single.add_argument('-p', '--threads', required=False,
                         default=1, type = int,
                         help='The number of threads to run with bowtie2 alignments.')
+
+    # MERGED arguments
+    parser_merged.add_argument('-o', '--output-dir', required=True, type=output_folder,
+                               help='Specify the output folder to create. If already created, it must be empty.')
 
     args = parser.parse_args()
     args = vars(args)

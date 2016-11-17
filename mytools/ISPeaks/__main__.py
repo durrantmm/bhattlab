@@ -2,8 +2,6 @@ import argparse, logging
 import sys, os
 import pprint
 from datetime import datetime
-from phylophilter import filters
-import bowtie2
 from glob import glob
 
 def main(args):
@@ -33,50 +31,6 @@ def main(args):
     logger.info("Results saved to %s" % out_file)
 
     logger.info("Analysis Complete  :)")
-
-
-def save_summary_stats(fastq_file, taxon_total_count, taxon_IS_count, potential_transfers, intra_IS,
-                       output_dir, names_dict=None, verbose=False):
-    results_output = os.path.join(output_dir, "results.txt")
-
-    out_header = ['Date', 'Taxon', 'InsertionSequence', 'InitialReadCount', 'NumAlignedReads', 'FreqAlignedReads']
-
-    with open(results_output, 'w') as out:
-        out.write("\t".join(out_header)+'\n')
-        for taxon in taxon_total_count.keys():
-            try:
-                for IS in taxon_IS_count[taxon]:
-                    out.write("\t".join([str(fastq_file), str(taxon), str(IS), str(taxon_total_count[taxon]),
-                                         str(taxon_IS_count[taxon][IS]),
-                                         str(taxon_IS_count[taxon][IS]/float(taxon_total_count[taxon]))])+'\n')
-            except KeyError:
-                if verbose:
-                    out.write("\t".join([str(fastq_file), str(taxon), "NO MATCH", str(taxon_total_count[taxon]),
-                                         "NA", "NA"])+'\n')
-    return results_output
-
-
-def get_fastq_read_count(fastq_file, lines_per_read=4):
-    line_count = 0
-    with open(fastq_file) as infile:
-        for line in infile:
-            line_count += 1
-    return line_count / lines_per_read
-
-
-def get_sam_read_count(sam_file):
-    line_count = 0
-    with open(sam_file) as infile:
-        for line in infile:
-            if line[0] != '@':
-                line_count += 1
-    return line_count
-
-
-def write_run_info(args, output_folder):
-
-    with open(os.path.join(output_folder, "run_info.txt"), 'w') as out:
-        out.write(pprint.pformat(args))
 
 
 if __name__ == "__main__":
@@ -120,4 +74,5 @@ if __name__ == "__main__":
     args = vars(args)
 
     main(args)
+
 

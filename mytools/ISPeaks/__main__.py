@@ -8,6 +8,8 @@ def main(args):
     logging.basicConfig(level=logging.DEBUG, format="\n%(levelname)s:\t%(message)s")
     logger = logging.getLogger()
 
+    print args['which']
+
 def genome_fasta(s):
     try:
         print s
@@ -54,7 +56,7 @@ def class_file(path):
         if not os.path.isfile(path): raise TypeError()
         return path
     except:
-        raise argparse.ArgumentTypeError('Please give paths to valid class files.')
+        raise argparse.ArgumentTypeError('Please give paths to valid classification files.')
 
 def output_folder(path):
     try:
@@ -65,6 +67,12 @@ def output_folder(path):
     except:
         raise argparse.ArgumentTypeError('Output folder must be empty or non-existent.')
 
+def taxon_nodes(path):
+    try:
+        if not os.path.isfile(path): raise TypeError()
+        return path
+    except:
+        raise argparse.ArgumentTypeError('Please give paths to valid taxonomy node files.')
 
 
 if __name__ == "__main__":
@@ -111,11 +119,10 @@ if __name__ == "__main__":
                              help='A path to a tab-seperated file that contains the Taxon in the first '
                                   'column, and the path to the corresponding genome fasta in the second column.')
 
-    parser_single.add_argument('-nodes', '--taxon-nodes', required=False, type=list,
-                               default=[
-                                   os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp")),
-                                   os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp"))],
-                               help='Location of the NCBI Taxonomy Database nodes.dmp and merged.dmp files',
+    parser_single.add_argument('-nodes', '--taxon-nodes', required=False, type=taxon_nodes,
+                               default=[taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"))),
+                                   taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")))],
+                               help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
                                nargs='*')
 
     parser_single.add_argument('-p', '--threads', required=False,
@@ -125,4 +132,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args = vars(args)
 
-    pprint(args)
+    main(args)

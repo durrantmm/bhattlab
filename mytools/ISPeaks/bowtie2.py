@@ -36,7 +36,7 @@ def build(version, fasta, logger=None):
     subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])
 
 
-def align_fastq_to_insertions(version, refpath, fastq, output_dir, threads=1,
+def align_fastq_to_insertions(version, refpath, fastq, output_dir, out_name, threads=1,
                               flags=('--no-unal', '--local', '--quiet', '--reorder','--no-head','--all')):
     # check that we have access to bowtie2
     find_bowtie2()
@@ -45,11 +45,26 @@ def align_fastq_to_insertions(version, refpath, fastq, output_dir, threads=1,
     check_version(version)
 
     # stream output from bowtie2
-    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s.sam' %
-                            (output_dir, os.path.basename(refpath)), '-p', str(threads)] + list(flags))
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s' %
+                            (output_dir, out_name), '-p', str(threads)] + list(flags))
 
     subprocess.call(bowtie_args, shell=True)
-    return '%s/%s.sam' % (output_dir, os.path.basename(refpath))
+    return '%s/%s' % (output_dir, out_name)
+
+def align_to_genome(version, refpath, fastq, output_dir, out_name, threads=1,
+                              flags=('--local', '--quiet', '--reorder','--no-head','--all')):
+    # check that we have access to bowtie2
+    find_bowtie2()
+
+    # check that version is the expected version
+    check_version(version)
+
+    # stream output from bowtie2
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s' %
+                            (output_dir, out_name), '-p', str(threads)] + list(flags))
+
+    subprocess.call(bowtie_args, shell=True)
+    return '%s/%s' % (output_dir, out_name)
 
 def find_bowtie2():
     try:
@@ -63,37 +78,11 @@ def check_version(version):
     assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
 
 def is_built(fasta):
+    print glob(fasta+'*'), len(glob(fasta+'*'))
     if glob(fasta+"*") > 1:
+        print "BUILT"
         return True
     return False
-def align_genome(version, refpath, fastq, output_prefix, threads=1, flags=('--no-unal', '--local', '--quiet',
-                                                                 '--all', '--reorder')):
-    """
-    Call bowtie2-align on paired read data
-    :param version: Enforces bowtie2 version number
-    :param refpath: Path to bowtie2 index files (.bt2)
-    :param fastq: File.
-    :param flags: A tuple of bowtie2 flags such as --local
-    :return:
-    """
-
-    # check that we have access to bowtie2
-    try:
-        subprocess.check_output(['bowtie2', '-h'])
-    except OSError:
-        raise RuntimeError('bowtie2 not found; check if it is installed and in $PATH\n')
-
-    # check that version is the expected version
-    stdout = subprocess.check_output(['bowtie2', '--version'])
-    local_version = stdout.split('\n')[0].split()[-1]
-    assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
-
-    # stream output from bowtie2
-    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S', output_prefix+'.sam',
-                            '-p', str(threads)] + list(flags))
-
-    subprocess.call(bowtie_args, shell=True)
-    return output_prefix+'.sam'
 
 def sam_to_bam(samfile):
     prefix = os.path.join(os.path.dirname(samfile), os.path.basename(samfile).split('.')[0])

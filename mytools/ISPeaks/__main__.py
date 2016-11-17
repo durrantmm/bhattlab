@@ -34,8 +34,36 @@ def exec_single(args, logger):
 
     logger.info("Building the insertion fasta file for alignment...")
     bowtie2.build('2.2.9', insertion_path, logger)
-    logger.info("Aligning the file %s to the file %s" % (fastq1_path, insertion_path))
-    bowtie2.align_fastq_to_insertions('2.2.9', insertion_path, fastq1_path, outdir, threads)
+
+    logger.info("Aligning the forward reads in %s to the file %s" % (fastq1_path, insertion_path))
+    outsam_fq1 = bowtie2.align_fastq_to_insertions('2.2.9', insertion_path, fastq1_path, outdir,
+                                                   'fastq1_to_IS.sam', threads)
+    logger.info("Output saved to %s" % outsam_fq1)
+
+    logger.info("Aligning the reverse reads in %s to the file %s" % (fastq2_path, insertion_path))
+    outsam_fq2 = bowtie2.align_fastq_to_insertions('2.2.9', insertion_path, fastq2_path, outdir,
+                                                   'fastq2_to_IS.sam', threads)
+    logger.info("Output saved to %s" % outsam_fq2)
+
+    logger.info("Beginning alignment to all specified reference files...")
+    if args['reference_genome_fastas']: refs = args['reference_genome_fastas']
+    else: refs = args['reference_genome_list']
+    ref_sams = align_to_references(fastq1_path, fastq2_path, refs, outdir, logger)
+    print ref_sams
+
+
+def align_to_references(fastq1, fastq2, references, outdir, logger=None):
+    ref_sams = {}
+    for ref in references:
+        taxon, refpath = ref
+        if logger: logger.info("Building the genome fasta file for the file %s..." % refpath)
+        bowtie2.build('2.2.9', refpath, logger)
+
+        if logger: logger.info("Aligning the forward reads in %s to the genome found at %s which "
+                               "represents the taxon %d" %(fastq1, refpath, taxon))
+        outsam = bowtie2.align_to_genome('2.2.9', refpath, fastq1, outdir, 'fastq1_to_%d_genome.sam')
+        ref_sams[taxon] = outsam
+    return ref_sams
 
 def exec_merged(args, logger):
     pass

@@ -57,6 +57,25 @@ if __name__ == "__main__":
                              'forward reads, and the second file corresponds to the reverse reads, in the same order'
                              'with no reads excluded. MUST HAVE A HEADER.')
 
+    parser_single.add_argument('-cce', '--complete-class-exclusions', required=False, nargs='*',
+                               type=argparseTypes.complete_class_exclude,
+                               help='A filter used to exclude certain reads if either class column matches the value. '
+                                    'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
+
+    parser_single.add_argument('-gce', '--genome-class-exclusions', required=False, nargs='*',
+                               type=argparseTypes.genome_class_exclude,
+                               default=[argparseTypes.genome_class_exclude("PASSEDFILTER=F"),
+                                        argparseTypes.genome_class_exclude("TAXID=0")],
+                               help='A filter used to exclude certain reads if the genome-aligned read has a column '
+                                    'that matches the given value. '
+                                    'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
+
+    parser_single.add_argument('-ice', '--IS-class-exclusions', required=False, nargs='*',
+                               type=argparseTypes.IS_class_exclude,
+                               help='A filter used to exclude certain reads if the IS-aligned read has a column '
+                                    'that matches the given value. '
+                                    'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
+
     parser_single.add_argument('-o', '--output-dir', required=True, type=argparseTypes.output_folder,
                         help='Specify the output folder to create. If already created, it must be empty.')
 

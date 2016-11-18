@@ -57,12 +57,12 @@ def read_classifications(read_class_file, delim='\t'):
     header = ''
     header = read_class_file.readline().strip().split('\t')
     for title in range(len(header)):
-        header[title] = header[title].replace(' ','').upper()
+        header[title] = header[title].replace(' ', '').upper()
 
     while True:
         try:
-            read_class = dict(zip(header, read_class_file.readline().strip().split()))
-            read_class['HEADER'] = read_class['HEADER'].strip('@')
+            read_class = dict(zip(header, read_class_file.readline().strip().split('\t')))
+            read_class['HEADER'] = read_class['HEADER'].split()[0].strip('@')
             yield read_class
         except ValueError:
             break

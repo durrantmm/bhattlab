@@ -11,12 +11,6 @@ def build_all(directory, suffix="fasta"):
         if len(glob(os.path.join(directory,"%s.*" % fasta))) == 0:
             build('2.2.9', fasta)
 
-def align_all(ref_directory, fastq_file, output_dir, threads=1, suffix="fasta"):
-    fasta_files = glob(os.path.join(ref_directory,"*.%s" % suffix))
-    for fasta in fasta_files:
-        align('2.2.9', fasta, fastq_file, output_dir, threads=threads)
-
-
 def build(version, fasta, logger=None):
     """
     Construct bowtie2 indices (.bt2 files)
@@ -37,7 +31,7 @@ def build(version, fasta, logger=None):
 
 
 def align_fastq_to_insertions(version, refpath, fastq, output_dir, out_name, threads=1,
-                              flags=('--no-unal', '--local', '--quiet', '--reorder','--no-head','--all')):
+                              flags=('--local', '--quiet', '--reorder','--no-head','--all')):
     # check that we have access to bowtie2
     find_bowtie2()
 
@@ -78,9 +72,7 @@ def check_version(version):
     assert version == local_version, 'bowtie2 version incompatibility %s != %s' % (version, local_version)
 
 def is_built(fasta):
-    print glob(fasta+'*'), len(glob(fasta+'*'))
-    if glob(fasta+"*") > 1:
-        print "BUILT"
+    if len(glob(fasta+"*")) > 1:
         return True
     return False
 

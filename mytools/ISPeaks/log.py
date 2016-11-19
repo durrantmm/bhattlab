@@ -23,3 +23,4 @@ class Log:
 
     def warning(self, s):
         self.rootLogger.warning(s)
+

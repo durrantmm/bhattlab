@@ -1,4 +1,6 @@
 
+global args
+
 def get_taxon_nodes(nodes_locations, logger=None):
     assert type(nodes_locations) is list, "The nodes location must be a list of file locations."
 
@@ -46,5 +48,8 @@ def which_parent_child(start_taxon1, hierarchy1, start_taxon2, hierarchy2):
         return 1
     return False
 
+def set_args(args_in):
+    global args
+    args = args_in
 
 

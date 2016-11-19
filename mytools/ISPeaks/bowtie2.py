@@ -5,6 +5,8 @@ import subprocess
 from glob import glob
 import os, sys
 
+args = None
+
 def build_all(directory, suffix="fasta"):
     fasta_files = glob(os.path.join(directory,"*.%s") % suffix)
     for fasta in fasta_files:
@@ -12,6 +14,9 @@ def build_all(directory, suffix="fasta"):
             build('2.2.9', fasta)
 
 def build(version, fasta, logger=None):
+    global args
+    if not logger:
+        if args: logger = args['logger']
     """
     Construct bowtie2 indices (.bt2 files)
     :param version: Enforces bowtie2 version number (e.g., '2.2.1')
@@ -30,7 +35,7 @@ def build(version, fasta, logger=None):
     subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])
 
 
-def align_fastq_to_insertions(version, refpath, fastq, output_dir, out_name, threads=1,
+def align_fastq_to_insertions(version, refpath, fastq, outfile, threads=1,
                               flags=('--local', '--quiet', '--reorder','--no-head','--all')):
     # check that we have access to bowtie2
     find_bowtie2()
@@ -39,13 +44,13 @@ def align_fastq_to_insertions(version, refpath, fastq, output_dir, out_name, thr
     check_version(version)
 
     # stream output from bowtie2
-    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s' %
-                            (output_dir, out_name), '-p', str(threads)] + list(flags))
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s' %
+                            outfile, '-p', str(threads)] + list(flags))
 
     subprocess.call(bowtie_args, shell=True)
-    return '%s/%s' % (output_dir, out_name)
+    return outfile
 
-def align_to_genome(version, refpath, fastq, output_dir, out_name, threads=1,
+def align_to_genome(version, refpath, fastq, outfile, threads=1,
                               flags=('--local', '--quiet', '--reorder','--no-head','--all')):
     # check that we have access to bowtie2
     find_bowtie2()
@@ -54,11 +59,11 @@ def align_to_genome(version, refpath, fastq, output_dir, out_name, threads=1,
     check_version(version)
 
     # stream output from bowtie2
-    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s/%s' %
-                            (output_dir, out_name), '-p', str(threads)] + list(flags))
+    bowtie_args = " ".join(['bowtie2', '-x', refpath, '-U', fastq, '-S %s' %
+                             outfile, '-p', str(threads)] + list(flags))
 
     subprocess.call(bowtie_args, shell=True)
-    return '%s/%s' % (output_dir, out_name)
+    return outfile
 
 def find_bowtie2():
     try:
@@ -96,3 +101,7 @@ def bamindex(bamfile):
 
     subprocess.call(samtools_args, shell=True)
     return bamfile
+
+def set_args(args_in):
+    global args
+    args = args_in

@@ -2,6 +2,7 @@ import os, argparse, re, sys
 from glob import glob
 import phylosorter
 
+
 ref_basenames = set()
 
 def genome(path):
@@ -34,7 +35,6 @@ def fastq_file(path):
 def class_file(path):
     try:
         if not os.path.isfile(path): raise TypeError()
-        print re.match('[^\w\d]', open(path).readline())
 
         return os.path.abspath(path)
     except:
@@ -47,33 +47,26 @@ def complete_class_exclude(exclude):
         if len(exclude.split('=')) != 2: raise TypeError()
 
         exclude = exclude.split('=')[0].upper(), exclude.split('=')[1]
-
-        phylosorter.append_complete_class_exclusions(exclude)
         return exclude
     except:
         raise argparse.ArgumentTypeError('--classification-exclude must be formatted as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
 def genome_class_exclude(exclude):
-    global genome_class_exclusions
     try:
         if '=' not in exclude: raise TypeError()
         if len(exclude.split('=')) != 2: raise TypeError()
 
         exclude = exclude.split('=')[0].upper(), exclude.split('=')[1]
-        phylosorter.append_genome_class_exclusions(exclude)
-
         return exclude
     except:
         raise argparse.ArgumentTypeError('--classification-exclude must be formatted as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
 def IS_class_exclude(exclude):
-    global IS_class_exclusions
     try:
         if '=' not in exclude: raise TypeError()
         if len(exclude.split('=')) != 2: raise TypeError()
 
         exclude = exclude.split('=')[0].upper(), exclude.split('=')[1]
-        phylosorter.append_IS_class_exclusions(exclude)
         return exclude
     except:
         raise argparse.ArgumentTypeError(

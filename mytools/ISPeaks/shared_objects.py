@@ -1,3 +1,5 @@
+args = None
+
 class pairedEndRead:
 
     def __init__(self, read1_in, read2_in):
@@ -43,3 +45,7 @@ class pairedEndClassification:
 
     def getClassifs(self):
         return [self.read1_class, self.read2_class]
+
+def set_args(args_in):
+    global args
+    args = args_in

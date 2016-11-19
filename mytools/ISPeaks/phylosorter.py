@@ -1,71 +1,137 @@
 import os, sys
-import misc, IO
-from itertools import izip
+from os.path import basename
+import multiprocessing
 from collections import defaultdict
+from itertools import izip
+from operator import itemgetter
 
-complete_class_exclusions = []
-genome_class_exclusions = []
-IS_class_exclusions = []
+import IO
+import misc
 
-def sort_flanking_reads(fq1_to_is_path, fq2_to_is_path, class1_path, class2_path, ref_sams, outdir, logger=None):
-    sorted_dir = os.path.join(outdir, 'sorted_sams')
-    misc.makedir(sorted_dir)
+def sort_flanking_reads(state):
 
-    classif1, classif2 = IO.read_classifications(open(class1_path)), IO.read_classifications(open(class2_path))
-    IS_sam1, IS_sam2 = IO.read_insertion_alignments_looped(open(fq1_to_is_path)), IO.read_insertion_alignments_looped(open(fq2_to_is_path))
+    for ref in state.paths.fastq_to_genome_algnmnts:
+        state.logger.info("Filtering reads that mapped to the %s genome..." % basename(ref))
+        read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads)
 
-    for ref in ref_sams:
-        genome_sam1, genome_sam2 = IO.read_genome_alignment(open(ref_sams[ref][0])), IO.read_genome_alignment(open(ref_sams[ref][1]))
+        process_id = 1
+        processes = []
+        for start, stop in read_chunks:
+            genome_sams = IO.read_genome_alignment(open(state.paths.fastq_to_genome_algnmnts[ref][0]), start), \
+                                       IO.read_genome_alignment(open(state.paths.fastq_to_genome_algnmnts[ref][1]), start)
+            classifs = IO.read_classifications(open(state.paths.class_files[0]), start), \
+                                 IO.read_classifications(open(state.paths.class_files[1]), start)
+            IS_sams = IO.read_insertion_alignments(open(state.paths.fastq_to_IS_algnmnts[0]), start), \
+                               IO.read_insertion_alignments(open(state.paths.fastq_to_IS_algnmnts[1]), start)
 
-        filter_flanks_to_fastq((genome_sam1, genome_sam2), (classif1, classif2), (IS_sam1, IS_sam2), ref, sorted_dir, logger)
+            filterProcess = filterFlanksProcess(process_id, start, stop, genome_sams,
+                                                classifs, IS_sams, ref, state)
+            processes.append(filterProcess)
+            filterProcess.start()
+            process_id += 1
+        for proc in processes: proc.join()
 
-    return sorted_dir
+
+class filterFlanksProcess(multiprocessing.Process):
+
+    def __init__(self, processID, start, stop, genome_sams, classifs, IS_sams, ref, state):
+        multiprocessing.Process.__init__(self)
+        self.processID = processID
+        self.startread = start
+        self.stopread = stop
+        self.genome_sams = genome_sams
+        self.classifs = classifs
+        self.IS_sams = IS_sams
+        self.ref = ref
+        self.state = state
 
 
-def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, outdir, logger=None):
-    global complete_class_exclusions, genome_class_exclusions, IS_class_exclusions
+    def run(self):
+        self.state.logger.debug("Starting filter process number %d..." % self.processID)
+        filter_flanks_to_fastq(self.genome_sams, self.classifs, self.IS_sams, self.ref,
+                               self.state, self.stopread-self.startread,'PROC%d' % self.processID)
 
+
+
+def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines, suffix):
+    logger = state.logger
     flank_sams_out = {}
 
     loop_count = 0
     total_read_count = 0
     flanking_reads_count = 0
 
-    if logger: logger.info("Beginning read filtering...")
-
-    for genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2 in izip(genome_sams[0], genome_sams[1], IS_sams[0], IS_sams[1], classifs[0], classifs[1]):
+    for genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2 in izip(genome_sams[0], genome_sams[1],
+                                                                           IS_sams[0], IS_sams[1], classifs[0],
+                                                                           classifs[1]):
         total_read_count += 1
 
         loop_count = misc.loop_counter(loop_count, total_read_count, logger)
-
+        if loop_count > maxlines: break
         # Check the reads and the classifications align
         check_matching_reads(genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2)
-        if not passes_complete_class_exclusions(class1, class2):
+        if not passes_complete_class_exclusions(class1, class2, state.settings.complete_class_exclusions):
             continue
 
         if is_aligned(IS_aln1[0]) and is_aligned(IS_aln2[0]):
             continue
         elif is_aligned(genome_aln1[0]) and is_aligned(IS_aln2[0]):
-            if not passes_genome_class_exclusions(class1):
+            if not passes_genome_class_exclusions(class1, state.settings.genome_class_exclusions):
                 continue
-            elif not passes_IS_class_exclusions(class2):
+            elif not passes_IS_class_exclusions(class2, state.settings.insertion_class_exclusions):
                 continue
 
-            flanking_reads_count = write_aln(genome_aln1, IS_aln2, class1, ref, outdir, flank_sams_out, flanking_reads_count)
+            flanking_reads_count = write_aln(genome_aln1, IS_aln2, class1, ref, state.paths.taxon_sorted_sams_dir,
+                                             flank_sams_out, suffix, flanking_reads_count)
 
         elif is_aligned(IS_aln1[0]) and is_aligned(genome_aln2[0]):
-            if not passes_genome_class_exclusions(class2):
+            if not passes_genome_class_exclusions(class2, state.settings.genome_class_exclusions):
                 continue
-            elif not passes_IS_class_exclusions(class1):
+            elif not passes_IS_class_exclusions(class1, state.settings.insertion_class_exclusions):
                 continue
 
-            flanking_reads_count = write_aln(genome_aln2, IS_aln1, class2, ref, outdir, flank_sams_out, flanking_reads_count)
+            flanking_reads_count = write_aln(genome_aln2, IS_aln1, class2, ref, state.paths.taxon_sorted_sams_dir,
+                                             flank_sams_out, suffix, flanking_reads_count)
 
         else:
             continue
 
-    logger.info("Total reads counted: %d" % total_read_count)
-    logger.info("Total flanking reads meeting criteria: %d" % flanking_reads_count)
+    state.logger.info("Total Reads counted on %s: %d" % (suffix, total_read_count))
+    state.logger.info("Total Flanking Reads counted on %s: %d" % (suffix, flanking_reads_count))
+
+
+def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix=None, flank_count):
+    refbase = os.path.basename(ref).split('.')[0]
+    for gen_aln in gen_algnmnts:
+        for IS_aln in IS_algnmnts:
+            IS = IS_aln['RNAME']
+            outfile = os.path.join(outdir, '%s_read_aligned_to_%s_and_%s_%s.sam' %
+                                   (classif['TAXID'], IS, suffix, refbase))
+            if outfile in sams_out:
+                outline = [val for key, val in gen_aln.items()]
+                outline[0] = outline[0]+':TAXID-%s'%classif['TAXID']
+                sams_out[outfile].write("\t".join(outline)+'\n')
+                flank_count += 1
+
+            else:
+                sams_out[outfile] = open(outfile, 'w')
+                outline = [val for key, val in gen_aln.items()]
+                outline[0] = outline[0] + ':TAXID-%s' % classif['TAXID']
+                sams_out[outfile].write("\t".join(outline) + '\n')
+                flank_count += 1
+    return flank_count
+
+
+def sorted_flanks_dict_to_string(sorted_dict):
+    outlist = []
+    for ref in sorted_dict:
+        for taxon in sorted_dict[ref]:
+            for IS in sorted_dict[ref][taxon]:
+                outlist.append([ref, taxon, IS, sorted_dict[ref][taxon][IS]])
+    outlist = sorted(outlist, key=itemgetter(0, 3), reverse=True)
+    outlist.append(['Genome', 'Taxon', 'Insertion', 'NFlanks'])
+    return "\n".join(["\t".join([str(elem) for elem in line]) for line in outlist])
+
 
 def check_matching_reads(genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2):
     if genome_aln1[0]['QNAME'] == genome_aln2[0]['QNAME'] == IS_aln1[0]['QNAME'] == IS_aln2[0]['QNAME'] == class1['HEADER'] == class2['HEADER']:
@@ -85,55 +151,26 @@ def is_aligned(alignment):
     else:
         return True
 
-def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, flank_count):
-    refbase = os.path.basename(ref).split('.')[0]
-    for gen_aln in gen_algnmnts:
-        for IS_aln in IS_algnmnts:
-            IS = IS_aln['RNAME']
-            outfile = os.path.join(outdir, '%s_read_aligned_to_%s_and_%s.sam' %(classif['TAXID'], IS, refbase))
-            if outfile in sams_out:
-                outline = [val for key, val in gen_aln.items()]
-                outline[0] = outline[0]+':TAXID-%s'%classif['TAXID']
-                sams_out[outfile].write("\t".join(outline)+'\n')
-                flank_count += 1
-            else:
-                sams_out[outfile] = open(outfile, 'w')
-                outline = [val for key, val in gen_aln.items()]
-                outline[0] = outline[0] + ':TAXID-%s' % classif['TAXID']
-                sams_out[outfile].write("\t".join(outline) + '\n')
-                flank_count += 1
-    return flank_count
 
-
-def append_complete_class_exclusions(exclude):
-    global complete_class_exclusions
-    complete_class_exclusions.append(exclude)
-
-def append_genome_class_exclusions(exclude):
-    global genome_class_exclusions
-    genome_class_exclusions.append(exclude)
-
-def append_IS_class_exclusions(exclude):
-    global IS_class_exclusions
-    IS_class_exclusions.append(exclude)
-
-def passes_complete_class_exclusions(class1, class2):
-    global complete_class_exclusions
-    for exclusion in complete_class_exclusions:
-        if class1[exclusion[0]] == exclusion[1] or class2[exclusion[0]] == exclusion[1]:
-            return False
+def passes_complete_class_exclusions(class1, class2, exclusions):
+    if exclusions:
+        for exclusion in exclusions:
+            if class1[exclusion[0]] == exclusion[1] or class2[exclusion[0]] == exclusion[1]:
+                return False
     return True
 
-def passes_genome_class_exclusions(classif):
-    global genome_class_exclusions
-    for exclusion in genome_class_exclusions:
-        if classif[exclusion[0]] == exclusion[1]:
-            return False
+def passes_genome_class_exclusions(classif, exclusions):
+    global args
+    if exclusions:
+        for exclusion in exclusions:
+            if classif[exclusion[0]] == exclusion[1]:
+                return False
     return True
 
-def passes_IS_class_exclusions(classif):
-    global IS_class_exclusions
-    for exclusion in IS_class_exclusions:
-        if classif[exclusion[0]] == exclusion[1]:
-            return False
+def passes_IS_class_exclusions(classif, exclusions):
+    global args
+    if exclusions:
+        for exclusion in exclusions:
+            if classif[exclusion[0]] == exclusion[1]:
+                return False
     return True

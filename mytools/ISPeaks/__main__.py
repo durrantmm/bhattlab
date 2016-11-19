@@ -1,24 +1,27 @@
-import argparse, logging
-import sys, os
+import argparse
+import os
+import sys
 from pprint import pprint, pformat
 
-from glob import glob
-import bowtie2, argparseTypes, executive, misc
-from log import Log
+import argparseTypes
+import executive
+import state
+
 
 def main(args):
-    args['output_dir'] = misc.makedir(args['output_dir'])
+    mystate = None
+    if args['which'] == 'single': mystate = state.SingleState(args)
+    if args['which'] == 'merged': pass
 
-
-    logger = Log(args['output_dir'])
+    logger = mystate.logger
     logger.info("Here are the arguments as they were given:\n\n%s\n" % pformat(args))
 
-    if args['which'] == 'single':
+    if mystate.which == 'single':
         logger.info("Executing the ISPeaks SINGLE protocol...")
-        executive.exec_single(args, logger)
+        executive.exec_single(mystate)
         sys.exit()
 
-    elif args['which'] == 'merged':
+    elif mystate.which == 'merged':
         logger.error("The MERGED protocol is not yet implemented.")
         sys.exit()
         executive.exec_merged(args, logger)
@@ -26,7 +29,6 @@ def main(args):
 
     else:
         logger.error("Something weird just happened...")
-
 
 
 
@@ -70,7 +72,7 @@ if __name__ == "__main__":
                                     'that matches the given value. '
                                     'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
-    parser_single.add_argument('-ice', '--IS-class-exclusions', required=False, nargs='*',
+    parser_single.add_argument('-ice', '--insertion-class-exclusions', required=False, nargs='*',
                                type=argparseTypes.IS_class_exclude,
                                help='A filter used to exclude certain reads if the IS-aligned read has a column '
                                     'that matches the given value. '
@@ -94,6 +96,10 @@ if __name__ == "__main__":
                                         argparseTypes.taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")))],
                                help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
                                nargs='+')
+
+    parser_single.add_argument('-n', '--num_reads', required=False, type=int,
+                               help='The total number of paired-end reads. If not given, it will be calculated by counting'
+                                    'the number of lines in one of the given classification files')
 
     parser_single.add_argument('-p', '--threads', required=False,
                         default=1, type = int,

@@ -12,7 +12,7 @@ def sort_flanking_reads(state):
 
     for ref in state.paths.fastq_to_genome_algnmnts:
         state.logger.info("Filtering reads that mapped to the %s genome..." % basename(ref))
-        read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads)
+        read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads*2)
 
         process_id = 1
         processes = []
@@ -72,7 +72,7 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
             break
         total_read_count += 1
 
-        loop_count = misc.loop_counter(loop_count, total_read_count, logger)
+        loop_count = misc.loop_counter(loop_count, total_read_count, suffix, logger)
 
         # Check the reads and the classifications align
         check_matching_reads(genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2)

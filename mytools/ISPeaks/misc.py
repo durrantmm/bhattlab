@@ -11,10 +11,10 @@ def count_lines(file_in, skip_header=False):
     if skip_header: return count-1
     else: return count
 
-def loop_counter(loop_count, total_read_count, logger, loop_count_out=1000000):
+def loop_counter(loop_count, total_read_count, suffix, logger, loop_count_out=1000000):
     loop_count += 1
     if loop_count == loop_count_out:
-        logger.info("Total Reads Processed: %d" % total_read_count)
+        logger.info("Total Reads Processed on %s: %d" % (suffix, total_read_count))
         loop_count = 0
     return loop_count
 

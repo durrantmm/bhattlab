@@ -68,21 +68,22 @@ def align_to_references(state):
 
         logger.info("Aligning the forward reads in %s to the genome %s..." %
                     (basename(state.paths.fastq_files[0]), basename(refpath)))
-
-
         outsam1 = bowtie2.align_to_genome('2.2.9',
                                           refpath,
                                           state.paths.fastq_files[0],
                                           os.path.join(state.paths.full_sams_dir, 'fastq1_to_genome_%s.sam' % suffix),
                                           state.settings.threads)
+        logger.info("Output saved to %s" % basename(outsam1))
 
-        logger.info("Aligning the reverse reads in %s to the genome found at %s..."%
+        logger.info("Aligning the reverse reads in %s to the genome %s..."%
                     (basename(state.paths.fastq_files[1]), basename(refpath)))
         outsam2 = bowtie2.align_to_genome('2.2.9',
                                           refpath,
                                           state.paths.fastq_files[1],
                                           os.path.join(state.paths.full_sams_dir, 'fastq2_to_genome_%s.sam' % suffix),
                                           state.settings.threads)
+        logger.info("Output saved to %s" % basename(outsam2))
+
         ref_sams[refpath] = (outsam1, outsam2)
         state.paths.fastq_to_genome_algnmnts = ref_sams
 

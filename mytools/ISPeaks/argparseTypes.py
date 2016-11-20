@@ -87,6 +87,7 @@ def output_folder(path):
 def taxon_nodes(path):
     try:
         print path
+        print os.path.isfile(path)
         if not os.path.isfile(path): raise TypeError()
         return os.path.abspath(path)
     except:

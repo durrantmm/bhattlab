@@ -64,10 +64,16 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
     for genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2 in izip(genome_sams[0], genome_sams[1],
                                                                            IS_sams[0], IS_sams[1], classifs[0],
                                                                            classifs[1]):
+        if total_read_count == 0:
+            state.logger.debug("START READ on %s: %s" % (suffix, class1['HEADER']))
+
+        if total_read_count > maxlines:
+            state.logger.debug("STOP READ on %s: %s" % (suffix, class1['HEADER']))
+            break
         total_read_count += 1
 
         loop_count = misc.loop_counter(loop_count, total_read_count, logger)
-        if loop_count > maxlines: break
+
         # Check the reads and the classifications align
         check_matching_reads(genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2)
         if not passes_complete_class_exclusions(class1, class2, state.settings.complete_class_exclusions):
@@ -100,13 +106,13 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
     state.logger.info("Total Flanking Reads counted on %s: %d" % (suffix, flanking_reads_count))
 
 
-def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix=None, flank_count):
+def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix, flank_count):
     refbase = os.path.basename(ref).split('.')[0]
     for gen_aln in gen_algnmnts:
         for IS_aln in IS_algnmnts:
             IS = IS_aln['RNAME']
-            outfile = os.path.join(outdir, '%s_read_aligned_to_%s_and_%s_%s.sam' %
-                                   (classif['TAXID'], IS, suffix, refbase))
+            outfile = os.path.join(outdir, '%s-::-%s-::-%s-::-%s.sam' %
+                                   (refbase, classif['TAXID'], IS, suffix))
             if outfile in sams_out:
                 outline = [val for key, val in gen_aln.items()]
                 outline[0] = outline[0]+':TAXID-%s'%classif['TAXID']

@@ -42,6 +42,9 @@ def exec_single(state):
 
     logger.info("Creating taxon-to-insertion sam files containing all insertion-flanking-reads...")
     sorted_dict = phylosorter.sort_flanking_reads(state)
+
+    logger.info("Consolidating resulting sam files...")
+    misc.consolidate_sams(state.paths.taxon_sorted_sams_dir, '-::-')
     logger.info("%d distinct sam files created containing genome-specific, taxon-sorted, IS-flanking reads..." %
                 len(glob(state.paths.taxon_sorted_sams_dir+'/*')))
 

@@ -1,8 +1,9 @@
 import sys, os
 from glob import glob
 import bowtie2
-import phylosorter, misc
+import phylosorter, misc, IO
 from os.path import basename
+import time
 
 def exec_single(state):
 
@@ -37,20 +38,24 @@ def exec_single(state):
                                                    state.settings.threads)
     logger.info("Output saved to %s" % basename(state.paths.fastq_to_IS_algnmnts[1]))
 
+    tic = time.clock()
     logger.info("Beginning alignment to all specified reference files...")
     align_to_references(state)
+    toc = time.clock()
+    logger.debug("Time to align to genome: %s" % (toc-tic))
 
     logger.info("Creating taxon-to-insertion sam files containing all insertion-flanking-reads...")
     sorted_dict = phylosorter.sort_flanking_reads(state)
 
     logger.info("Consolidating resulting sam files...")
-    misc.consolidate_sams(state.paths.taxon_sorted_sams_dir, '-::-')
+    sams_dict = misc.consolidate_sams(state.paths.taxon_sorted_sams_dir, '-::-')
     logger.info("%d distinct sam files created containing genome-specific, taxon-sorted, IS-flanking reads..." %
                 len(glob(state.paths.taxon_sorted_sams_dir+'/*')))
 
+    stats_path = os.path.join(state.paths.out_dir, 'flanking_reads_stats.tsv')
+    logger.info("Writing the stats out to file %s..." % stats_path)
+    total_reads = open(stats_path, 'w').write(phylosorter.sorted_flanks_dict_to_string(sams_dict))
 
-
-    os.path.join(state.paths.out_dir, 'flanking_reads_stats.tsv')
 
     logger.info("Analysis Complete :)")
 

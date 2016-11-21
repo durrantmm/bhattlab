@@ -12,7 +12,7 @@ def sort_flanking_reads(state):
 
     for ref in state.paths.fastq_to_genome_algnmnts:
         state.logger.info("Filtering reads that mapped to the %s genome..." % basename(ref))
-        read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads*2)
+        read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads)
 
         process_id = 1
         processes = []

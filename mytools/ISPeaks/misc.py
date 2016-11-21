@@ -33,21 +33,6 @@ def calc_threads_start_stop(num_reads, threads):
 
     return start_stop
 
-def calc_threads_start_stop(num_reads, threads):
-    read_pos = 1
-    reads_per_thread = num_reads / threads
-    remainder = num_reads-(threads*reads_per_thread)
-
-    start_stop = []
-    for i in range(threads):
-        if i != threads - 1:
-            start_stop.append((read_pos, read_pos+reads_per_thread-1))
-        else:
-            start_stop.append((read_pos, read_pos + reads_per_thread - 1 + remainder))
-        read_pos += reads_per_thread
-
-    return start_stop
-
 def consolidate_sams(dir, delim):
     sams = glob(dir+'/*')
     sams_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
@@ -62,6 +47,8 @@ def consolidate_sams(dir, delim):
     for path in cons_groups:
         group = glob(path+'*')
         cat_delete(path.strip(delim), group)
+
+    return sams_dict
 
 def cat_delete(outpath, group):
 

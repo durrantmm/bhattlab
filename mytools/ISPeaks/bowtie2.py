@@ -7,12 +7,6 @@ import os, sys
 
 args = None
 
-def build_all(directory, suffix="fasta"):
-    fasta_files = glob(os.path.join(directory,"*.%s") % suffix)
-    for fasta in fasta_files:
-        if len(glob(os.path.join(directory,"%s.*" % fasta))) == 0:
-            build('2.2.9', fasta)
-
 def build(version, fasta, logger=None):
     global args
     if not logger:
@@ -32,7 +26,7 @@ def build(version, fasta, logger=None):
     stdout = subprocess.check_output(['bowtie2-build', '--version'])
     local_version = stdout.split('\n')[0].split()[-1]
     assert version == local_version, 'bowtie2-build version incompatibility %s != %s' % (version, local_version)
-    subprocess.check_call(['bowtie2-build', '-q', '-f', fasta, fasta])
+    subprocess.check_call(['bowtie2-build', '--offrate', '4', '-q', '-f', fasta, fasta])
 
 
 def align_fastq_to_insertions(version, refpath, fastq, outfile, threads=1,

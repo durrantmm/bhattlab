@@ -11,7 +11,7 @@ import misc
 def sort_flanking_reads(state):
 
     for ref in state.paths.fastq_to_genome_algnmnts:
-        state.logger.info("Filtering reads that mapped to the %s genome..." % basename(ref))
+        state.logger.info("Filtering IS-flanking reads that mapped to the %s genome..." % basename(ref))
         read_chunks = misc.calc_threads_start_stop(state.settings.num_reads, state.settings.threads)
 
         process_id = 1
@@ -88,7 +88,7 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
                 continue
 
             flanking_reads_count = write_aln(genome_aln1, IS_aln2, class1, ref, state.paths.taxon_sorted_sams_dir,
-                                             flank_sams_out, suffix, flanking_reads_count)
+                                             flank_sams_out, suffix, flanking_reads_count, state)
 
         elif is_aligned(IS_aln1[0]) and is_aligned(genome_aln2[0]):
             if not passes_genome_class_exclusions(class2, state.settings.genome_class_exclusions):
@@ -97,7 +97,7 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
                 continue
 
             flanking_reads_count = write_aln(genome_aln2, IS_aln1, class2, ref, state.paths.taxon_sorted_sams_dir,
-                                             flank_sams_out, suffix, flanking_reads_count)
+                                             flank_sams_out, suffix, flanking_reads_count, state)
 
         else:
             continue
@@ -106,13 +106,14 @@ def filter_flanks_to_fastq(genome_sams, classifs, IS_sams, ref, state, maxlines,
     state.logger.info("Total Flanking Reads counted on %s: %d" % (suffix, flanking_reads_count))
 
 
-def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix, flank_count):
+def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix, flank_count, state):
     refbase = os.path.basename(ref).split('.')[0]
+    delim = state.settings.path_delim
     for gen_aln in gen_algnmnts:
         for IS_aln in IS_algnmnts:
             IS = IS_aln['RNAME']
-            outfile = os.path.join(outdir, '%s-::-%s-::-%s-::-%s.sam' %
-                                   (refbase, classif['TAXID'], IS, suffix))
+            outfile = os.path.join(outdir, '%s%s%s%s%s%s%s.sam' %
+                                   (refbase, delim, classif['TAXID'], delim, IS, delim, suffix))
             if outfile in sams_out:
                 outline = [val for key, val in gen_aln.items()]
                 outline[0] = outline[0]+':TAXID-%s'%classif['TAXID']
@@ -128,14 +129,22 @@ def write_aln(gen_algnmnts, IS_algnmnts, classif, ref, outdir, sams_out, suffix,
     return flank_count
 
 
-def sorted_flanks_dict_to_string(sorted_dict):
+def sorted_flanks_dict_to_string(sorted_dict, taxon_names=None):
     outlist = []
     for ref in sorted_dict:
         for taxon in sorted_dict[ref]:
             for IS in sorted_dict[ref][taxon]:
-                outlist.append([ref, taxon, IS, sorted_dict[ref][taxon][IS]])
-    outlist = sorted(outlist, key=itemgetter(0, 3), reverse=True)
-    outlist.append(['Genome', 'Taxon', 'Insertion', 'NFlanks'])
+                if taxon_names:
+                    outlist.append([ref, taxon, taxon_names[taxon], IS, sorted_dict[ref][taxon][IS]])
+                else:
+                    outlist.append([ref, taxon, IS, sorted_dict[ref][taxon][IS]])
+    if taxon_names:
+        outlist = sorted(outlist, key=itemgetter(0, 4), reverse=True)
+        outlist.insert(0, ['Genome', 'Taxon', 'Name', 'Insertion', 'NFlanks'])
+    else:
+        outlist = sorted(outlist, key=itemgetter(0, 3), reverse=True)
+        outlist.insert(0, ['Genome', 'Taxon', 'Insertion', 'NFlanks'])
+
     return "\n".join(["\t".join([str(elem) for elem in line]) for line in outlist])
 
 

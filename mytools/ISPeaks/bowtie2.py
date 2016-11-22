@@ -45,7 +45,7 @@ def align_fastq_to_insertions(version, refpath, fastq, outfile, threads=1,
     return outfile
 
 def align_to_genome(version, refpath, fastq, outfile, threads=1,
-                              flags=('--local', '--quiet', '--reorder','--no-head','--all')):
+                              flags=('--local', '--quiet', '--reorder','--all')):
     # check that we have access to bowtie2
     find_bowtie2()
 
@@ -95,7 +95,3 @@ def bamindex(bamfile):
 
     subprocess.call(samtools_args, shell=True)
     return bamfile
-
-def set_args(args_in):
-    global args
-    args = args_in

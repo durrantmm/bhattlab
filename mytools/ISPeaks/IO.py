@@ -34,7 +34,9 @@ def read_genome_alignment_fast(sam_file, start_read):
     read_count= 1
     while True:
 
-        first_line = sam_file.readline().split()
+        first_line = sam_file.readline()
+        while first_line[0] == '@': first_line = sam_file.readline()
+        first_line = first_line.split()
         if start_read == 1: return sam_file, first_line
 
         current_name = first_line[0]
@@ -86,7 +88,9 @@ def read_insertion_alignments_fast(sam_file, start_read):
     read_count= 1
     while True:
 
-        first_line = sam_file.readline().split()
+        first_line = sam_file.readline()
+        while first_line[0] == '@': first_line = sam_file.readline()
+        first_line = first_line.split()
         if start_read == 1: return sam_file, first_line
 
         current_name = first_line[0]

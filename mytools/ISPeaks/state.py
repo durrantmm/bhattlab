@@ -1,5 +1,8 @@
 import os
 from log import Log
+import misc
+from os.path import basename
+from collections import defaultdict
 
 class SingleState:
     def __init__(self, args):
@@ -10,6 +13,8 @@ class SingleState:
                            class_files = args['classifications'],
                            insertion_fasta=args['insertion_fasta'],
                            reference_genomes=args['reference_genomes'],
+                           taxon_nodes=args['taxon_nodes'],
+                           taxon_names=args['taxon_names'],
                            outdir=args['output_dir'])
 
         self.settings = Settings(args['complete_class_exclusions'],
@@ -20,28 +25,19 @@ class SingleState:
 
         self.logger = Log(self.paths.out_dir)
 
-    def print_state(self):
-        print "FASTQ FILES:", self.paths.fastq_files
-        print "CLASSIFICATION FILES:", self.paths.class_files
-        print "INSERTION FASTA:", self.paths.insertion_fasta
-        print "OUTPUT DIRECTORY:", self.paths.out_dir
-        print "SAMS DIR:", self.paths.sams_dir
-        print "FULL SAMS DIR:", self.paths.full_sams_dir
-        print "TAXON SORTED SAMS DIR:", self.paths.taxon_sorted_sams_dir
-        print
-        print "COMPLETE CLASS EXCLUSIONS:", self.settings.complete_class_exclusions
-        print "GENOME CLASS EXCLUSIONS:", self.settings.genome_class_exclusions
-        print "INSERTION CLASS EXCLUSIONS:", self.settings.insertion_class_exclusions
-        print "REFERENCE GENOMES:", self.paths.reference_genomes
-
 class Paths:
-    def __init__(self, fastq_files, fastq_to_IS_algnmnts, class_files, insertion_fasta, reference_genomes, outdir):
+    def __init__(self, fastq_files, fastq_to_IS_algnmnts, class_files, insertion_fasta, reference_genomes, taxon_nodes,
+                 taxon_names, outdir):
 
         # Directories
         self.out_dir = self.makedir(outdir)
         self.sams_dir = self.makedir(os.path.join(outdir, 'sams'))
         self.full_sams_dir = self.makedir(os.path.join(outdir, 'sams', 'full_sams'))
         self.taxon_sorted_sams_dir = self.makedir(os.path.join(outdir, 'sams', 'taxon_sorted_sams_dir'))
+        self.peaks_dir = self.makedir(os.path.join(outdir, 'peaks'))
+        self.peaks_dir_single = self.makedir(os.path.join(outdir, 'peaks', 'single'))
+        self.peaks_dir_merged = self.makedir(os.path.join(outdir, 'peaks', 'merged'))
+        self.results_dir = self.makedir(os.path.join(outdir, 'results'))
 
         # Files
         self.fastq_files = fastq_files
@@ -49,12 +45,31 @@ class Paths:
         self.class_files = class_files
         self.insertion_fasta = insertion_fasta
         self.reference_genomes = reference_genomes
+        self.reference_id_to_path = self.create_ref_id_dict(reference_genomes)
         self.fastq_to_genome_algnmnts = None
+        self.taxon_nodes = taxon_nodes
+        self.taxon_names = taxon_names
+
+        self.taxon_sam_paths = {}
+        self.taxon_bam_paths = {}
+        self.peak_paths = {}
+
+        self.indiv_results_out = os.path.join(outdir, 'indiv_results.tsv')
 
     def makedir(self, path):
         if not os.path.isdir(path):
             os.makedirs(path)
         return os.path.abspath(path)
+
+    def create_ref_id_dict(self, ref_genomes):
+        mydict = {}
+        for ref in ref_genomes:
+            mydict[misc.get_refid_from_path(ref)] = ref
+
+        if len(mydict) != len(ref_genomes):
+            raise TypeError("The given reference genomes must have unique base names in their paths.")
+
+        return mydict
 
 class Settings:
     def __init__(self, complete_class_exclusions, genome_class_exclusions, insertion_class_exclusions, threads, num_reads):
@@ -63,3 +78,15 @@ class Settings:
         self.insertion_class_exclusions = insertion_class_exclusions
         self.threads = threads
         self.num_reads = num_reads
+        self.taxon_nodes = None
+        self.taxon_names = None
+        self.taxon_reads_dict = None
+        self.path_delim = '-_-ispeaks-_-'
+        self.reference_headers_dict = defaultdict(list)
+        self.peak_extension = 1000
+
+    def set_nodes(self, nodes_in):
+        self.taxon_nodes = nodes_in
+
+    def set_names(self, names_in):
+        self.taxon_names = names_in

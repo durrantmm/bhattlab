@@ -1,4 +1,4 @@
-import IO
+import IO, misc
 
 
 def test_readers(gen1, gen2, class1, class2, is1, is2):
@@ -29,4 +29,9 @@ if __name__ == "__main__":
     class1 = "data/small_PE1.fq.results.tsv"
     class2 = "data/small_PE1.fq.results.tsv"
 
-    test_readers(gen1, gen2, class1, class2, is1, is2)
+    #test_readers(gen1, gen2, class1, class2, is1, is2)
+
+    genome1 = "/Users/mdurrant/OneDrive/Stanford/BhattLab/code/bhattlab/mytools/ISPeaks/data/refs/bcaccae_sequence.fasta"
+    genome2 = "/Users/mdurrant/OneDrive/Stanford/BhattLab/code/bhattlab/mytools/ISPeaks/data/IS_fastas/Bacteroides_all.fasta"
+    print misc.get_genome_length(genome1)
+    print misc.get_genome_length(genome2)

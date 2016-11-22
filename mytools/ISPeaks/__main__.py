@@ -97,6 +97,11 @@ if __name__ == "__main__":
                                help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
                                nargs='+')
 
+    parser_single.add_argument('-names', '--taxon-names', required=False, type=argparseTypes.taxon_names,
+                               default=argparseTypes.taxon_nodes(
+                                   os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/names.dmp"))),
+                               help='Location of the NCBI Taxonomy Database names.dmp')
+
     parser_single.add_argument('-n', '--num_reads', required=False, type=int,
                                help='The total number of paired-end reads. If not given, it will be calculated by counting'
                                     'the number of lines in one of the given classification files')

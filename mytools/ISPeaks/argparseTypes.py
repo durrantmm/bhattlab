@@ -1,6 +1,6 @@
 import os, argparse, re, sys
 from glob import glob
-import phylosorter
+import phylosorter, misc
 
 
 ref_basenames = set()
@@ -9,7 +9,7 @@ def genome(path):
     global ref_basenames
     try:
         if not os.path.isfile(path): raise TypeError("Genome fasta is not a file.")
-        if os.path.basename(path).split('.')[0] in ref_basenames: raise TypeError("Duplicate Basename")
+        if misc.get_refid_from_path(path) in ref_basenames: raise TypeError("Duplicate Basename")
         ref_basenames.add(os.path.basename(path).split('.')[0])
         return os.path.abspath(path)
     except:
@@ -86,10 +86,14 @@ def output_folder(path):
 
 def taxon_nodes(path):
     try:
-        print path
-        print os.path.isfile(path)
         if not os.path.isfile(path): raise TypeError()
         return os.path.abspath(path)
     except:
         raise argparse.ArgumentTypeError('Please give paths to valid taxonomy node files.')
 
+def taxon_names(path):
+    try:
+        if not os.path.isfile(path): raise TypeError()
+        return os.path.abspath(path)
+    except:
+        raise argparse.ArgumentTypeError('Please give paths to valid taxonomy names file.')

@@ -4,6 +4,8 @@ from pprint import pprint
 from glob import glob
 from collections import defaultdict
 
+from Bio import SeqIO
+
 def count_lines(file_in, skip_header=False):
     count = 0
     for line in file_in: count += 1
@@ -33,31 +35,59 @@ def calc_threads_start_stop(num_reads, threads):
 
     return start_stop
 
-def consolidate_sams(dir, delim):
-    sams = glob(dir+'/*')
+def consolidate_taxon_sams(state):
+    samsdir = state.paths.taxon_sorted_sams_dir
+    delim = state.settings.path_delim
+    sams = glob(samsdir+'/*')
     sams_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
 
-    cons_groups = set()
     for sam in sams:
-        genome, taxon, insert, proc = basename(sam).split(delim)
+        genome, taxon, insert, proc = basename(sam).split(state.settings.path_delim)
         readcount = count_lines(open(sam), skip_header = False)
         sams_dict[genome][taxon][insert] += readcount
-        cons_groups.add(os.path.join(dir, delim.join(basename(sam).split(delim)[:-1])+delim))
 
-    for path in cons_groups:
-        group = glob(path+'*')
-        cat_delete(path.strip(delim), group)
+    state.settings.taxon_reads_dict = sams_dict
+    for genome in sams_dict:
 
-    return sams_dict
+        header = state.settings.reference_headers_dict[genome][0]
 
-def cat_delete(outpath, group):
+        for taxon in sams_dict[genome]:
 
-    with open(outpath+'.sam','w') as out:
+            for IS in sams_dict[genome][taxon]:
+                match = os.path.join(samsdir, delim.join([genome, taxon, IS]) + delim)
+                group = glob(match+'*')
+                outfile = match.strip(delim)+'.sam'
+                cat_delete(outfile, group, header)
+                state.paths.taxon_sam_paths[state.settings.path_delim.join([genome, taxon, IS])] = outfile
 
+
+
+def cat_delete(outpath, group, header=None):
+
+    with open(outpath,'w') as out:
+        if header:
+            out.write('\n'.join(header)+'\n')
         for path in group:
             with open(path) as infile:
                 for line in infile:
                     out.write(line)
             os.remove(path)
 
+def get_genome_length(genome_path):
+    length = 0
+    with open(genome_path, "rU") as handle:
+        for record in SeqIO.parse(handle, "fasta"):
+            length += len(record.seq)
+    return length
 
+def get_refid_from_path(genome_path):
+    return basename(genome_path).split('.')[0]
+
+def get_sam_header(path):
+    with open(path) as infile:
+        header = []
+        line = infile.readline().strip()
+        while line[0] == '@':
+            header.append(line)
+            line = infile.readline().strip()
+    return header

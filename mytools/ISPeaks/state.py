@@ -34,9 +34,9 @@ class Paths:
         self.sams_dir = self.makedir(os.path.join(outdir, 'sams'))
         self.full_sams_dir = self.makedir(os.path.join(outdir, 'sams', 'full_sams'))
         self.taxon_sorted_sams_dir = self.makedir(os.path.join(outdir, 'sams', 'taxon_sorted_sams_dir'))
+
         self.peaks_dir = self.makedir(os.path.join(outdir, 'peaks'))
-        self.peaks_dir_single = self.makedir(os.path.join(outdir, 'peaks', 'single'))
-        self.peaks_dir_merged = self.makedir(os.path.join(outdir, 'peaks', 'merged'))
+        self.single_peaks_dir = self.makedir(os.path.join(outdir, 'peaks', 'single'))
         self.results_dir = self.makedir(os.path.join(outdir, 'results'))
 
         # Files
@@ -50,11 +50,14 @@ class Paths:
         self.taxon_nodes = taxon_nodes
         self.taxon_names = taxon_names
 
+
         self.taxon_sam_paths = {}
         self.taxon_bam_paths = {}
-        self.peak_paths = {}
+        self.single_peak_paths = {}
 
-        self.indiv_results_out = os.path.join(outdir, 'indiv_results.tsv')
+        self.indiv_results_out = os.path.join(self.results_dir, 'indiv_results.tsv')
+        self.taxonomy_traversal_results_out = os.path.join(self.results_dir, 'taxonomy_traversal_results.tsv')
+        self.taxonomy_traversal_subpecies_merged_results_out = os.path.join(self.results_dir, 'taxonomy_traversal_subspecies_merged_results.tsv')
 
     def makedir(self, path):
         if not os.path.isdir(path):
@@ -79,14 +82,24 @@ class Settings:
         self.threads = threads
         self.num_reads = num_reads
         self.taxon_nodes = None
+        self.taxon_ranks = None
         self.taxon_names = None
         self.taxon_reads_dict = None
         self.path_delim = '-_-ispeaks-_-'
         self.reference_headers_dict = defaultdict(list)
         self.peak_extension = 1000
+        self.merge_subspecies = True
+
+        self.nodes_child_parent_overwrite = [('1263037', '47678')]
 
     def set_nodes(self, nodes_in):
+        for child, parent in self.nodes_child_parent_overwrite:
+            nodes_in[child] = parent
         self.taxon_nodes = nodes_in
 
     def set_names(self, names_in):
         self.taxon_names = names_in
+
+    def set_ranks(self, ranks_in):
+        self.taxon_ranks = ranks_in
+

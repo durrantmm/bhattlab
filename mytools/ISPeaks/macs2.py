@@ -10,7 +10,7 @@ def call_peaks(version, bampath, genome_length, outdir):
     find_macs2()
 
     # check that version is the expected version
-    #check_version(version)
+    # check_version(version)
     # stream output from bowtie2
     prefix_out = ".".join(basename(bampath).split('.')[:-1])
     macs2_args = 'macs2 callpeak -t %s -g %d -n %s --broad --broad-cutoff 0.1 --nomodel --extsize 147 --outdir %s --verbose 0' \

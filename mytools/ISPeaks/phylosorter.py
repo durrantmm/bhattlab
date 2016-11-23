@@ -147,7 +147,6 @@ def sorted_flanks_dict_to_string(sorted_dict, taxon_names=None):
 
     return "\n".join(["\t".join([str(elem) for elem in line]) for line in outlist])
 
-
 def check_matching_reads(genome_aln1, genome_aln2, IS_aln1, IS_aln2, class1, class2):
     if genome_aln1[0]['QNAME'] == genome_aln2[0]['QNAME'] == IS_aln1[0]['QNAME'] == IS_aln2[0]['QNAME'] == class1['HEADER'] == class2['HEADER']:
         pass

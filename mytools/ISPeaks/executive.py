@@ -14,10 +14,13 @@ def exec_single(state):
         state.settings.num_reads = misc.count_lines(open(state.paths.class_files[0]), skip_header=True)
         logger.info("File contains %d reads" % state.settings.num_reads)
 
-    logger.info("Loading taxonomy nodes from specified file...")
-    #state.settings.set_nodes( shared.get_taxon_nodes(state.paths.taxon_nodes) )
+    logger.info("Loading taxonomy nodes and ranks from specified file...")
+    nodes, ranks = shared.get_taxon_nodes_ranks(state.paths.taxon_nodes)
+    state.settings.set_nodes(nodes)
+    state.settings.set_ranks(ranks)
+
     logger.info("Loading taxonomy names from specified file...")
-    #state.settings.set_names( shared.get_taxon_names(state.paths.taxon_names) )
+    state.settings.set_names( shared.get_taxon_names(state.paths.taxon_names) )
 
     logger.info("Aligning the FASTQ files to the insertion sequences...")
 
@@ -58,6 +61,10 @@ def exec_single(state):
     logger.info("%d distinct sam files created containing genome-specific, taxon-sorted, IS-flanking reads..." %
                 len(state.paths.taxon_sam_paths))
 
+    if state.settings.merge_subspecies:
+        logger.info("Merging sams with species-subspecies relationship for downstream analysis...")
+        misc.merge_subspecies_sams(state)
+
 
     stats_path = os.path.join(state.paths.out_dir, 'flanking_reads_stats.tsv')
     logger.info("Writing the stats out to file %s..." % stats_path)
@@ -68,13 +75,12 @@ def exec_single(state):
     samtools.process_all_taxon_sams(state)
 
     logger.info("Calling insertion peaks for each individual bam file...")
-    peaks.call_all_peaks('2.1.1.20160309', state.paths.taxon_bam_paths, state.paths.peaks_dir_single, state)
+    peaks.call_all_peaks('2.1.1.20160309', state.paths.taxon_bam_paths, state.paths.single_peak_paths, state.paths.single_peaks_dir, state)
 
     logger.info("Processing the peaks by taxonomy traversal...")
-    peaks.process_peaks_indiv(state)
-    #peaks.process_peaks_taxonomy(state)
-
-
+    peaks.process_peaks_taxonomy_traversal(state.paths.single_peak_paths, state.paths.taxon_sam_paths,
+                                           state.paths.taxonomy_traversal_results_out, state)
+    logger.info("Saved the results to %s" % basename(state.paths.taxonomy_traversal_results_out))
 
     logger.info("Analysis Complete :)")
 

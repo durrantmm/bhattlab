@@ -75,13 +75,10 @@ def IS_class_exclude(exclude):
 def output_folder(path):
     try:
         if os.path.isdir(path):
-            if len(glob(path+'/*')) > 0:
-                raise TypeError()
+            raise TypeError()
         return os.path.abspath(path)
     except:
-        ##### TEMPORARY TO MAKE THINGS FASTER, DELETE THIS NEXT LINE LATER #####
-        return path
-        raise argparse.ArgumentTypeError('Output folder must be empty or non-existent.')
+        raise argparse.ArgumentTypeError('Output folder cannot already exist')
 
 
 def taxon_nodes(path):

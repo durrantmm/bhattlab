@@ -3,6 +3,7 @@ from os.path import basename
 from pprint import pprint
 from glob import glob
 from collections import defaultdict
+import IO
 
 from Bio import SeqIO
 
@@ -60,8 +61,6 @@ def consolidate_taxon_sams(state):
                 cat_delete(outfile, group, header)
                 state.paths.taxon_sam_paths[state.settings.path_delim.join([genome, taxon, IS])] = outfile
 
-
-
 def cat_delete(outpath, group, header=None):
 
     with open(outpath,'w') as out:
@@ -91,3 +90,65 @@ def get_sam_header(path):
             header.append(line)
             line = infile.readline().strip()
     return header
+
+def get_taxon_hierarchy_set(taxon_id, taxon_nodes_dict, exclude_orig=True):
+    if exclude_orig == True:
+        hierarchy = set()
+    else:
+        hierarchy = set([taxon_id])
+
+    while taxon_id != '1' and taxon_id != '0':
+        taxon_id = taxon_nodes_dict[taxon_id]
+        hierarchy.add(taxon_id)
+
+    return hierarchy
+
+
+def merge_subspecies_sams(state):
+    merge_dict = {}
+    for key in state.paths.taxon_sam_paths:
+        genome, taxon, IS = key.split(state.settings.path_delim)
+        if state.settings.taxon_ranks[taxon] == 'species':
+            merge_dict.update({key:[]})
+
+    for key1 in merge_dict:
+        genome1, taxon1, IS1 = key1.split(state.settings.path_delim)
+        for key2 in state.paths.taxon_sam_paths:
+            genome2, taxon2, IS2 = key2.split(state.settings.path_delim)
+            if genome1 == genome2 and IS1 == IS2 and is_subspecies(taxon1, taxon2, state.settings.taxon_nodes):
+                merge_dict[key1].append(key2)
+
+    merged_sam_paths = set()
+    remove_subspecies_keys = set()
+    for key in merge_dict:
+        genome, taxon, IS = key.split(state.settings.path_delim)
+        if len(merge_dict[key]) > 0:
+
+            merged_sam_path = state.paths.taxon_sam_paths[key]+'.tmp'
+            merged_sam_paths.add(merged_sam_path)
+
+            with open(merged_sam_path, 'w') as out:
+                out.write('\n'.join(state.settings.reference_headers_dict[genome][0])+'\n')
+                for read in IO.read_genome_alignment(open(state.paths.taxon_sam_paths[key]), 1):
+                    for aln in read:
+                        out.write('\t'.join(aln.values())+'\n')
+                for subspecies in merge_dict[key]:
+                    remove_subspecies_keys.add(subspecies)
+                    for read in IO.read_genome_alignment(open(state.paths.taxon_sam_paths[subspecies]), 1):
+                        for aln in read:
+                            out.write('\t'.join(aln.values()) + '\n')
+
+    for key in remove_subspecies_keys:
+        os.remove(state.paths.taxon_sam_paths[key])
+        state.paths.taxon_sam_paths.pop(key, None)
+
+    for path in merged_sam_paths:
+        old = '.'.join(path.split('.')[:-1])
+        os.rename(path, old)
+
+def is_subspecies(species, query, taxon_nodes):
+    taxonomy = get_taxon_hierarchy_set(query, taxon_nodes)
+    if species in taxonomy:
+        return True
+    else:
+        return False

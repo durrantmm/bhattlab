@@ -1,17 +1,20 @@
 import sys
 
-def get_taxon_nodes(nodes_locations, logger=None):
+def get_taxon_nodes_ranks(nodes_locations, logger=None):
     assert type(nodes_locations) is list, "The nodes location must be a list of file locations."
 
     taxon_nodes_dict = {}
+    taxon_ranks_dict = {}
     for location in nodes_locations:
         with open(location) as nodes_in:
             for line in nodes_in:
                 line = line.strip().split("|")
                 id = line[0].strip()
+                rank = line[2].strip()
                 parent_id = line[1].strip()
                 taxon_nodes_dict[id] = parent_id
-    return taxon_nodes_dict
+                taxon_ranks_dict[id] = rank
+    return taxon_nodes_dict, taxon_ranks_dict
 
 def get_taxon_names(names_location, logger=None):
     assert type(names_location) is str, "The nodes location must be a string to the file location."

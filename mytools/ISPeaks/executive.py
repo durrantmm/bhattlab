@@ -77,6 +77,10 @@ def exec_single(state):
     logger.info("Calling insertion peaks for each individual bam file...")
     peaks.call_all_peaks('2.1.1.20160309', state.paths.taxon_bam_paths, state.paths.single_peak_paths, state.paths.single_peaks_dir, state)
 
+    logger.info("Processing the peaks at an individual taxon level...")
+    peaks.process_peaks_indiv(state.paths.single_peak_paths, state.paths.taxon_sam_paths, state.paths.indiv_results_out, state)
+    logger.info("Saved the results to %s" % basename(state.paths.indiv_results_out))
+
     logger.info("Processing the peaks by taxonomy traversal...")
     peaks.process_peaks_taxonomy_traversal(state.paths.single_peak_paths, state.paths.taxon_sam_paths,
                                            state.paths.taxonomy_traversal_results_out, state)

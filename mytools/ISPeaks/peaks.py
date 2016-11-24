@@ -38,8 +38,41 @@ def delete_peak_files(path):
         os.remove(peakfile)
 
 
-def process_peaks_indiv(state):
-    pass
+def process_peaks_indiv(peak_paths, sam_paths, outfile, state):
+    final_results = []
+
+    # Getting the peaks for the starting nodes
+
+    for key in peak_paths:
+        read_count_dict = defaultdict(lambda: defaultdict(int))
+        genome, taxon, IS = key.split(state.settings.path_delim)
+        path = peak_paths[key]
+        peaks = get_peaks(path)
+
+        merged_peaks = {}
+        for chrom in peaks:
+            merged_peaks[chrom] = merge_peaks_single(peaks[chrom], state.settings.peak_extension)
+
+        for chrom in merged_peaks:
+            #print chrom
+            for peak in merged_peaks[chrom]:
+                #print '\t',peak
+                for read in IO.read_genome_alignment(open(sam_paths[key]), 1):
+
+                    for aln in read:
+                        #print '\t', '\t', aln
+                        #print '\t', '\t', '\t', aln['POS']
+                        if is_within_peak(int(aln['POS']), peak[0], peak[1], state.settings.peak_extension):
+                            read_count_dict[chrom]['-'.join([str(i) for i in peak])] += 1
+
+        for chrom in read_count_dict:
+            for peak in read_count_dict[chrom]:
+                final_results.append([genome, taxon, state.settings.taxon_names[taxon], IS, chrom,
+                                      peak.split('-')[0], peak.split('-')[1], str(read_count_dict[chrom][peak])])
+
+    final_results.insert(0, ['Genome', 'TaxonID', 'TaxonName', 'Insertion', 'Chrom', 'PeakStart', 'PeakEnd',
+                             'FlankingReadCount'])
+    open(outfile, 'w').write('\n'.join(['\t'.join(line) for line in final_results]))
 
 
 def process_peaks_taxonomy_traversal(peak_paths, sam_paths_dict, outfile, state):
@@ -67,8 +100,8 @@ def process_peaks_taxonomy_traversal(peak_paths, sam_paths_dict, outfile, state)
             for chrom in peak_dict:
                 for peak in peak_dict[chrom]:
                     final_results.append([genome1,
-                                          ','.join(out_taxa),
-                                          ','.join([state.settings.taxon_names[taxon].replace(' ','_') for taxon in out_taxa]),
+                                          taxon1,
+                                          state.settings.taxon_names[taxon1].replace(' ','_'),
                                           IS1, chrom, peak.split('-')[0], peak.split('-')[1],
                                           str(peak_dict[chrom][peak])])
 
@@ -77,7 +110,7 @@ def process_peaks_taxonomy_traversal(peak_paths, sam_paths_dict, outfile, state)
         else:
             continue
 
-    final_results.insert(0, ['Genome', 'TaxonIDs', 'TaxonNames', 'Insertion', 'Chrom', 'PeakStart', 'PeakEnd', 'FlankingReadCount'])
+    final_results.insert(0, ['Genome', 'StartTaxonIDs', 'StartTaxonName', 'Insertion', 'Chrom', 'PeakStart', 'PeakEnd', 'FlankingReadCount'])
     open(outfile, 'w').write('\n'.join(['\t'.join(line) for line in final_results]))
 
 

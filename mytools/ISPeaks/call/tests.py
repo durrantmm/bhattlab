@@ -1,5 +1,5 @@
-import IO, misc, peaks
-from pprint import pprint
+import IO
+import peaks
 
 
 def test_readers(gen1, gen2, class1, class2, is1, is2):
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     print
     print "IN:", [[1,100]]
-    print "OUT:", peaks.merge_peaks_single([[1,100]], 1)
+    print "OUT:", peaks.merge_peaks_single([[1, 100]], 1)
 
     print
     print "IN:", [[1, 100]]

@@ -1,7 +1,7 @@
-import os, argparse, re, sys
-from glob import glob
-import phylosorter, misc
+import argparse
+import os
 
+import misc
 
 ref_basenames = set()
 

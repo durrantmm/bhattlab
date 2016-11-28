@@ -1,11 +1,12 @@
-import os, sys
-from os.path import basename
-from pprint import pprint
-from glob import glob
+import os
 from collections import defaultdict
-import IO
+from glob import glob
+from os.path import basename
 
 from Bio import SeqIO
+
+import IO
+
 
 def count_lines(file_in, skip_header=False):
     count = 0

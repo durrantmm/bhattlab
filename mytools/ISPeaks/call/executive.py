@@ -1,12 +1,16 @@
-import sys, os
-from glob import glob
-from pprint import pprint
-import bowtie2, macs2, samtools
-import phylosorter, misc, IO, shared, peaks
-from os.path import basename
+import os
 import time
+from os.path import basename
 
-def exec_single(state):
+import bowtie2
+import misc
+import phylosorter
+import samtools
+import shared
+import peaks
+
+
+def action(state):
 
     logger = state.logger
     if not state.settings.num_reads:
@@ -20,7 +24,7 @@ def exec_single(state):
     state.settings.set_ranks(ranks)
 
     logger.info("Loading taxonomy names from specified file...")
-    state.settings.set_names( shared.get_taxon_names(state.paths.taxon_names) )
+    state.settings.set_names(shared.get_taxon_names(state.paths.taxon_names))
 
     logger.info("Aligning the FASTQ files to the insertion sequences...")
 
@@ -68,7 +72,8 @@ def exec_single(state):
 
     stats_path = os.path.join(state.paths.out_dir, 'flanking_reads_stats.tsv')
     logger.info("Writing the stats out to file %s..." % stats_path)
-    open(stats_path, 'w').write(phylosorter.sorted_flanks_dict_to_string(state.settings.taxon_reads_dict, state.settings.taxon_names))
+    open(stats_path, 'w').write(
+        phylosorter.sorted_flanks_dict_to_string(state.settings.taxon_reads_dict, state.settings.taxon_names))
 
     logger.info("Beginning peak calling...")
     logger.info("Converting all sam files to bam, sorting and indexing...")

@@ -1,10 +1,11 @@
 import os
-from log import Log
-import misc
-from os.path import basename
 from collections import defaultdict
 
-class SingleState:
+import misc
+from log import Log
+
+
+class CallState:
     def __init__(self, args):
         self.which = 'single'
 

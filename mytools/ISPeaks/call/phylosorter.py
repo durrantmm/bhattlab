@@ -1,9 +1,8 @@
-import os, sys
-from os.path import basename
 import multiprocessing
-from collections import defaultdict
+import os
 from itertools import izip
 from operator import itemgetter
+from os.path import basename
 
 import IO
 import misc
@@ -18,11 +17,11 @@ def sort_flanking_reads(state):
         processes = []
         for start, stop in read_chunks:
             genome_sams = IO.read_genome_alignment(open(state.paths.fastq_to_genome_algnmnts[ref][0]), start), \
-                                       IO.read_genome_alignment(open(state.paths.fastq_to_genome_algnmnts[ref][1]), start)
+                          IO.read_genome_alignment(open(state.paths.fastq_to_genome_algnmnts[ref][1]), start)
             classifs = IO.read_classifications(open(state.paths.class_files[0]), start), \
-                                 IO.read_classifications(open(state.paths.class_files[1]), start)
+                       IO.read_classifications(open(state.paths.class_files[1]), start)
             IS_sams = IO.read_insertion_alignments(open(state.paths.fastq_to_IS_algnmnts[0]), start), \
-                               IO.read_insertion_alignments(open(state.paths.fastq_to_IS_algnmnts[1]), start)
+                      IO.read_insertion_alignments(open(state.paths.fastq_to_IS_algnmnts[1]), start)
 
             filterProcess = filterFlanksProcess(process_id, start, stop, genome_sams,
                                                 classifs, IS_sams, ref, state)

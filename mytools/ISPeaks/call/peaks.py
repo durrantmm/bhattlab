@@ -1,12 +1,16 @@
-import macs2
-import pysam
-from os.path import basename, join
-from glob import glob
-import sys, os
-import IO, misc
+import os
+import sys
 from collections import defaultdict
+from glob import glob
 from operator import itemgetter
-from pprint import pprint
+from os.path import basename
+
+import pysam
+
+import IO
+import macs2
+import misc
+
 
 def call_all_peaks(version, bamdict, peak_paths, outdir, state):
     for key in bamdict:

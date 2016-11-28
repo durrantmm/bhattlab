@@ -10,7 +10,7 @@ def main(args):
         outstr = """#!/bin/sh
 #
 # set the name of the job
-#$ -N %s
+#$ -N submit_%s
 #
 # set the maximum memory usage (per slot)
 #$ -l h_vmem=%s

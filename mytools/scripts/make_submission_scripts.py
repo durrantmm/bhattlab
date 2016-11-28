@@ -33,6 +33,9 @@ def main(args):
 # output logfile
 #$ -o log_%s
 #
+# Pass all environoment variables
+#$ -V
+#
 #$ -cwd
 %s""" % (com['NAME'], args['memory'], args['time'], com['NAME'], com['COMMAND'])
         with open(join(args['out_dir'], "submit_%s.sh" % com['NAME']), 'w') as out:

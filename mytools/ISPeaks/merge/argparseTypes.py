@@ -4,10 +4,9 @@ import os, sys
 ref_basenames = set()
 
 def ispeaks_directory(path):
+
     try:
-        print path
-        sys.exit()
-        if not os.path.isfile(path): raise TypeError()
+        if not os.path.isdir(path): raise TypeError()
         return os.path.abspath(path)
     except:
         raise argparse.ArgumentTypeError('Please give paths to valid fastq files.')

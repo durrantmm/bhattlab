@@ -5,7 +5,9 @@ from pprint import pformat
 
 import call.state
 
-from call import argparseTypes, executive
+import call.argparseTypes, call.executive
+import merge.argparseTypes
+
 
 
 def main(args):
@@ -47,55 +49,55 @@ if __name__ == "__main__":
     parser_merge.set_defaults(which="merge")
 
     # SINGLE arguments
-    parser_call.add_argument('-fq', '--fastqs', required=True, nargs = 2, type=argparseTypes.fastq_file,
+    parser_call.add_argument('-fq', '--fastqs', required=True, nargs = 2, type=call.argparseTypes.fastq_file,
                                help='Two fastq files containing the forward and reverse strands, in that order.')
 
-    parser_call.add_argument('-c', '--classifications', required=True, nargs=2, type=argparseTypes.class_file,
+    parser_call.add_argument('-c', '--classifications', required=True, nargs=2, type=call.argparseTypes.class_file,
                                help='Two tab-separated files where the first column is the read title and the second'
                              'column is the assigned taxon id. The first classification file corresponds to the'
                              'forward reads, and the second file corresponds to the reverse reads, in the same order'
                              'with no reads excluded. MUST HAVE A HEADER.')
 
     parser_call.add_argument('-cce', '--complete-class-exclusions', required=False, nargs='*',
-                               type=argparseTypes.complete_class_exclude,
+                               type=call.argparseTypes.complete_class_exclude,
                                help='A filter used to exclude certain reads if either class column matches the value. '
                                     'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
     parser_call.add_argument('-gce', '--genome-class-exclusions', required=False, nargs='*',
-                               type=argparseTypes.genome_class_exclude,
-                               default=[argparseTypes.genome_class_exclude("PASSEDFILTER=F"),
-                                        argparseTypes.genome_class_exclude("TAXID=0")],
+                               type=call.argparseTypes.genome_class_exclude,
+                               default=[call.argparseTypes.genome_class_exclude("PASSEDFILTER=F"),
+                                        call.argparseTypes.genome_class_exclude("TAXID=0")],
                                help='A filter used to exclude certain reads if the genome-aligned read has a column '
                                     'that matches the given value. '
                                     'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
     parser_call.add_argument('-ice', '--insertion-class-exclusions', required=False, nargs='*',
-                               type=argparseTypes.IS_class_exclude,
+                               type=call.argparseTypes.IS_class_exclude,
                                help='A filter used to exclude certain reads if the IS-aligned read has a column '
                                     'that matches the given value. '
                                     'Input as \"<Column Name1>=<Criterion1> <Column Name2>=<Criterion2>...\"')
 
-    parser_call.add_argument('-o', '--output-dir', required=True, type=argparseTypes.output_folder,
+    parser_call.add_argument('-o', '--output-dir', required=True, type=call.argparseTypes.output_folder,
                                help='Specify the output folder to create. If already created, it must be empty.')
 
-    parser_call.add_argument('-is', '--insertion-fasta', required=True, type=argparseTypes.insertion_fasta,
+    parser_call.add_argument('-is', '--insertion-fasta', required=True, type=call.argparseTypes.insertion_fasta,
                                default=os.path.join(data_dir, "IS_fastas/Bacteroides_all.fasta"),
                                help='A fasta file containing the insertion sequences of interest,'
                              ' concatenated sequentially in any order.')
 
     parser_call.add_argument('-g', '--reference-genomes', nargs='+',
-                               type=argparseTypes.genome, required = True,
+                               type=call.argparseTypes.genome, required = True,
                                help='Reference genomes to analyze in fasta format. Input must be '
                                 'in the format \"<reference-fasta1> <reference-fasta2>\"')
 
-    parser_call.add_argument('-nodes', '--taxon-nodes', required=False, type=argparseTypes.taxon_nodes,
-                               default=[argparseTypes.taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"))),
-                                        argparseTypes.taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")))],
+    parser_call.add_argument('-nodes', '--taxon-nodes', required=False, type=call.argparseTypes.taxon_nodes,
+                               default=[call.argparseTypes.taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"))),
+                                        call.argparseTypes.taxon_nodes(os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")))],
                                help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
                                nargs='+')
 
     parser_call.add_argument('-names', '--taxon-names', required=False, type=argparseTypes.taxon_names,
-                               default=argparseTypes.taxon_nodes(
+                               default=call.argparseTypes.taxon_nodes(
                                    os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/names.dmp"))),
                                help='Location of the NCBI Taxonomy Database names.dmp')
 
@@ -111,10 +113,10 @@ if __name__ == "__main__":
     # MERGED arguments
     parser_merge.add_argument('-d', '--ispeaks_directories', required=True,
                               nargs='+',
-                              type=argparseTypes.output_folder,
+                              type=merge.argparseTypes.ispeaks_directory,
                               help='Include 2 or more ISPeaks output directories to merge')
 
-    parser_merge.add_argument('-o', '--output-dir', required=True, type=argparseTypes.output_folder,
+    parser_merge.add_argument('-o', '--output-dir', required=True, type=merge.argparseTypes.output_folder,
                                help='Specify the output folder to create. If already created, it must be empty.')
 
     args = parser.parse_args()

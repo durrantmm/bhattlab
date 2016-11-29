@@ -109,6 +109,11 @@ if __name__ == "__main__":
                              ' of available processors) / 2.')
 
     # MERGED arguments
+    parser_merge.add_argument('-d', '--ispeaks_directories', required=True,
+                              nargs='+',
+                              type=argparseTypes.output_folder,
+                              help='Include 2 or more ISPeaks output directories to merge')
+
     parser_merge.add_argument('-o', '--output-dir', required=True, type=argparseTypes.output_folder,
                                help='Specify the output folder to create. If already created, it must be empty.')
 

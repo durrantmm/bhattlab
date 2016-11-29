@@ -21,7 +21,7 @@ def main(args):
 
         logger.info("Executing the ISPeaks SINGLE protocol...")
 
-        executive.action(mystate)
+        call.executive.action(mystate)
 
     elif args['which'] == 'merge':
         pass
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                                help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
                                nargs='+')
 
-    parser_call.add_argument('-names', '--taxon-names', required=False, type=argparseTypes.taxon_names,
+    parser_call.add_argument('-names', '--taxon-names', required=False, type=call.argparseTypes.taxon_names,
                                default=call.argparseTypes.taxon_nodes(
                                    os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/names.dmp"))),
                                help='Location of the NCBI Taxonomy Database names.dmp')

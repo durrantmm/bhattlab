@@ -14,14 +14,14 @@ def main(args):
 
     if args['which'] == 'call':
 
-        mystate = call.state.CallState(args)
-        logger = mystate.logger
+        callstate = call.state.CallState(args)
+        logger = callstate.logger
 
         logger.info("Here are the arguments as they were given:\n\n%s\n" % pformat(args))
 
         logger.info("Executing the ISPeaks SINGLE protocol...")
 
-        call.executive.action(mystate)
+        call.executive.action(callstate)
 
     elif args['which'] == 'merge':
         pass

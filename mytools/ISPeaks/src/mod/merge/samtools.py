@@ -12,6 +12,7 @@ def merge_sam_files(state, flags=['-r','-c','-p']):
         outsam = join(state.paths.merged_sam_dir, key+'.sam')
         command = ['samtools','merge'] + flags + [join(state.paths.merged_sam_dir, key+'.sam')] + samfiles
         merged_sam_paths[key] = outsam
+        print command
         subprocess.check_output(command)
 
     state.paths.merged_sam_paths = merged_sam_paths

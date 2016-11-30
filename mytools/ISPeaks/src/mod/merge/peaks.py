@@ -14,19 +14,19 @@ import misc
 
 def call_all_peaks(version, bamdict, peak_paths, outdir, state):
     for key in bamdict:
-        print key
+        #print key
         bam = bamdict[key]
         handle = pysam.AlignmentFile(bam, "rb")
         genome_len = handle.header['SQ'][0]['LN']
         read_count = sum([1 for read in handle])
-        print "READ COUNT %s" % read_count
-        if read_count < 20:
+        #print "READ COUNT %s" % read_count
+        if read_count < 10:
             state.logger.info("Too few reads to perform peak calling in %s" %
                               "-".join(basename(bam).split(state.settings.path_delim)))
             continue
-        print "PASSED READ THRESHOLD"
+        #print "PASSED READ THRESHOLD"
         peak_path = macs2.call_peaks(version, bam, genome_len, outdir)
-        print "CALLED THE PEAKS"
+        #print "CALLED THE PEAKS"
         if check_peak_path(peak_path):
             peak_paths[key] = peak_path
         else:
@@ -60,10 +60,11 @@ def process_peaks_indiv(merged_peak_paths, orig_sam_info, outfile, state):
             merged_peaks[chrom] = merge_peaks_single(peaks[chrom], state.settings.peak_extension)
 
         for chrom in merged_peaks:
-            #print chrom
+            print chrom
             for peak in merged_peaks[chrom]:
-                #print '\t',peak
+                print '\t',peak
                 for sample in orig_sam_info[key]:
+                    print '\t','\t',sample
                     for read in IO.read_genome_alignment(open(orig_sam_info[key][sample]), 1):
 
                         for aln in read:

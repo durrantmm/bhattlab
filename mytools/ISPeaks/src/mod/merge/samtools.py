@@ -12,7 +12,6 @@ def merge_bam_files(state, flags=['-r','-c','-p']):
         outbam = join(state.paths.merged_bam_dir, key+'.bam')
         command = ['samtools','merge'] + flags + [join(state.paths.merged_bam_dir, key+'.bam')] + bamfiles
         merged_bam_paths[key] = outbam
-        print command
         subprocess.check_output(command)
 
     state.paths.merged_bam_paths = merged_bam_paths

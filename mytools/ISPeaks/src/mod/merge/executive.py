@@ -17,7 +17,6 @@ def action(state):
     logger.info("Loading taxonomy names from specified file...")
     state.settings.set_names(shared.get_taxon_names(state.paths.taxon_names))
 
-
     logger.info("Collecting all sam file information...")
     collect_bam_info(state)
 
@@ -35,6 +34,7 @@ def action(state):
     logger.info("Processing the merged peaks at an individual taxon level...")
     peaks.process_peaks_indiv(state.paths.merged_peaks_paths, state.paths.bam_info, state.paths.merged_indiv_peaks_path,
                               state)
+
     logger.info("Saved the results to %s" % basename(state.paths.merged_indiv_peaks_path))
 
 

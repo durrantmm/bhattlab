@@ -19,7 +19,7 @@ def action(state):
 
 
     logger.info("Collecting all sam file information...")
-    collect_sam_info(state)
+    collect_bam_info(state)
 
     logger.info("Merging all of the concordant sam files between samples...")
     samtools.merge_sam_files(state)
@@ -33,7 +33,7 @@ def action(state):
                          state.paths.merged_peaks_dir, state)
 
     logger.info("Processing the merged peaks at an individual taxon level...")
-    peaks.process_peaks_indiv(state.paths.merged_peaks_paths, state.paths.sam_info, state.paths.merged_indiv_peaks_path,
+    peaks.process_peaks_indiv(state.paths.merged_peaks_paths, state.paths.bam_info, state.paths.merged_indiv_peaks_path,
                               state)
     logger.info("Saved the results to %s" % basename(state.paths.merged_indiv_peaks_path))
 
@@ -117,17 +117,17 @@ def action(state):
 
     logger.info("Analysis Complete :)")
 
-def collect_sam_info(state):
+def collect_bam_info(state):
 
-    sam_info = defaultdict(lambda: defaultdict(str))
+    bam_info = defaultdict(lambda: defaultdict(str))
     for dir in state.paths.ispeaks_dirs:
         sam_dir = os.path.join(dir, 'sams', 'taxon_sorted_sams_dir')
         if not os.path.isdir(sam_dir):
             raise TypeError("The directory architecture of the ISPeaks folder %s is unexpected." % basename(dir))
 
-        for sam in glob(sam_dir+'/*.sam'):
+        for sam in glob(sam_dir+'/*.bam'):
             key = '.'.join(basename(sam).split('.')[:-1])
-            sam_info[key][dir] = sam
+            bam_info[key][dir] = sam
 
-    state.paths.sam_info = sam_info
+    state.paths.bam_info = bam_info
 

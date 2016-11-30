@@ -2,15 +2,15 @@ import os, subprocess
 from os.path import join
 version = '1.3.1'
 
-def merge_sam_files(state, flags=['-r','-c','-p']):
+def merge_bam_files(state, flags=['-r','-c','-p']):
     find_samtools()
     check_version()
 
     merged_sam_paths = {}
-    for key in state.paths.sam_info:
+    for key in state.paths.bam_info:
         samfiles = [state.paths.sam_info[key][sample] for sample in state.paths.sam_info[key]]
         outsam = join(state.paths.merged_sam_dir, key+'.sam')
-        command = ['samtools','merge'] + flags + [join(state.paths.merged_sam_dir, key+'.sam')] + samfiles
+        command = ['samtools','merge'] + flags + [join(state.paths.merged_sam_dir, key+'.bam')] + samfiles
         merged_sam_paths[key] = outsam
         print command
         subprocess.check_output(command)

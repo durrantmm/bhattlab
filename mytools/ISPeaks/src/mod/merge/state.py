@@ -29,8 +29,7 @@ class MergePaths(PathsSuperClass):
         self.merged_peaks_dir = self.makedir(join(self.out_dir, 'peaks_merged'))
         self.results_dir = self.makedir(join(self.out_dir, 'results'))
 
-        self.sam_info = None
-        self.merged_sam_paths = None
+        self.bam_info = None
         self.merged_bam_paths = None
 
         self.merged_peaks_paths = {}

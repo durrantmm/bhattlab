@@ -19,7 +19,7 @@ def call_all_peaks(version, bamdict, peak_paths, outdir, state):
         handle = pysam.AlignmentFile(bam, "rb")
         genome_len = handle.header['SQ'][0]['LN']
         read_count = sum([1 for read in handle])
-        if read_count < 10:
+        if read_count < 20:
             state.logger.info("Too few reads to perform peak calling in %s" %
                               "-".join(basename(bam).split(state.settings.path_delim)))
             continue

@@ -6,26 +6,25 @@ def merge_bam_files(state, flags=['-r','-c','-p']):
     find_samtools()
     check_version()
 
-    merged_sam_paths = {}
+    merged_bam_paths = {}
     for key in state.paths.bam_info:
-        samfiles = [state.paths.sam_info[key][sample] for sample in state.paths.sam_info[key]]
-        outsam = join(state.paths.merged_sam_dir, key+'.sam')
-        command = ['samtools','merge'] + flags + [join(state.paths.merged_sam_dir, key+'.bam')] + samfiles
-        merged_sam_paths[key] = outsam
+        bamfiles = [state.paths.bam_info[key][sample] for sample in state.paths.bam_info[key]]
+        outbam = join(state.paths.merged_bam_dir, key+'.bam')
+        command = ['samtools','merge'] + flags + [join(state.paths.merged_bam_dir, key+'.bam')] + bamfiles
+        merged_bam_paths[key] = outbam
         print command
         subprocess.check_output(command)
 
-    state.paths.merged_sam_paths = merged_sam_paths
+    state.paths.merged_bam_paths = merged_bam_paths
 
 def process_all_taxon_sams(state):
     find_samtools()
     check_version()
 
     merged_bam_paths = {}
-    for key in state.paths.merged_sam_paths:
-        path = state.paths.merged_sam_paths[key]
-        bamfile = sam_to_bam(path)
-        bamfile = bamsort(bamfile)
+    for key in state.paths.merged_bam_paths:
+        path = state.paths.merged_bam_paths[key]
+        bamfile = bamsort(path)
         bamfile = bamindex(bamfile)
         merged_bam_paths[key] = bamfile
 

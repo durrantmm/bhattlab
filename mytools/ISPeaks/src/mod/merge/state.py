@@ -25,7 +25,7 @@ class MergePaths(PathsSuperClass):
 
         # Directories
         self.ispeaks_dirs = [self.makedir(dir) for dir in ispeaks_dirs]
-        self.merged_sam_dir = self.makedir(join(self.out_dir, 'sams_merged'))
+        self.merged_bam_dir = self.makedir(join(self.out_dir, 'bams_merged'))
         self.merged_peaks_dir = self.makedir(join(self.out_dir, 'peaks_merged'))
         self.results_dir = self.makedir(join(self.out_dir, 'results'))
 

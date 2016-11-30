@@ -22,7 +22,7 @@ def action(state):
     collect_bam_info(state)
 
     logger.info("Merging all of the concordant sam files between samples...")
-    samtools.merge_sam_files(state)
+    samtools.merge_bam_files(state)
 
     logger.info("Beginning peak calling...")
     logger.info("Converting all sam files to bam, sorting and indexing...")

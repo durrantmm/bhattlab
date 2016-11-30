@@ -14,19 +14,19 @@ import misc
 
 def call_all_peaks(version, bamdict, peak_paths, outdir, state):
     for key in bamdict:
-        #print key
+        state.logger.debug("CALLING PEAKS FOR %s" % key)
         bam = bamdict[key]
         handle = pysam.AlignmentFile(bam, "rb")
         genome_len = handle.header['SQ'][0]['LN']
         read_count = sum([1 for read in handle])
-        #print "READ COUNT %s" % read_count
+        print state.logger.debug("READ COUNT %s" % read_count)
         if read_count < 20:
             state.logger.info("Too few reads to perform peak calling in %s" %
                               "-".join(basename(bam).split(state.settings.path_delim)))
             continue
-        #print "PASSED READ THRESHOLD"
+        print state.logger.debug("PASSED READ THRESHOLD")
         peak_path = macs2.call_peaks(version, bam, genome_len, outdir)
-        #print "CALLED THE PEAKS"
+        print state.logger.debug("CALLED THE PEAKS")
         if check_peak_path(peak_path):
             peak_paths[key] = peak_path
         else:

@@ -3,16 +3,40 @@ import time
 from os.path import basename
 from collections import defaultdict
 from glob import glob
-import samtools
+import samtools, peaks
+import shared
 
 def action(state):
 
     logger = state.logger
+    logger.info("Loading taxonomy nodes and ranks from specified file...")
+    nodes, ranks = shared.get_taxon_nodes_ranks(state.paths.taxon_nodes)
+    state.settings.set_nodes(nodes)
+    state.settings.set_ranks(ranks)
+
+    logger.info("Loading taxonomy names from specified file...")
+    state.settings.set_names(shared.get_taxon_names(state.paths.taxon_names))
+
+
     logger.info("Collecting all sam file information...")
     collect_sam_info(state)
 
     logger.info("Merging all of the concordant sam files between samples...")
     samtools.merge_sam_files(state)
+
+    logger.info("Beginning peak calling...")
+    logger.info("Converting all sam files to bam, sorting and indexing...")
+    samtools.process_all_taxon_sams(state)
+
+    logger.info("Calling insertion peaks for each individual merged bam file...")
+    peaks.call_all_peaks('2.1.1.20160309', state.paths.merged_bam_paths, state.paths.merged_peaks_paths,
+                         state.paths.merged_peaks_dir, state)
+
+    logger.info("Processing the merged peaks at an individual taxon level...")
+    peaks.process_peaks_indiv(state.paths.merged_peaks_paths, state.paths.sam_info, state.paths.merged_indiv_peaks_path,
+                              state)
+    logger.info("Saved the results to %s" % basename(state.paths.merged_indiv_peaks_path))
+
 
     sys.exit()
 
@@ -21,10 +45,7 @@ def action(state):
         state.settings.num_reads = misc.count_lines(open(state.paths.class_files[0]), skip_header=True)
         logger.info("File contains %d reads" % state.settings.num_reads)
 
-    logger.info("Loading taxonomy nodes and ranks from specified file...")
-    nodes, ranks = shared.get_taxon_nodes_ranks(state.paths.taxon_nodes)
-    state.settings.set_nodes(nodes)
-    state.settings.set_ranks(ranks)
+
 
     logger.info("Loading taxonomy names from specified file...")
     state.settings.set_names(shared.get_taxon_names(state.paths.taxon_names))

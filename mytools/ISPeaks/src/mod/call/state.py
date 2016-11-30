@@ -30,7 +30,7 @@ class CallState(StateSuperClass):
 class CallPaths(PathsSuperClass):
     def __init__(self, fastq_files, fastq_to_IS_algnmnts, class_files, insertion_fasta, reference_genomes, taxon_nodes,
                  taxon_names, outdir):
-        PathsSuperClass.__init__(self, outdir)
+        PathsSuperClass.__init__(self, outdir, taxon_nodes, taxon_names)
 
         # Directories
         self.sams_dir = self.makedir(os.path.join(outdir, 'sams'))
@@ -49,8 +49,7 @@ class CallPaths(PathsSuperClass):
         self.reference_genomes = reference_genomes
         self.reference_id_to_path = self.create_ref_id_dict(reference_genomes)
         self.fastq_to_genome_algnmnts = None
-        self.taxon_nodes = taxon_nodes
-        self.taxon_names = taxon_names
+
 
 
         self.taxon_sam_paths = {}
@@ -90,21 +89,7 @@ class CallSettings(SettingsSuperClass):
         self.taxon_ranks = None
         self.taxon_names = None
         self.taxon_reads_dict = None
-        self.path_delim = '-_-ispeaks-_-'
         self.reference_headers_dict = defaultdict(list)
-        self.peak_extension = 1000
         self.merge_subspecies = True
 
-        self.nodes_child_parent_overwrite = [('1263037', '47678')]
-
-    def set_nodes(self, nodes_in):
-        for child, parent in self.nodes_child_parent_overwrite:
-            nodes_in[child] = parent
-        self.taxon_nodes = nodes_in
-
-    def set_names(self, names_in):
-        self.taxon_names = names_in
-
-    def set_ranks(self, ranks_in):
-        self.taxon_ranks = ranks_in
 

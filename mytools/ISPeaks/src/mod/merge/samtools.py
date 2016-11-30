@@ -6,11 +6,29 @@ def merge_sam_files(state):
     find_samtools()
     check_version()
 
+    merged_sam_paths = {}
     for key in state.paths.sam_info:
         samfiles = [state.paths.sam_info[key][sample] for sample in state.paths.sam_info[key]]
-        command = ['samtools','merge', join(state.paths.out_dir, key+'.sam')] + samfiles
+        outsam = join(state.paths.merged_sam_dir, key+'.sam')
+        command = ['samtools','merge', join(state.paths.merged_sam_dir, key+'.sam')] + samfiles
+        merged_sam_paths[key] = outsam
         subprocess.check_output(command)
 
+    state.paths.merged_sam_paths = merged_sam_paths
+
+def process_all_taxon_sams(state):
+    find_samtools()
+    check_version()
+
+    merged_bam_paths = {}
+    for key in state.paths.merged_sam_paths:
+        path = state.paths.merged_sam_paths[key]
+        bamfile = sam_to_bam(path)
+        bamfile = bamsort(bamfile)
+        bamfile = bamindex(bamfile)
+        merged_bam_paths[key] = bamfile
+
+    state.paths.merged_bam_paths = merged_bam_paths
 
 def sam_to_bam(samfile):
     prefix = os.path.join(os.path.dirname(samfile), '.'.join(os.path.basename(samfile).split('.')[:-1]))

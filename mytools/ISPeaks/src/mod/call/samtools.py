@@ -13,7 +13,6 @@ def process_all_taxon_sams(state):
         bamfile = bamindex(bamfile)
         state.paths.taxon_bam_paths[key] = bamfile
 
-
 def sam_to_bam(samfile):
     prefix = os.path.join(os.path.dirname(samfile), '.'.join(os.path.basename(samfile).split('.')[:-1]))
     bam_out = prefix+'.bam'

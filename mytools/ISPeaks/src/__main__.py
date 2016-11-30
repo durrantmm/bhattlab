@@ -43,8 +43,9 @@ def main(args):
 if __name__ == "__main__":
 
     current_dir = os.path.dirname(__file__)
+    print current_dir
     data_dir = os.path.join(current_dir, "../data")
-
+    print data_dir
     # setup the option parser
     parser = argparse.ArgumentParser(description='')
 
@@ -126,6 +127,19 @@ if __name__ == "__main__":
 
     parser_merge.add_argument('-o', '--output-dir', required=True, type=merge_argparseTypes.output_folder,
                               help='Specify the output folder to create. If already created, it must be empty.')
+
+    parser_merge.add_argument('-nodes', '--taxon-nodes', required=False, type=call_argparseTypes.taxon_nodes,
+                             default=[call_argparseTypes.taxon_nodes(
+                                 os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/nodes.dmp"))),
+                                      call_argparseTypes.taxon_nodes(
+                                          os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/merged.dmp")))],
+                             help='Location of the NCBI Taxonomy Database nodes.dmp and/or merged.dmp files',
+                             nargs='+')
+
+    parser_merge.add_argument('-names', '--taxon-names', required=False, type=call_argparseTypes.taxon_names,
+                             default=call_argparseTypes.taxon_nodes(
+                                 os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/names.dmp"))),
+                             help='Location of the NCBI Taxonomy Database names.dmp')
 
     args = parser.parse_args()
     args = vars(args)

@@ -1,4 +1,4 @@
-import shared_objects, sys
+import sys
 from collections import defaultdict, OrderedDict
 
 

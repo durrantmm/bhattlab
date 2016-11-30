@@ -16,6 +16,7 @@ def call_peaks(version, bampath, genome_length, outdir):
     macs2_args = 'macs2 callpeak -t %s -g %d -n %s --broad --broad-cutoff 0.1 --nomodel --extsize 147 --outdir %s --verbose 0' \
                  % (bampath, genome_length, prefix_out, outdir)
     #print macs2_args
+    print macs2_args
     subprocess.call(macs2_args.split(), shell=False)
     broadPeak_file = glob(join(outdir, prefix_out)+'_*broadPeak')
 

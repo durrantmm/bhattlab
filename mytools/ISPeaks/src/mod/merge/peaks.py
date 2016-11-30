@@ -136,12 +136,13 @@ def assign_reads_to_peaks(sampath, merged_peaks, peak_dict, extension=0):
                         peak_dict[chrom]['-'.join([str(i) for i in peak])] += 1
     return peak_dict
 
-def create_peak_dict(peaks_in):
-    peak_dict = defaultdict(lambda: defaultdict(int))
+def create_peak_dict(peaks_in, samples):
+    peak_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
 
-    for chrom in peaks_in:
-        for peak in peaks_in[chrom]:
-            peak_dict[chrom]["-".join([str(i) for i in peak])] = 0
+    for sample in samples:
+        for chrom in peaks_in:
+            for peak in peaks_in[chrom]:
+                peak_dict[sample][chrom]["-".join([str(i) for i in peak])] = 0
 
     return peak_dict
 

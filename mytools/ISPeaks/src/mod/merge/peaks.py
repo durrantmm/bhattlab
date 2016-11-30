@@ -116,7 +116,7 @@ def process_peaks_taxonomy_traversal(merged_peak_paths, orig_bam_info, outfile, 
                                               taxon1,
                                               state.settings.taxon_names[taxon1].replace(' ','_'),
                                               IS1, chrom, peak.split('-')[0], peak.split('-')[1],
-                                              str(peak_dict[chrom][peak])])
+                                              str(peak_dict[sample][chrom][peak])])
 
         # SINGLE NODE - NO TRAVERSAL NEEDED - WAS COMPLETED ALREADY IN
         #  process_peaks_indiv()

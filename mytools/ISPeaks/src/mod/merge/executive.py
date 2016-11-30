@@ -17,14 +17,14 @@ def action(state):
     logger.info("Loading taxonomy names from specified file...")
     state.settings.set_names(shared.get_taxon_names(state.paths.taxon_names))
 
-    logger.info("Collecting all sam file information...")
+    logger.info("Collecting all bam file information...")
     collect_bam_info(state)
 
-    logger.info("Merging all of the concordant sam files between samples...")
+    logger.info("Merging all of the concordant bam files between samples...")
     samtools.merge_bam_files(state)
 
     logger.info("Beginning peak calling...")
-    logger.info("Converting all sam files to bam, sorting and indexing...")
+    logger.info("Sorting and indexing the bam files...")
     samtools.process_all_taxon_sams(state)
 
     logger.info("Calling insertion peaks for each individual merged bam file...")

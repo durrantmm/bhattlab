@@ -19,6 +19,7 @@ def call_all_peaks(version, bamdict, peak_paths, outdir, state):
         handle = pysam.AlignmentFile(bam, "rb")
         genome_len = handle.header['SQ'][0]['LN']
         read_count = sum([1 for read in handle])
+        print "READ COUNT %s" % read_count
         if read_count < 20:
             state.logger.info("Too few reads to perform peak calling in %s" %
                               "-".join(basename(bam).split(state.settings.path_delim)))
@@ -90,9 +91,9 @@ def process_peaks_taxonomy_traversal(merged_peak_paths, orig_sam_info, outfile, 
         genome1, taxon1, IS1 = key1.split(state.settings.path_delim)
         taxonomy = misc.get_taxon_hierarchy_set(taxon1, state.settings.taxon_nodes)
 
-        parent_peaks_keys = get_parent_peaks_keys(genome1, taxon1, IS1, taxonomy, peak_paths, state)
+        parent_peaks_keys = get_parent_peaks_keys(genome1, taxon1, IS1, taxonomy, merged_peak_paths, state)
         if len(parent_peaks_keys) > 0:
-            merged_peaks = merge_peaks_taxonomy(genome1, taxon1, IS1, parent_peaks_keys, peak_paths, state)
+            merged_peaks = merge_peaks_taxonomy(genome1, taxon1, IS1, parent_peaks_keys, merged_peak_paths, state)
             peak_dict = create_peak_dict(merged_peaks)
 
             # Now assign the reads in the sam files to specified read bins...
@@ -122,6 +123,7 @@ def process_peaks_taxonomy_traversal(merged_peak_paths, orig_sam_info, outfile, 
 
 
 def assign_reads_to_peaks(sampath, merged_peaks, peak_dict, extension=0):
+
     for read in IO.read_genome_alignment(open(sampath), 1):
         #print read
         for aln in read:

@@ -48,7 +48,6 @@ def process_peaks_indiv(merged_peak_paths, orig_sam_info, outfile, state):
     # Getting the peaks for the starting nodes
 
     for key in merged_peak_paths:
-        print key
         read_count_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
         genome, taxon, IS = key.split(state.settings.path_delim)
         path = merged_peak_paths[key]

@@ -14,6 +14,7 @@ import misc
 
 def call_all_peaks(version, bamdict, peak_paths, outdir, state):
     for key in bamdict:
+        print key
         bam = bamdict[key]
         handle = pysam.AlignmentFile(bam, "rb")
         genome_len = handle.header['SQ'][0]['LN']
@@ -81,11 +82,11 @@ def process_peaks_indiv(merged_peak_paths, orig_sam_info, outfile, state):
     open(outfile, 'w').write('\n'.join(['\t'.join(line) for line in final_results]))
 
 
-def process_peaks_taxonomy_traversal(peak_paths, sam_paths_dict, outfile, state):
+def process_peaks_taxonomy_traversal(merged_peak_paths, orig_sam_info, outfile, state):
     final_results = []
 
     # Getting the peaks for the starting nodes
-    for key1 in peak_paths:
+    for key1 in merged_peak_paths:
         genome1, taxon1, IS1 = key1.split(state.settings.path_delim)
         taxonomy = misc.get_taxon_hierarchy_set(taxon1, state.settings.taxon_nodes)
 
@@ -95,9 +96,9 @@ def process_peaks_taxonomy_traversal(peak_paths, sam_paths_dict, outfile, state)
             peak_dict = create_peak_dict(merged_peaks)
 
             # Now assign the reads in the sam files to specified read bins...
-            peak_dict = assign_reads_to_peaks(sam_paths_dict[key1], merged_peaks, peak_dict, state.settings.peak_extension)
+            peak_dict = assign_reads_to_peaks(orig_sam_info[key1], merged_peaks, peak_dict, state.settings.peak_extension)
             for key in parent_peaks_keys:
-                peak_dict = assign_reads_to_peaks(sam_paths_dict[key], merged_peaks, peak_dict,
+                peak_dict = assign_reads_to_peaks(orig_sam_info[key], merged_peaks, peak_dict,
                                                   state.settings.peak_extension)
 
             # Write the peak counts to the final results

@@ -4,6 +4,7 @@ from collections import defaultdict
 from glob import glob
 from operator import itemgetter
 from os.path import basename
+from pprint import pprint
 
 import pysam
 
@@ -66,9 +67,7 @@ def process_peaks_indiv(merged_peak_paths, orig_sam_info, outfile, state):
                 #print '\t',peak
                 for sample in orig_sam_info[key]:
                     #print '\t','\t',sample
-
                     for read in pysam.AlignmentFile(orig_sam_info[key][sample], 'rb'):
-
                         if is_within_peak(read.pos, peak[0], peak[1], state.settings.peak_extension):
                             read_count_dict[sample][chrom]['-'.join([str(i) for i in peak])] += 1
 
@@ -83,7 +82,7 @@ def process_peaks_indiv(merged_peak_paths, orig_sam_info, outfile, state):
     open(outfile, 'w').write('\n'.join(['\t'.join(line) for line in final_results]))
 
 
-def process_peaks_taxonomy_traversal(merged_peak_paths, orig_sam_info, outfile, state):
+def process_peaks_taxonomy_traversal(merged_peak_paths, orig_bam_info, outfile, state):
     final_results = []
 
     # Getting the peaks for the starting nodes
@@ -92,48 +91,54 @@ def process_peaks_taxonomy_traversal(merged_peak_paths, orig_sam_info, outfile, 
         taxonomy = misc.get_taxon_hierarchy_set(taxon1, state.settings.taxon_nodes)
 
         parent_peaks_keys = get_parent_peaks_keys(genome1, taxon1, IS1, taxonomy, merged_peak_paths, state)
+
         if len(parent_peaks_keys) > 0:
             merged_peaks = merge_peaks_taxonomy(genome1, taxon1, IS1, parent_peaks_keys, merged_peak_paths, state)
-            peak_dict = create_peak_dict(merged_peaks)
+
+            samples = get_samples(orig_bam_info)
+            peak_dict = create_peak_dict(merged_peaks, samples)
 
             # Now assign the reads in the sam files to specified read bins...
-            peak_dict = assign_reads_to_peaks(orig_sam_info[key1], merged_peaks, peak_dict, state.settings.peak_extension)
+            peak_dict = assign_reads_to_peaks(orig_bam_info[key1], merged_peaks, peak_dict, state.settings.peak_extension)
+
             for key in parent_peaks_keys:
-                peak_dict = assign_reads_to_peaks(orig_sam_info[key], merged_peaks, peak_dict,
+                peak_dict = assign_reads_to_peaks(orig_bam_info[key], merged_peaks, peak_dict,
                                                   state.settings.peak_extension)
 
             # Write the peak counts to the final results
             parent_taxa = [key.split(state.settings.path_delim)[1] for key in parent_peaks_keys]
             out_taxa = [taxon1] + parent_taxa
-            for chrom in peak_dict:
-                for peak in peak_dict[chrom]:
-                    final_results.append([genome1,
-                                          taxon1,
-                                          state.settings.taxon_names[taxon1].replace(' ','_'),
-                                          IS1, chrom, peak.split('-')[0], peak.split('-')[1],
-                                          str(peak_dict[chrom][peak])])
+            for sample in samples:
+                for chrom in peak_dict[sample]:
+                    for peak in peak_dict[sample][chrom]:
+                        final_results.append([sample,
+                                              genome1,
+                                              taxon1,
+                                              state.settings.taxon_names[taxon1].replace(' ','_'),
+                                              IS1, chrom, peak.split('-')[0], peak.split('-')[1],
+                                              str(peak_dict[chrom][peak])])
 
         # SINGLE NODE - NO TRAVERSAL NEEDED - WAS COMPLETED ALREADY IN
         #  process_peaks_indiv()
         else:
             continue
 
-    final_results.insert(0, ['Genome', 'StartTaxonIDs', 'StartTaxonName', 'Insertion', 'Chrom', 'PeakStart', 'PeakEnd', 'FlankingReadCount'])
+    final_results.insert(0, ['Sample', 'Genome', 'StartTaxonIDs', 'StartTaxonName', 'Insertion', 'Chrom', 'PeakStart', 'PeakEnd', 'FlankingReadCount'])
     open(outfile, 'w').write('\n'.join(['\t'.join(line) for line in final_results]))
 
 
-def assign_reads_to_peaks(sampath, merged_peaks, peak_dict, extension=0):
+def assign_reads_to_peaks(bam_info, merged_peaks, peak_dict, extension=0):
 
-    for read in IO.read_genome_alignment(open(sampath), 1):
-        #print read
-        for aln in read:
-           # print "\t", aln
+    for sample in bam_info:
+        for read in pysam.AlignmentFile(bam_info[sample], 'rb'):
+
             for chrom in merged_peaks:
-                #print "\t", "\t", chrom
+
                 for peak in merged_peaks[chrom]:
-                    #print "\t", "\t", "\t", peak
-                    if is_within_peak(int(aln['POS']), int(peak[0]), int(peak[1]), extension):
-                        peak_dict[chrom]['-'.join([str(i) for i in peak])] += 1
+
+                    if is_within_peak(read.pos, int(peak[0]), int(peak[1]), extension):
+                        peak_dict[sample][chrom]['-'.join([str(i) for i in peak])] += 1
+
     return peak_dict
 
 def create_peak_dict(peaks_in, samples):
@@ -145,6 +150,12 @@ def create_peak_dict(peaks_in, samples):
                 peak_dict[sample][chrom]["-".join([str(i) for i in peak])] = 0
 
     return peak_dict
+
+def get_samples(bam_info):
+    samples = set()
+    for key in bam_info:
+        samples = samples | set(bam_info[key].keys())
+    return samples
 
 
 def get_parent_peaks_keys(genome1, taxon1, IS1, taxonomy, peak_paths, state):

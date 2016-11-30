@@ -23,9 +23,9 @@ def call_all_peaks(version, bamdict, peak_paths, outdir, state):
             state.logger.info("Too few reads to perform peak calling in %s" %
                               "-".join(basename(bam).split(state.settings.path_delim)))
             continue
-
+        print "PASSED READ THRESHOLD"
         peak_path = macs2.call_peaks(version, bam, genome_len, outdir)
-
+        print "CALLED THE PEAKS"
         if check_peak_path(peak_path):
             peak_paths[key] = peak_path
         else:

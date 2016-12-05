@@ -4,6 +4,7 @@ from pprint import pformat
 
 from mod.call import executive as call_executive
 from mod.merge import executive as merge_executive
+from mod.findsites import executive as findsites_executive
 
 
 from mod.call import state as call_state
@@ -11,6 +12,9 @@ from mod.merge import state as merge_state
 
 from mod.call import argparseTypes as call_argparseTypes
 from mod.merge import argparseTypes as merge_argparseTypes
+from mod.findsites import argparseTypes as findsites_argparseTypes
+
+from mod.shared.log import SimpleLog
 
 def main(args):
 
@@ -34,6 +38,22 @@ def main(args):
 
         merge_executive.action(mergestate)
 
+    elif args['which'] == 'findsites':
+
+        logger = SimpleLog()
+        logger.info("Here are the arguments as they were given:\n\n%s\n" % pformat(args))
+        logger.info("Executing the ISPeaks find-sites protocol...")
+
+        findsites_executive.action(args, logger)
+
+    elif args['which'] == 'strandstats':
+
+        logger = SimpleLog()
+        logger.info("Here are the arguments as they were given:\n\n%s\n" % pformat(args))
+        logger.info("Executing the ISPeaks find-sites protocol...")
+
+        findsites_executive.action(args, logger)
+
     else:
         pass
         #logger.error("Something weird just happened...")
@@ -43,9 +63,7 @@ def main(args):
 if __name__ == "__main__":
 
     current_dir = os.path.dirname(__file__)
-    print current_dir
     data_dir = os.path.join(current_dir, "../data")
-    print data_dir
     # setup the option parser
     parser = argparse.ArgumentParser(description='')
 
@@ -54,8 +72,13 @@ if __name__ == "__main__":
 
     parser_call = subparsers.add_parser('call', help='Run ISPeaks on a single fastq file to call al lthe peaks')
     parser_call.set_defaults(which="call")
+
     parser_merge = subparsers.add_parser('merge', help='Run ISPeaks on multiple ISPeaks output folders.')
     parser_merge.set_defaults(which="merge")
+
+    parser_findsite = subparsers.add_parser('find-sites', help='Identify the specific sites of insertion using ISPeaks '
+                                                          'insertion-flanking alignments and specific peaks of interest.')
+    parser_findsite.set_defaults(which="findsites")
 
     # SINGLE arguments
     parser_call.add_argument('-fq', '--fastqs', required=True, nargs = 2, type=call_argparseTypes.fastq_file,
@@ -140,6 +163,20 @@ if __name__ == "__main__":
                              default=call_argparseTypes.taxon_nodes(
                                  os.path.abspath(os.path.join(data_dir, "TaxonomyDatabase/names.dmp"))),
                              help='Location of the NCBI Taxonomy Database names.dmp')
+
+    # Find-Site arguments
+    parser_findsite.add_argument('-b', '--bam-file', required=True,
+                              type=findsites_argparseTypes.bam_file,
+                              help='The IS-flanking alignment file in bam format.')
+
+    parser_findsite.add_argument('-p', '--peak-ranges', required=True,
+                              type=findsites_argparseTypes.peak_ranges,
+                              help='A tab-delimited text file containing three columns of genomic positions corresponding'
+                                   'to peak ranges of interest.'
+                                   'The left column includes the specific chromosome reference, the middle position must precede the right column positions.')
+
+
+    ## Strand-Stats
 
     args = parser.parse_args()
     args = vars(args)

@@ -15,7 +15,7 @@ def main(args):
 
     print delimiter.join(['Factor', 'Count'])
     for key in factor_counts:
-        print delimiter.join([key, factor_counts[key]])
+        print delimiter.join([key, str(factor_counts[key])])
 
 
 if __name__ == "__main__":

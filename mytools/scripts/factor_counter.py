@@ -16,7 +16,7 @@ def main(args):
 
     header = ['Factor', 'Count']
     if outpath:
-        with open(outpath) as file_out:
+        with open(outpath, 'w') as file_out:
             file_out.write(delimiter.join(header)+'\n')
 
             for key in factor_counts:
